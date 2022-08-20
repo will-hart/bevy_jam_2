@@ -47,15 +47,18 @@ pub struct TextureAssets {
     #[asset(path = "textures/background.png")]
     pub background: Handle<Image>,
 
-    #[asset(texture_atlas(tile_size_x = 160., tile_size_y = 64., columns = 2, rows = 1))]
+    #[asset(texture_atlas(tile_size_x = 160., tile_size_y = 64., columns = 3, rows = 1))]
     #[asset(path = "textures/horse_and_cart.png")]
     pub horse_and_cart: Handle<TextureAtlas>,
 
-    #[asset(path = "textures/cart_boxes.png")]
-    pub cart_boxes: Handle<Image>,
+    #[asset(path = "textures/crate1_on_cart.png")]
+    pub crate1_on_cart: Handle<Image>,
 
-    #[asset(path = "textures/cart_boxes2.png")]
-    pub cart_boxes2: Handle<Image>,
+    #[asset(path = "textures/crate2_on_cart.png")]
+    pub crate2_on_cart: Handle<Image>,
+
+    #[asset(path = "textures/crate.png")]
+    pub cart: Handle<Image>,
 
     #[asset(path = "textures/waves.png")]
     pub waves: Handle<Image>,

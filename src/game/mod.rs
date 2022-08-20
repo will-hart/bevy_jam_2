@@ -124,17 +124,17 @@ fn setup_world(
         })
         .insert(AnimateX {
             looped: false,
-            speed: -12.,
+            speed: -20.,
         })
         .insert(animations.cart.clone())
         .insert(AnimationState::default())
         .with_children(|parent| {
             parent.spawn_bundle(SpriteBundle {
-                texture: textures.cart_boxes.clone(),
+                texture: textures.crate1_on_cart.clone(),
                 ..Default::default()
             });
             parent.spawn_bundle(SpriteBundle {
-                texture: textures.cart_boxes2.clone(),
+                texture: textures.crate2_on_cart.clone(),
                 ..Default::default()
             });
         });
