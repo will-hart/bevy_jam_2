@@ -25,9 +25,9 @@ pub enum PlayerActions {
 
 /// Initialises the input manager, linking commands
 fn init_input_manager(mut commands: Commands) {
-    let input_map = InputMap::default();
+    let mut input_map = InputMap::default();
 
-    // input_map.insert(MouseButton::Left, PlayerActions::Confirm);
+    input_map.insert(MouseButton::Left, PlayerActions::Click);
     commands
         .spawn()
         .insert_bundle(InputManagerBundle::<PlayerActions> {

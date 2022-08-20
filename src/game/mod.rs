@@ -1,3 +1,4 @@
+mod actions;
 mod animation;
 pub mod components;
 mod day_night_cycle;
@@ -5,12 +6,13 @@ mod day_night_cycle;
 pub use animation::{Animation, AnimationState};
 
 use bevy::prelude::*;
-use iyes_loopless::{condition::IntoConditionalSystem, prelude::AppLooplessStateExt};
+use iyes_loopless::prelude::AppLooplessStateExt;
 
 use crate::{
     game::{
-        components::{AnimateX, Ship, Torch},
-        day_night_cycle::{SkyColourCycles, SunEvent, TimeOfDay},
+        actions::ActionPlugin,
+        components::{AnimateX, BoxType, Cart, CartCrate, Ship, Torch},
+        day_night_cycle::DayNightCyclePlugin,
     },
     loader::{AnimationAssets, TextureAssets},
     GameState, GRID_SIZE, WIDTH,
@@ -22,16 +24,10 @@ pub struct GamePlugin;
 impl Plugin for GamePlugin {
     fn build(&self, app: &mut App) {
         info!("Mounting GamePlugin");
-        app.insert_resource(SkyColourCycles::default())
-            .insert_resource(TimeOfDay { time_of_day: 5.8 })
-            .add_event::<SunEvent>()
-            .add_plugin(AnimationPlugin)
-            .add_enter_system(GameState::Playing, setup_world)
-            .add_system(day_night_cycle::day_night_cycle.run_not_in_state(GameState::Loading))
-            .add_system(day_night_cycle::torch_visibility.run_not_in_state(GameState::Loading))
-            .add_system(day_night_cycle::star_and_sun_spawner.run_not_in_state(GameState::Loading))
-            .add_system(day_night_cycle::sun_movement.run_not_in_state(GameState::Loading))
-            .add_system(day_night_cycle::star_movement.run_not_in_state(GameState::Loading));
+        app.add_plugin(AnimationPlugin)
+            .add_plugin(ActionPlugin)
+            .add_plugin(DayNightCyclePlugin)
+            .add_enter_system(GameState::Playing, setup_world);
     }
 }
 
@@ -137,24 +133,36 @@ fn setup_world(
             looped: false,
             speed: -20.,
         })
+        .insert(Cart {
+            front: Some(BoxType::Cotton),
+            back: Some(BoxType::Bannanas),
+        })
         .insert(animations.cart.clone())
         .insert(AnimationState::default())
         .with_children(|parent| {
-            parent.spawn_bundle(SpriteSheetBundle {
-                texture_atlas: textures.cart_boxes.clone(),
-                sprite: TextureAtlasSprite {
-                    index: 0,
+            parent
+                .spawn_bundle(SpriteSheetBundle {
+                    texture_atlas: textures.cart_boxes.clone(),
+                    sprite: TextureAtlasSprite {
+                        index: 0,
+                        ..Default::default()
+                    },
                     ..Default::default()
-                },
-                ..Default::default()
-            });
-            parent.spawn_bundle(SpriteSheetBundle {
-                texture_atlas: textures.cart_boxes.clone(),
-                sprite: TextureAtlasSprite {
-                    index: 3,
+                })
+                .insert(CartCrate {
+                    is_front_slot: true,
+                });
+            parent
+                .spawn_bundle(SpriteSheetBundle {
+                    texture_atlas: textures.cart_boxes.clone(),
+                    sprite: TextureAtlasSprite {
+                        index: 3,
+                        ..Default::default()
+                    },
                     ..Default::default()
-                },
-                ..Default::default()
-            });
+                })
+                .insert(CartCrate {
+                    is_front_slot: false,
+                });
         });
 }

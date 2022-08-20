@@ -1,10 +1,11 @@
 use bevy::prelude::*;
+use iyes_loopless::prelude::IntoConditionalSystem;
 use rand::{Rng, SeedableRng};
 use rand_chacha::ChaCha8Rng;
 
 use crate::{
     loader::{AnimationAssets, TextureAssets},
-    HEIGHT, WIDTH,
+    GameState, HEIGHT, WIDTH,
 };
 
 use super::{
@@ -50,9 +51,24 @@ const STORMY_COLOR_CYCLE: [Vec3; NUM_COLOURS] = [
     /*  9pm */ Vec3::new(0.18, 0.18, 0.25),
 ];
 
-pub struct SunEvent(pub bool);
+pub struct DayNightCyclePlugin;
 
-pub struct SkyColourCycles {
+impl Plugin for DayNightCyclePlugin {
+    fn build(&self, app: &mut App) {
+        app.insert_resource(SkyColourCycles::default())
+            .insert_resource(TimeOfDay { time_of_day: 5.8 })
+            .add_event::<SunEvent>()
+            .add_system(day_night_cycle.run_not_in_state(GameState::Loading))
+            .add_system(torch_visibility.run_not_in_state(GameState::Loading))
+            .add_system(star_and_sun_spawner.run_not_in_state(GameState::Loading))
+            .add_system(sun_movement.run_not_in_state(GameState::Loading))
+            .add_system(star_movement.run_not_in_state(GameState::Loading));
+    }
+}
+
+struct SunEvent(pub bool);
+
+struct SkyColourCycles {
     pub sunny: [Vec3; NUM_COLOURS],
     pub stormy: [Vec3; NUM_COLOURS],
     pub is_sunny: bool,
@@ -68,11 +84,11 @@ impl Default for SkyColourCycles {
     }
 }
 
-pub struct TimeOfDay {
+struct TimeOfDay {
     pub time_of_day: f32,
 }
 
-pub fn day_night_cycle(
+fn day_night_cycle(
     time: Res<Time>,
     mut cycle: ResMut<SkyColourCycles>,
     mut clear_colour: ResMut<ClearColor>,
@@ -116,7 +132,7 @@ pub fn day_night_cycle(
     clear_colour.0 = Color::from(colour.extend(1.0));
 }
 
-pub fn torch_visibility(
+fn torch_visibility(
     clear_colour: Res<ClearColor>,
     animations: Res<AnimationAssets>,
     mut torches: Query<&mut Handle<Animation>, With<Torch>>,
@@ -133,7 +149,7 @@ pub fn torch_visibility(
     }
 }
 
-pub fn star_and_sun_spawner(
+fn star_and_sun_spawner(
     mut commands: Commands,
     mut sun_events: EventReader<SunEvent>,
     textures: Res<TextureAssets>,
@@ -198,7 +214,7 @@ fn get_sun_y(t: f32) -> f32 {
     -8. * (9. * t - 3.0).powi(2) + 300.
 }
 
-pub fn sun_movement(tod: Res<TimeOfDay>, mut suns: Query<&mut Transform, With<Sun>>) {
+fn sun_movement(tod: Res<TimeOfDay>, mut suns: Query<&mut Transform, With<Sun>>) {
     let proportion_through_sun_up_time = (tod.time_of_day - SUN_UP) / (SUN_DOWN - SUN_UP);
     let x = get_sun_x(proportion_through_sun_up_time);
     let y = get_sun_y(proportion_through_sun_up_time);
@@ -209,7 +225,7 @@ pub fn sun_movement(tod: Res<TimeOfDay>, mut suns: Query<&mut Transform, With<Su
     }
 }
 
-pub fn star_movement(
+fn star_movement(
     tod: Res<TimeOfDay>,
     time: Res<Time>,
     mut stars: Query<(&mut Sprite, &mut Transform), With<Star>>,
