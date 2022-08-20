@@ -41,6 +41,10 @@ pub struct TextureAssets {
     #[asset(path = "textures/torch.png")]
     pub torch: Handle<TextureAtlas>,
 
+    #[asset(texture_atlas(tile_size_x = 32., tile_size_y = 64., columns = 5, rows = 1))]
+    #[asset(path = "textures/torch_upright.png")]
+    pub torch_upright: Handle<TextureAtlas>,
+
     #[asset(path = "textures/icon.png")]
     pub bevy_icon: Handle<Image>,
 
@@ -51,14 +55,20 @@ pub struct TextureAssets {
     #[asset(path = "textures/horse_and_cart.png")]
     pub horse_and_cart: Handle<TextureAtlas>,
 
-    #[asset(path = "textures/crate1_on_cart.png")]
-    pub crate1_on_cart: Handle<Image>,
+    #[asset(texture_atlas(tile_size_x = 32., tile_size_y = 32., columns = 3, rows = 1))]
+    #[asset(path = "textures/crates.png")]
+    pub crates: Handle<TextureAtlas>,
 
-    #[asset(path = "textures/crate2_on_cart.png")]
-    pub crate2_on_cart: Handle<Image>,
+    #[asset(texture_atlas(tile_size_x = 160., tile_size_y = 64., columns = 2, rows = 3))]
+    #[asset(path = "textures/cart_boxes.png")]
+    pub cart_boxes: Handle<TextureAtlas>,
 
-    #[asset(path = "textures/crate.png")]
-    pub cart: Handle<Image>,
+    #[asset(texture_atlas(tile_size_x = 64., tile_size_y = 64., columns = 2, rows = 1))]
+    #[asset(path = "textures/sun.png")]
+    pub sun: Handle<TextureAtlas>,
+
+    #[asset(path = "textures/star.png")]
+    pub star: Handle<Image>,
 
     #[asset(path = "textures/waves.png")]
     pub waves: Handle<Image>,

@@ -14,3 +14,9 @@ pub struct AnimateX {
     pub speed: f32,
     pub looped: bool,
 }
+
+#[derive(Component)]
+pub struct Sun;
+
+#[derive(Component)]
+pub struct Star;

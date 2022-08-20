@@ -10,7 +10,7 @@ use iyes_loopless::{condition::IntoConditionalSystem, prelude::AppLooplessStateE
 use crate::{
     game::{
         components::{AnimateX, Ship, Torch},
-        day_night_cycle::SkyColourCycles,
+        day_night_cycle::{SkyColourCycles, SunEvent, TimeOfDay},
     },
     loader::{AnimationAssets, TextureAssets},
     GameState, GRID_SIZE, WIDTH,
@@ -23,10 +23,15 @@ impl Plugin for GamePlugin {
     fn build(&self, app: &mut App) {
         info!("Mounting GamePlugin");
         app.insert_resource(SkyColourCycles::default())
+            .insert_resource(TimeOfDay { time_of_day: 5.8 })
+            .add_event::<SunEvent>()
             .add_plugin(AnimationPlugin)
             .add_enter_system(GameState::Playing, setup_world)
             .add_system(day_night_cycle::day_night_cycle.run_not_in_state(GameState::Loading))
-            .add_system(day_night_cycle::torch_visibility.run_not_in_state(GameState::Loading));
+            .add_system(day_night_cycle::torch_visibility.run_not_in_state(GameState::Loading))
+            .add_system(day_night_cycle::star_and_sun_spawner.run_not_in_state(GameState::Loading))
+            .add_system(day_night_cycle::sun_movement.run_not_in_state(GameState::Loading))
+            .add_system(day_night_cycle::star_movement.run_not_in_state(GameState::Loading));
     }
 }
 
@@ -44,27 +49,33 @@ fn setup_world(
     });
 
     /* TORCHES */
-    commands
-        .spawn_bundle(SpriteSheetBundle {
-            texture_atlas: textures.torch.clone(),
-            transform: Transform::from_xyz(GRID_SIZE * 3.25, 0., 0.1)
-                .with_scale(Vec3::new(0.5, 0.5, 0.5)),
-            ..Default::default()
-        })
-        .insert(animations.torch_off.clone())
-        .insert(AnimationState::default())
-        .insert(Torch);
-
-    commands
-        .spawn_bundle(SpriteSheetBundle {
-            texture_atlas: textures.torch.clone(),
-            transform: Transform::from_xyz(-GRID_SIZE * 9.25, 0., 0.1)
-                .with_scale(Vec3::new(-0.5, 0.5, 0.5)),
-            ..Default::default()
-        })
-        .insert(animations.torch_off.clone())
-        .insert(AnimationState::default())
-        .insert(Torch);
+    [
+        -GRID_SIZE * 9.25,
+        GRID_SIZE * 3.25,
+        6.5 * GRID_SIZE,
+        8.5 * GRID_SIZE,
+    ]
+    .iter()
+    .enumerate()
+    .for_each(|(i, x)| {
+        commands
+            .spawn_bundle(SpriteSheetBundle {
+                texture_atlas: if i <= 1 {
+                    textures.torch.clone()
+                } else {
+                    textures.torch_upright.clone()
+                },
+                transform: Transform::from_xyz(*x, 0., 0.1).with_scale(Vec3::new(
+                    if i == 0 { -0.5 } else { 0.5 },
+                    0.5,
+                    0.5,
+                )),
+                ..Default::default()
+            })
+            .insert(animations.torch_off.clone())
+            .insert(AnimationState::default())
+            .insert(Torch);
+    });
 
     /* SHIPS */
     commands
@@ -119,7 +130,7 @@ fn setup_world(
     commands
         .spawn_bundle(SpriteSheetBundle {
             texture_atlas: textures.horse_and_cart.clone(),
-            transform: Transform::from_xyz(WIDTH / 2.0 + GRID_SIZE * 5.0, -GRID_SIZE, 0.4),
+            transform: Transform::from_xyz(WIDTH / 2.0 + GRID_SIZE * 5.0, -GRID_SIZE * 1.5, 0.4),
             ..Default::default()
         })
         .insert(AnimateX {
@@ -129,12 +140,20 @@ fn setup_world(
         .insert(animations.cart.clone())
         .insert(AnimationState::default())
         .with_children(|parent| {
-            parent.spawn_bundle(SpriteBundle {
-                texture: textures.crate1_on_cart.clone(),
+            parent.spawn_bundle(SpriteSheetBundle {
+                texture_atlas: textures.cart_boxes.clone(),
+                sprite: TextureAtlasSprite {
+                    index: 0,
+                    ..Default::default()
+                },
                 ..Default::default()
             });
-            parent.spawn_bundle(SpriteBundle {
-                texture: textures.crate2_on_cart.clone(),
+            parent.spawn_bundle(SpriteSheetBundle {
+                texture_atlas: textures.cart_boxes.clone(),
+                sprite: TextureAtlasSprite {
+                    index: 3,
+                    ..Default::default()
+                },
                 ..Default::default()
             });
         });
