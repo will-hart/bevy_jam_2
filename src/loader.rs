@@ -30,8 +30,8 @@ pub struct FontAssets {
 /// Contains audio assets loaded from file
 #[derive(AssetCollection)]
 pub struct AudioAssets {
-    // #[asset(path = "audio/flying.ogg")]
-    // pub flying: Handle<AudioSource>,
+    #[asset(path = "audio/box_drop.ogg")]
+    pub box_drop: Handle<bevy_kira_audio::AudioSource>,
 }
 
 /// Contains texture assets loaded from file

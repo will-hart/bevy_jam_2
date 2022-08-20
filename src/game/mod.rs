@@ -1,4 +1,4 @@
-mod actions;
+pub mod actions;
 mod animation;
 pub mod components;
 mod day_night_cycle;

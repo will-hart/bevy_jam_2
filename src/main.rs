@@ -37,10 +37,10 @@ fn main() {
             ..Default::default()
         })
         .add_plugins(DefaultPlugins)
-        .add_plugin(CameraPlugin)
         .add_plugin(LoadingPlugin)
-        .add_plugin(InputPlugin)
         .add_plugin(InternalAudioPlugin)
+        .add_plugin(CameraPlugin)
+        .add_plugin(InputPlugin)
         .add_plugin(GamePlugin)
         .run();
 }

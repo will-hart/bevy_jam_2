@@ -21,9 +21,12 @@ pub struct OnDropCrate {
     pub ship: Option<Entity>,
 }
 
+pub struct OnCrateDroppedOnShip;
+
 pub fn handle_drop(
     mut commands: Commands,
-    mut events: EventReader<OnDropCrate>,
+    mut on_drop_events: EventReader<OnDropCrate>,
+    mut on_drop_on_ship_events: EventWriter<OnCrateDroppedOnShip>,
     mut dragging: ResMut<DraggingBox>,
     followers: Query<Entity, With<FollowMouse>>,
     mut carts: Query<(&mut Cart, &Children)>,
@@ -31,7 +34,7 @@ pub fn handle_drop(
     mut ships: Query<&mut Ship>,
 ) {
     let mut done = false;
-    for evt in events.iter() {
+    for evt in on_drop_events.iter() {
         if done {
             warn!("Repeat drop event being ignored");
             continue;
@@ -58,7 +61,8 @@ pub fn handle_drop(
                 let mut ship = ships
                     .get_mut(ship_ent)
                     .expect("Should be able to find ship");
-                ship.crates.push(dragging.box_type.unwrap())
+                ship.crates.push(dragging.box_type.unwrap());
+                on_drop_on_ship_events.send(OnCrateDroppedOnShip);
             }
             None => {
                 // "drop back" on the cart

@@ -14,7 +14,7 @@ mod dragging;
 mod dropping;
 mod pickup;
 
-pub use dropping::ShipSlots;
+pub use dropping::{OnCrateDroppedOnShip, ShipSlots};
 
 // Numbers that are the range cart boxes can fall into
 pub const CART_MIN_Y: f32 = -2.5 * GRID_SIZE + 24.0; // magic numbers
@@ -44,6 +44,8 @@ impl Plugin for ActionPlugin {
         .insert_resource(ShipSlots::default())
         .add_event::<OnStartDragging>()
         .add_event::<OnDropCrate>()
+        .add_event::<OnDropCrate>()
+        .add_event::<OnCrateDroppedOnShip>()
         .add_system(pickup::click_to_pickup.run_in_state(GameState::Playing))
         .add_system(dragging::start_dragging.run_in_state(GameState::Playing))
         .add_system(dragging::mouse_follower.run_in_state(GameState::Playing))
