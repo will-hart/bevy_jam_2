@@ -12,6 +12,10 @@ mod game;
 mod input;
 mod loader;
 
+pub const WIDTH: f32 = 1024.;
+pub const HEIGHT: f32 = 768.;
+pub const GRID_SIZE: f32 = 32.;
+
 #[derive(Clone, Copy, Debug, Eq, PartialEq, Hash)]
 pub enum GameState {
     Loading,

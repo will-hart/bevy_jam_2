@@ -46,6 +46,23 @@ pub struct TextureAssets {
 
     #[asset(path = "textures/background.png")]
     pub background: Handle<Image>,
+
+    #[asset(texture_atlas(tile_size_x = 160., tile_size_y = 64., columns = 2, rows = 1))]
+    #[asset(path = "textures/horse_and_cart.png")]
+    pub horse_and_cart: Handle<TextureAtlas>,
+
+    #[asset(path = "textures/cart_boxes.png")]
+    pub cart_boxes: Handle<Image>,
+
+    #[asset(path = "textures/cart_boxes2.png")]
+    pub cart_boxes2: Handle<Image>,
+
+    #[asset(path = "textures/waves.png")]
+    pub waves: Handle<Image>,
+
+    #[asset(texture_atlas(tile_size_x = 288., tile_size_y = 224., columns = 4, rows = 1))]
+    #[asset(path = "textures/ship.png")]
+    pub ship: Handle<TextureAtlas>,
 }
 
 /// Contains animation assets loaded from file using a custom animation loader
@@ -55,4 +72,6 @@ pub struct AnimationAssets {
     pub torch: Handle<Animation>,
     #[asset(path = "animations/torch-off.animation.yml")]
     pub torch_off: Handle<Animation>,
+    #[asset(path = "animations/cart.animation.yml")]
+    pub cart: Handle<Animation>,
 }
