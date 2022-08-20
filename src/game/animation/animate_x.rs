@@ -22,10 +22,10 @@ pub fn animate_x(
         if out_of_bounds {
             if anim.looped {
                 info!("Resetting an x-animated item");
-                item.translation.x = -WIDTH / 2.0 - 5.0 * GRID_SIZE;
+                item.translation.x = -anim.speed.signum() * (WIDTH / 2.0 + 5.0 * GRID_SIZE);
             } else {
                 info!("Despawning an animated item");
-                commands.entity(ent).despawn();
+                commands.entity(ent).despawn_recursive();
             }
         }
     }

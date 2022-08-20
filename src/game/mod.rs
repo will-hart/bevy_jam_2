@@ -99,7 +99,7 @@ fn setup_world(
         });
 
     /* WAVES */
-    let mut x = -WIDTH / 2.0 - 20. * GRID_SIZE;
+    let mut x = -WIDTH / 2.0 - 5. * GRID_SIZE;
 
     while x < WIDTH / 2.0 + 5. * GRID_SIZE {
         commands
