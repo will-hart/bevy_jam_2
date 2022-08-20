@@ -1,7 +1,7 @@
 use bevy::prelude::*;
 use bevy_asset_loader::prelude::*;
 
-use crate::GameState;
+use crate::{game::Animation, GameState};
 
 /// A plugin that automatically loads in fonts, audio assets, textures, animations, maps etc
 /// from file. See the various asset collection classes for the assets being loaded
@@ -14,6 +14,7 @@ impl Plugin for LoadingPlugin {
                 .with_collection::<FontAssets>()
                 .with_collection::<AudioAssets>()
                 .with_collection::<TextureAssets>()
+                .with_collection::<AnimationAssets>()
                 .continue_to_state(GameState::Playing),
         );
     }
@@ -36,9 +37,22 @@ pub struct AudioAssets {
 /// Contains texture assets loaded from file
 #[derive(AssetCollection)]
 pub struct TextureAssets {
-    // #[asset(texture_atlas(tile_size_x = 16., tile_size_y = 16., columns = 5, rows = 1))]
-    // #[asset(path = "textures/PLACEHOLDER_player.png")]
-    // pub placeholder_player: Handle<TextureAtlas>,
+    #[asset(texture_atlas(tile_size_x = 32., tile_size_y = 64., columns = 5, rows = 1))]
+    #[asset(path = "textures/torch.png")]
+    pub torch: Handle<TextureAtlas>,
+
     #[asset(path = "textures/icon.png")]
     pub bevy_icon: Handle<Image>,
+
+    #[asset(path = "textures/background.png")]
+    pub background: Handle<Image>,
+}
+
+/// Contains animation assets loaded from file using a custom animation loader
+#[derive(AssetCollection)]
+pub struct AnimationAssets {
+    #[asset(path = "animations/torch.animation.yml")]
+    pub torch: Handle<Animation>,
+    #[asset(path = "animations/torch-off.animation.yml")]
+    pub torch_off: Handle<Animation>,
 }

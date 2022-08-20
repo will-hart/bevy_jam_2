@@ -1,11 +1,33 @@
 <!doctype html>
 <html lang="en">
-<script type="module">
-  import init from './bevy_game.js'
-  init()
-</script>
+  <script type="module">
+    import init from './bevy_game.js'
+    init()
+  </script>
 
-<body style="margin: 0px;">
-</body>
+  <style>
+    .game-container {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    #bevy {
+      background-color: #222244;
+      width: 1024px;
+      height: 768px;
+    }
+
+  </style>
+
+  <body style="margin: 0px;">
+    <div class="game-container">
+      <canvas id="bevy">
+        Javascript and support for canvas is required
+      </canvas>
+    </div>
+  </body>
 
 </html>
