@@ -64,7 +64,7 @@ fn update_mouse_position(
     };
 
     if let Some(position) = window.cursor_position() {
-        mouse_position.screen = position.clone();
+        mouse_position.screen = position;
         mouse_position.in_screen = true;
 
         // now convert screen to world coords for the camera
