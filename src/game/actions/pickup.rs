@@ -8,24 +8,25 @@ use crate::{
 };
 
 use super::{
-    dragging::{DraggingBox, StartDragging, StopDragging},
-    CART_MAX_Y, CART_MIN_Y,
+    dragging::{DraggingBox, OnStartDragging},
+    dropping::{OnDropCrate, ShipSlots},
+    CART_MAX_Y, CART_MIN_Y, SHIP_MAX_Y, SHIP_MIN_Y, SHIP_ZONES,
 };
 
 pub fn click_to_pickup(
     mouse_pos: Res<MousePosition>,
     dragging: Res<DraggingBox>,
-    mut start_events: EventWriter<StartDragging>,
-    mut stop_events: EventWriter<StopDragging>,
+    ship_slots: Res<ShipSlots>,
+    mut start_events: EventWriter<OnStartDragging>,
+    mut stop_events: EventWriter<OnDropCrate>,
     action_state_query: Query<&ActionState<PlayerActions>>,
     mut carts: Query<(Entity, &Transform), With<Cart>>,
 ) {
     let action_state = action_state_query.single();
+    let x = mouse_pos.world.x;
+    let y = mouse_pos.world.y;
 
     if action_state.just_pressed(PlayerActions::Click) {
-        let x = mouse_pos.world.x;
-        let y = mouse_pos.world.y;
-
         if y < CART_MIN_Y || y > CART_MAX_Y {
             return;
         }
@@ -48,12 +49,31 @@ pub fn click_to_pickup(
             );
 
             // trigger the event to handle drag start
-            start_events.send(StartDragging {
+            start_events.send(OnStartDragging {
                 cart_entity: cart_ent,
                 is_front_slot: zone == 0,
             });
         }
     } else if dragging.cart_entity.is_some() && action_state.just_released(PlayerActions::Click) {
-        stop_events.send(StopDragging { ship: None });
+        if y > SHIP_MIN_Y && y < SHIP_MAX_Y {
+            for (idx, r) in SHIP_ZONES.iter().enumerate() {
+                if r.contains(&x) {
+                    info!("Dropped crate on ship slot {}", idx);
+
+                    match ship_slots.slots[idx] {
+                        Some(entity) => {
+                            stop_events.send(OnDropCrate { ship: Some(entity) });
+                            return;
+                        }
+                        None => {
+                            info!("--> ship slot {} is empty", idx);
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+
+        stop_events.send(OnDropCrate { ship: None });
     }
 }

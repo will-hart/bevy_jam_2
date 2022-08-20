@@ -57,7 +57,7 @@ impl Plugin for DayNightCyclePlugin {
     fn build(&self, app: &mut App) {
         app.insert_resource(SkyColourCycles::default())
             .insert_resource(TimeOfDay { time_of_day: 5.8 })
-            .add_event::<SunEvent>()
+            .add_event::<OnSunEvent>()
             .add_system(day_night_cycle.run_not_in_state(GameState::Loading))
             .add_system(torch_visibility.run_not_in_state(GameState::Loading))
             .add_system(star_and_sun_spawner.run_not_in_state(GameState::Loading))
@@ -66,7 +66,7 @@ impl Plugin for DayNightCyclePlugin {
     }
 }
 
-struct SunEvent(pub bool);
+struct OnSunEvent(pub bool);
 
 struct SkyColourCycles {
     pub sunny: [Vec3; NUM_COLOURS],
@@ -93,7 +93,7 @@ fn day_night_cycle(
     mut cycle: ResMut<SkyColourCycles>,
     mut clear_colour: ResMut<ClearColor>,
     mut time_of_day: ResMut<TimeOfDay>,
-    mut sun_events: EventWriter<SunEvent>,
+    mut sun_events: EventWriter<OnSunEvent>,
 ) {
     let dt = time.delta_seconds();
     let elapsed = dt * TIME_OF_DAY_HOURS_PER_GAME_SECONDS;
@@ -108,11 +108,11 @@ fn day_night_cycle(
     }
 
     if prev_time_of_day < 18.0 && time_of_day.time_of_day >= 18.0 {
-        sun_events.send(SunEvent(false));
+        sun_events.send(OnSunEvent(false));
     }
 
     if prev_time_of_day < 6.0 && time_of_day.time_of_day >= 6.0 {
-        sun_events.send(SunEvent(true));
+        sun_events.send(OnSunEvent(true));
     }
 
     let from_idx = (time_of_day.time_of_day / HOURS_PER_COLOUR).floor() as usize;
@@ -151,7 +151,7 @@ fn torch_visibility(
 
 fn star_and_sun_spawner(
     mut commands: Commands,
-    mut sun_events: EventReader<SunEvent>,
+    mut sun_events: EventReader<OnSunEvent>,
     textures: Res<TextureAssets>,
     cycle: Res<SkyColourCycles>,
     suns: Query<Entity, With<Sun>>,

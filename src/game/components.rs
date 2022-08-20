@@ -3,10 +3,11 @@ use bevy::prelude::*;
 #[derive(Component)]
 pub struct Torch;
 
-#[derive(Component)]
+#[derive(Component, Debug)]
 pub struct Ship {
     pub y: f32,
     pub phase: f32,
+    pub crates: Vec<BoxType>,
 }
 
 #[derive(Component)]
