@@ -1,0 +1,38 @@
+Ship Game:
+  ✔ Reorganise spawning systems to be more reusable @done(22-08-21 11:15)
+
+  Ship departure system:
+    ☐ make waves a single scrolling texture and parent to ship
+    ☐ add departure button
+    ☐ animate sails unfurling
+    ☐ remove from ship slot
+    ☐ move down
+    ☐ move off screen
+    ☐ hide renderer
+  
+  Ship Weight system:
+    ☐ Add ship weight and volume capacity
+    ☐ Add weight/volume to resources
+    ☐ Show weight/vol on resources crates
+    ☐ Calculate weight/vol on ship when loaded
+    ☐ Show weight/vol below ship
+    ☐ Highlght overweight
+    ☐ Drop crates if too much volume
+  
+  Economy system:
+    ☐ Different markets
+    ☐ Demands per market
+    ☐ Change demand over time
+    ☐ player score
+    ☐ display player score
+    ☐ buy/sell mechanic
+    ☐ Lost ship (overweight) mechanic
+  
+  Ship system:
+    ☐ ship delivery timer (off screen / unavailable)
+    ☐ ship queue off screen
+    ☐ ship maintenance cost
+    ☐ ship docking system
+      ☐ add ship to slot
+      ☐ park ship
+      ☐ furl sails

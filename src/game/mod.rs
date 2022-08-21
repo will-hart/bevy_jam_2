@@ -2,6 +2,7 @@ pub mod actions;
 mod animation;
 pub mod components;
 mod day_night_cycle;
+mod spawners;
 
 #[cfg(feature = "debug_system")]
 mod debug;
@@ -14,8 +15,9 @@ use iyes_loopless::prelude::AppLooplessStateExt;
 use crate::{
     game::{
         actions::ActionPlugin,
-        components::{AnimateX, BoxType, Cart, CartCrate, Ship, Torch},
+        components::{AnimateX, BoxType},
         day_night_cycle::DayNightCyclePlugin,
+        spawners::{spawn_cart, spawn_ship, spawn_torch},
     },
     loader::{AnimationAssets, TextureAssets},
     GameState, GRID_SIZE, WIDTH,
@@ -69,68 +71,37 @@ fn setup_world(
     .iter()
     .enumerate()
     .for_each(|(i, x)| {
-        commands
-            .spawn_bundle(SpriteSheetBundle {
-                texture_atlas: if i <= 1 {
-                    textures.torch.clone()
-                } else {
-                    textures.torch_upright.clone()
-                },
-                transform: Transform::from_xyz(*x, 0., 0.1).with_scale(Vec3::new(
-                    if i == 0 { -0.5 } else { 0.5 },
-                    0.5,
-                    0.5,
-                )),
-                ..Default::default()
-            })
-            .insert(animations.torch_off.clone())
-            .insert(AnimationState::default())
-            .insert(Torch);
+        spawn_torch(
+            &mut commands,
+            &textures,
+            &animations,
+            Vec3::new(*x, 0., 0.1),
+            i == 0,
+            i > 1,
+        );
     });
 
     /* SHIPS */
-    ship_slots.slots[0] = Some(
-        commands
-            .spawn_bundle(SpriteSheetBundle {
-                texture_atlas: textures.ship.clone(),
-                transform: Transform::from_xyz(-GRID_SIZE * 10., -GRID_SIZE * 4., 0.6),
-                ..Default::default()
-            })
-            .insert(Ship {
-                y: -GRID_SIZE * 4.,
-                phase: 0.25,
-                crates: vec![],
-            })
-            .id(),
-    );
-    ship_slots.slots[1] = Some(
-        commands
-            .spawn_bundle(SpriteSheetBundle {
-                texture_atlas: textures.ship.clone(),
-                transform: Transform::from_xyz(0., -GRID_SIZE * 4., 0.6),
-                ..Default::default()
-            })
-            .insert(Ship {
-                y: -GRID_SIZE * 4.,
-                phase: 1.9,
-                crates: vec![],
-            })
-            .id(),
-    );
-    ship_slots.slots[2] = Some(
-        commands
-            .spawn_bundle(SpriteSheetBundle {
-                texture_atlas: textures.ship.clone(),
-                transform: Transform::from_xyz(GRID_SIZE * 10., -GRID_SIZE * 4., 0.6),
-                ..Default::default()
-            })
-            .insert(Ship {
-                y: -GRID_SIZE * 4.,
-                phase: 2.5,
-                crates: vec![],
-            })
-            .id(),
-    );
+    ship_slots.slots[0] = Some(spawn_ship(
+        &mut commands,
+        &textures,
+        Vec3::new(-GRID_SIZE * 10., -GRID_SIZE * 4., 0.6),
+        -4.0 * GRID_SIZE,
+    ));
+
+    ship_slots.slots[1] = Some(spawn_ship(
+        &mut commands,
+        &textures,
+        Vec3::new(0., -GRID_SIZE * 4., 0.6),
+        -4.0 * GRID_SIZE,
+    ));
+
+    ship_slots.slots[2] = Some(spawn_ship(
+        &mut commands,
+        &textures,
+        Vec3::new(GRID_SIZE * 10., -GRID_SIZE * 4., 0.6),
+        -4.0 * GRID_SIZE,
+    ));
 
     /* WAVES */
     let mut x = -WIDTH / 2.0 - 5. * GRID_SIZE;
@@ -150,89 +121,18 @@ fn setup_world(
     }
 
     /* CARTS */
-    commands
-        .spawn_bundle(SpriteSheetBundle {
-            texture_atlas: textures.horse_and_cart.clone(),
-            transform: Transform::from_xyz(WIDTH / 2.0 + GRID_SIZE * 5.0, -GRID_SIZE * 1.5, 0.4),
-            ..Default::default()
-        })
-        .insert(AnimateX {
-            looped: false,
-            speed: -30.,
-        })
-        .insert(Cart {
-            front: Some(BoxType::Cotton),
-            back: Some(BoxType::Apples),
-        })
-        .insert(animations.cart.clone())
-        .insert(AnimationState::default())
-        .with_children(|parent| {
-            parent
-                .spawn_bundle(SpriteSheetBundle {
-                    texture_atlas: textures.cart_boxes.clone(),
-                    sprite: TextureAtlasSprite {
-                        index: 0,
-                        ..Default::default()
-                    },
-                    ..Default::default()
-                })
-                .insert(CartCrate {
-                    is_front_slot: true,
-                });
-            parent
-                .spawn_bundle(SpriteSheetBundle {
-                    texture_atlas: textures.cart_boxes.clone(),
-                    sprite: TextureAtlasSprite {
-                        index: 3,
-                        ..Default::default()
-                    },
-                    ..Default::default()
-                })
-                .insert(CartCrate {
-                    is_front_slot: false,
-                });
-        });
-
-    commands
-        .spawn_bundle(SpriteSheetBundle {
-            texture_atlas: textures.horse_and_cart.clone(),
-            transform: Transform::from_xyz(WIDTH / 2.0 + GRID_SIZE * 15.0, -GRID_SIZE * 1.5, 0.4),
-            ..Default::default()
-        })
-        .insert(AnimateX {
-            looped: false,
-            speed: -30.,
-        })
-        .insert(Cart {
-            front: Some(BoxType::Bannanas),
-            back: Some(BoxType::Bannanas),
-        })
-        .insert(animations.cart.clone())
-        .insert(AnimationState::default())
-        .with_children(|parent| {
-            parent
-                .spawn_bundle(SpriteSheetBundle {
-                    texture_atlas: textures.cart_boxes.clone(),
-                    sprite: TextureAtlasSprite {
-                        index: 4,
-                        ..Default::default()
-                    },
-                    ..Default::default()
-                })
-                .insert(CartCrate {
-                    is_front_slot: true,
-                });
-            parent
-                .spawn_bundle(SpriteSheetBundle {
-                    texture_atlas: textures.cart_boxes.clone(),
-                    sprite: TextureAtlasSprite {
-                        index: 5,
-                        ..Default::default()
-                    },
-                    ..Default::default()
-                })
-                .insert(CartCrate {
-                    is_front_slot: false,
-                });
-        });
+    spawn_cart(
+        &mut commands,
+        &textures,
+        &animations,
+        Vec3::new(WIDTH / 2.0 + GRID_SIZE * 5.0, -GRID_SIZE * 1.5, 0.4),
+        [BoxType::Cotton, BoxType::Apples],
+    );
+    spawn_cart(
+        &mut commands,
+        &textures,
+        &animations,
+        Vec3::new(WIDTH / 2.0 + GRID_SIZE * 15.0, -GRID_SIZE * 1.5, 0.4),
+        [BoxType::Bannanas, BoxType::Bannanas],
+    );
 }
