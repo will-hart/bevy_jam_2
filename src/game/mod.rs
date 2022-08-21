@@ -7,6 +7,7 @@ mod spawners;
 mod custom_sprite;
 #[cfg(feature = "debug_system")]
 mod debug;
+mod market;
 mod ship_launch;
 mod ui;
 
@@ -20,6 +21,7 @@ use crate::{
         actions::ActionPlugin,
         custom_sprite::CustomSpritePlugin,
         day_night_cycle::DayNightCyclePlugin,
+        market::MarketPlugin,
         ship_launch::LaunchShipPlugin,
         spawners::{cart_spawning_system, spawn_ship, spawn_torch},
         ui::UiPlugin,
@@ -44,6 +46,7 @@ impl Plugin for GamePlugin {
             .add_plugin(AnimationPlugin)
             .add_plugin(ActionPlugin)
             .add_plugin(DayNightCyclePlugin)
+            .add_plugin(MarketPlugin)
             .add_plugin(LaunchShipPlugin)
             .add_plugin(UiPlugin)
             .add_system(cart_spawning_system.run_in_state(GameState::Playing))

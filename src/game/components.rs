@@ -5,7 +5,7 @@ use bevy::prelude::*;
 #[derive(Component)]
 pub struct Torch;
 
-#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
 pub enum ShipDestination {
     Americas,
     Carribean,
@@ -69,7 +69,7 @@ pub struct Sun;
 #[derive(Component)]
 pub struct Star;
 
-#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
 pub enum BoxType {
     MedicalSupplies = 0,
     Fruit = 1,
@@ -100,9 +100,9 @@ impl BoxType {
     pub fn get_volume(&self) -> u32 {
         match self {
             BoxType::MedicalSupplies => 1,
-            BoxType::Fruit => 2,
+            BoxType::Fruit => 1,
             BoxType::Iron => 1,
-            BoxType::Rum => 2,
+            BoxType::Rum => 1,
         }
     }
 }
