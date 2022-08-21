@@ -85,3 +85,6 @@ pub struct Wave;
 
 #[derive(Component)]
 pub struct ScoreUi;
+
+#[derive(Component)]
+pub struct ShipLaunchButton(pub usize);

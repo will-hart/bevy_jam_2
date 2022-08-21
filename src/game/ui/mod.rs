@@ -1,3 +1,4 @@
+mod launch_ships;
 mod score;
 mod ship_ui;
 
@@ -24,6 +25,8 @@ impl Plugin for UiPlugin {
                 score::score_update
                     .run_in_state(GameState::Playing)
                     .before("score_display"),
-            );
+            )
+            .add_enter_system(GameState::Playing, launch_ships::spawn_ship_buttons)
+            .add_system(launch_ships::button_interaction.run_in_state(GameState::Playing));
     }
 }
