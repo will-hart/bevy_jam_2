@@ -43,25 +43,28 @@ pub struct Star;
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub enum BoxType {
-    Cotton = 0,
-    Apples = 1,
-    Bannanas = 2,
+    MedicalSupplies = 0,
+    Fruit = 1,
+    Iron = 2,
+    Rum = 3,
 }
 
 impl BoxType {
     pub fn get_weight(&self) -> u32 {
         match self {
-            BoxType::Cotton => 1,
-            BoxType::Apples => 2,
-            BoxType::Bannanas => 2,
+            BoxType::MedicalSupplies => 1,
+            BoxType::Fruit => 2,
+            BoxType::Iron => 4,
+            BoxType::Rum => 2,
         }
     }
 
     pub fn get_volume(&self) -> u32 {
         match self {
-            BoxType::Cotton => 2,
-            BoxType::Apples => 1,
-            BoxType::Bannanas => 1,
+            BoxType::MedicalSupplies => 1,
+            BoxType::Fruit => 2,
+            BoxType::Iron => 1,
+            BoxType::Rum => 2,
         }
     }
 }

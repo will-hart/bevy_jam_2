@@ -10,16 +10,21 @@ Ship Game:
     ✔ move down @done(22-08-21 19:29)
     ✔ move off screen @done(22-08-21 19:29)
     ✔ Ship launch button becomes invisible after a ship is launched @done(22-08-21 19:42)
-    ✘ hide renderer @cancelled(22-08-21 19:42)
+    ✘ hide renderer% @cancelled(22-08-21 19:42)
   
   Ship Weight system:
     ✔ Add ship weight and volume capacity @done(22-08-21 13:18)
     ✔ Add weight/volume to resources @done(22-08-21 13:31)
-    ☐ Show weight/vol on resources crates
+    ✔ Redo resources @done(22-08-21 19:59)
+      ✔ fruit @done(22-08-21 19:59)
+      ✔ mail @done(22-08-21 19:59)
+      ✔ rum @done(22-08-21 19:59)
+      ✔ iron @done(22-08-21 19:59)
+    ✔ Show weight/vol on resources crates @done(22-08-21 20:01)
+      Could be better, but can revisit when I do artwork
     ✔ Calculate weight/vol on ship when loaded @done(22-08-21 13:31)
     ✔ Show weight/vol below ship @done(22-08-21 13:18)
     ✔ Highlght overweight @done(22-08-21 13:44)
-    ☐ Drop crates if too much volume
     ✔ Ship sinks lower with weight @done(22-08-21 13:37)
     ☐ use icons for weight / volume
   
@@ -52,6 +57,7 @@ Ship Game:
 Super Nice to Haves:
   ☐ Physics / dropping to crates so you can hover them above the ship and drop them
   ☐ If you miss the ship the crate falls in the water and is lost
+    ☐  also if your ship has no more volume it bounces off
   ☐ A warehouse on the shore with very limited capacity that you can use to stockpile interesting items
   ☐ Smuggling :D
   ☐ Nice art

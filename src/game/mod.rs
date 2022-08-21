@@ -133,13 +133,13 @@ fn setup_world(
         &textures,
         &animations,
         Vec3::new(WIDTH / 2.0 + GRID_SIZE * 5.0, -GRID_SIZE * 1.5, 0.4),
-        [BoxType::Cotton, BoxType::Apples],
+        [BoxType::MedicalSupplies, BoxType::Fruit],
     );
     spawn_cart(
         &mut commands,
         &textures,
         &animations,
         Vec3::new(WIDTH / 2.0 + GRID_SIZE * 15.0, -GRID_SIZE * 1.5, 0.4),
-        [BoxType::Bannanas, BoxType::Bannanas],
+        [BoxType::Iron, BoxType::Rum],
     );
 }

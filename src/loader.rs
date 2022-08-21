@@ -58,11 +58,11 @@ pub struct TextureAssets {
     #[asset(path = "textures/horse_and_cart.png")]
     pub horse_and_cart: Handle<TextureAtlas>,
 
-    #[asset(texture_atlas(tile_size_x = 32., tile_size_y = 32., columns = 3, rows = 1))]
+    #[asset(texture_atlas(tile_size_x = 32., tile_size_y = 32., columns = 4, rows = 1))]
     #[asset(path = "textures/crates.png")]
     pub crates: Handle<TextureAtlas>,
 
-    #[asset(texture_atlas(tile_size_x = 160., tile_size_y = 64., columns = 2, rows = 3))]
+    #[asset(texture_atlas(tile_size_x = 160., tile_size_y = 64., columns = 2, rows = 4))]
     #[asset(path = "textures/cart_boxes.png")]
     pub cart_boxes: Handle<TextureAtlas>,
 
@@ -86,14 +86,19 @@ pub struct TextureAssets {
 pub struct AnimationAssets {
     #[asset(path = "animations/torch.animation.yml")]
     pub torch: Handle<Animation>,
+
     #[asset(path = "animations/torch-off.animation.yml")]
     pub torch_off: Handle<Animation>,
+
     #[asset(path = "animations/cart.animation.yml")]
     pub cart: Handle<Animation>,
+
     #[asset(path = "animations/ship_unfurl.animation.yml")]
     pub ship_unfurl: Handle<Animation>,
+
     #[asset(path = "animations/ship_furl.animation.yml")]
     pub ship_furl: Handle<Animation>,
+
     #[asset(path = "animations/ship_idle.animation.yml")]
     pub ship_idle: Handle<Animation>,
 }
