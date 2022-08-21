@@ -1,7 +1,34 @@
+use std::fmt::Display;
+
 use bevy::prelude::*;
 
 #[derive(Component)]
 pub struct Torch;
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub enum ShipDestination {
+    Americas,
+    Carribean,
+    China,
+}
+
+impl Display for ShipDestination {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        f.write_str(match self {
+            ShipDestination::Americas => "Americas",
+            ShipDestination::Carribean => "Carribean",
+            ShipDestination::China => "China",
+        })
+    }
+}
+
+/// used for randomg selection of destinations, see notes on [BOX_TYPES] below.
+/// Keep up to date with ShipDestination above.
+pub const DESTINATIONS: [ShipDestination; 3] = [
+    ShipDestination::Americas,
+    ShipDestination::Carribean,
+    ShipDestination::China,
+];
 
 #[derive(Component, Debug)]
 pub struct Ship {
@@ -11,6 +38,7 @@ pub struct Ship {
 
 #[derive(Component, Clone, Debug)]
 pub struct ShipHold {
+    pub destination: ShipDestination,
     pub crates: Vec<BoxType>,
 
     pub weight_capacity: u32,

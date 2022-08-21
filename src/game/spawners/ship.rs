@@ -1,9 +1,9 @@
 use bevy::{prelude::*, sprite::MaterialMesh2dBundle};
-use rand::{thread_rng, Rng};
+use rand::{seq::SliceRandom, thread_rng, Rng};
 
 use crate::{
     game::{
-        components::{Ship, ShipHold, ShipText, Wave},
+        components::{Ship, ShipHold, ShipText, Wave, DESTINATIONS},
         custom_sprite::CustomSpriteMaterial,
         AnimationState,
     },
@@ -41,6 +41,7 @@ pub fn spawn_ship(
         .insert(Wave)
         .with_children(|child_commands| {
             let ship_hold = ShipHold {
+                destination: DESTINATIONS.choose(&mut rng).unwrap().clone(),
                 crates: vec![],
                 weight_capacity: 5,
                 current_weight: 0,
@@ -66,14 +67,17 @@ pub fn spawn_ship(
                         ship_child_commands
                             .spawn_bundle(Text2dBundle {
                                 text: Text::from_sections([
-                                    TextSection::new("W: ", text_style.clone()),      // 0
-                                    TextSection::new("0", text_style.clone()),        // 1
-                                    TextSection::new(" / 0", text_style.clone()),     // 2
-                                    TextSection::new("\nV: ", text_style.clone()),    // 3
-                                    TextSection::new("0", text_style.clone()),        // 4
-                                    TextSection::new(" / 0", text_style.clone()),     // 5
-                                    TextSection::new("\n", text_style.clone()),       // 6
-                                    TextSection::new("Americas", text_style.clone()), // 7
+                                    TextSection::new("W: ", text_style.clone()),   // 0
+                                    TextSection::new("0", text_style.clone()),     // 1
+                                    TextSection::new(" / 0", text_style.clone()),  // 2
+                                    TextSection::new("\nV: ", text_style.clone()), // 3
+                                    TextSection::new("0", text_style.clone()),     // 4
+                                    TextSection::new(" / 0", text_style.clone()),  // 5
+                                    TextSection::new("\n", text_style.clone()),    // 6
+                                    TextSection::new(
+                                        format!("{}", ship_hold.destination),
+                                        text_style.clone(),
+                                    ), // 7
                                 ])
                                 .with_alignment(TextAlignment::TOP_LEFT),
                                 transform: Transform::from_xyz(-110.0, -120.0, 1.2),
