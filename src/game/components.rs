@@ -101,3 +101,6 @@ pub struct ScoreUi;
 
 #[derive(Component)]
 pub struct ShipLaunchButton(pub usize);
+
+#[derive(Component)]
+pub struct ShipText;

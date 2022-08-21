@@ -11,6 +11,7 @@ Ship Game:
     ✔ move off screen @done(22-08-21 19:29)
     ✔ Ship launch button becomes invisible after a ship is launched @done(22-08-21 19:42)
     ✘ hide renderer% @cancelled(22-08-21 19:42)
+    ✔ Hide ship text when launching @done(22-08-21 22:30)
   
   Ship Weight system:
     ✔ Add ship weight and volume capacity @done(22-08-21 13:18)
@@ -35,6 +36,8 @@ Ship Game:
       ✔ Random time between @done(22-08-21 22:23)
       ✔ random resources @done(22-08-21 22:23)
       ✘ maximum number of carts at once @cancelled(22-08-21 22:24)
+      ☐ Cart spawns get faster as time goes on
+      ☐ Carts move faster as time goes on
     ✔ player score @done(22-08-21 14:10)
     ✔ display player score @done(22-08-21 14:10)
     ☐ buy/sell mechanic for resources

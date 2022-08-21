@@ -7,7 +7,7 @@ use crate::{
 
 use super::{
     actions::ShipSlots,
-    components::{Ship, Wave},
+    components::{Ship, ShipText, Wave},
     Animation,
 };
 
@@ -30,7 +30,8 @@ fn trigger_launch(
     animations: Res<AnimationAssets>,
     mut slots: ResMut<ShipSlots>,
     mut waves: Query<(Entity, &mut Transform), With<Wave>>,
-    mut ships: Query<(&mut Handle<Animation>, &Parent), With<Ship>>,
+    mut ships: Query<(&mut Handle<Animation>, &Parent, &Children), With<Ship>>,
+    ship_texts: Query<Entity, With<ShipText>>,
 ) {
     let mut launched = HashSet::<usize>::new();
 
@@ -47,7 +48,8 @@ fn trigger_launch(
 
         match slots.slots[evt.slot_id].take() {
             Some(se) => {
-                let (mut ship_anim, parent) = ships.get_mut(se).expect("Should find ship");
+                let (mut ship_anim, parent, children) =
+                    ships.get_mut(se).expect("Should find ship");
 
                 // update the animation
                 *ship_anim = animations.ship_unfurl.clone();
@@ -61,6 +63,14 @@ fn trigger_launch(
                     target: Vec2::new(WIDTH, -10.0 * GRID_SIZE),
                 });
                 wave_tx.translation.z = 6.0 + evt.slot_id as f32 * 3.0; // not sure why this does prevent overlapping of waves + other ships :thinking:
+
+                // hide the ship text
+                for child in children.iter() {
+                    match ship_texts.get(*child) {
+                        Ok(text_ent) => commands.entity(text_ent).despawn(),
+                        _ => {}
+                    }
+                }
             }
             None => {
                 warn!("Attempted to depart ship that has already left");
