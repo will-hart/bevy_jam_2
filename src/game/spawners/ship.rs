@@ -23,7 +23,7 @@ pub fn spawn_ship(
 
     let text_style = TextStyle {
         font: fonts.default_font.clone(),
-        font_size: 14.0,
+        font_size: 16.0,
         color: Color::WHITE,
     };
 

@@ -25,8 +25,8 @@ Ship Game:
     ☐ Different markets
     ☐ Demands per market
     ☐ Change demand over time
-    ☐ player score
-    ☐ display player score
+    ✔ player score @done(22-08-21 14:10)
+    ✔ display player score @done(22-08-21 14:10)
     ☐ buy/sell mechanic
     ☐ Lost ship (overweight) mechanic
   
@@ -39,9 +39,20 @@ Ship Game:
       ☐ park ship
       ☐ furl sails
 
+  Sound effects:
+    ☐ Morning
+    ☐ Cart arriving
+    ☐ Ship arriving
+    ☐ Weather
+    ☐ Storm noise when a ship is lost
+
 
 Super Nice to Haves:
   ☐ Physics / dropping to crates so you can hover them above the ship and drop them
   ☐ If you miss the ship the crate falls in the water and is lost
   ☐ A warehouse on the shore with very limited capacity that you can use to stockpile interesting items
   ☐ Smuggling :D
+  ☐ Nice art
+  ☐ Weather effects
+  ☐ Money ticking down in chunks, with world text "damage" indicators when money is spent
+  ☐ Maintenance / docking fees

@@ -82,3 +82,6 @@ pub struct CartCrate {
 
 #[derive(Component)]
 pub struct Wave;
+
+#[derive(Component)]
+pub struct ScoreUi;
