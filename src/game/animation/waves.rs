@@ -10,6 +10,6 @@ pub fn scroll_wave_texture(
     let dt = time.delta_seconds();
     for instance in instances.iter() {
         let material = materials.get_mut(instance).unwrap();
-        material.x_offset -= 0.1 * dt;
+        material.x_offset = (material.x_offset + 0.1 * dt) % 1.0;
     }
 }
