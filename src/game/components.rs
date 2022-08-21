@@ -1,5 +1,3 @@
-use std::fmt::Display;
-
 use bevy::prelude::*;
 
 #[derive(Component)]
@@ -20,15 +18,6 @@ pub struct ShipHold {
 
     pub volume_capacity: u32,
     pub current_volume: u32,
-}
-
-impl Display for ShipHold {
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        f.write_fmt(format_args!(
-            "W: {}/{} V: {}/{}",
-            self.current_weight, self.weight_capacity, self.current_volume, self.volume_capacity
-        ))
-    }
 }
 
 impl ShipHold {

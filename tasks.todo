@@ -16,9 +16,10 @@ Ship Game:
     ☐ Show weight/vol on resources crates
     ✔ Calculate weight/vol on ship when loaded @done(22-08-21 13:31)
     ✔ Show weight/vol below ship @done(22-08-21 13:18)
-    ☐ Highlght overweight
+    ✔ Highlght overweight @done(22-08-21 13:44)
     ☐ Drop crates if too much volume
     ✔ Ship sinks lower with weight @done(22-08-21 13:37)
+    ☐ use icons for weight / volume
   
   Economy system:
     ☐ Different markets

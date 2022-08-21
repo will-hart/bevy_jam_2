@@ -60,8 +60,17 @@ pub fn spawn_ship(
                     .insert(ship_hold.clone())
                     .with_children(|ship_child_commands| {
                         ship_child_commands.spawn_bundle(Text2dBundle {
-                            text: Text::from_section(format!("{}", ship_hold), text_style)
-                                .with_alignment(TextAlignment::CENTER_LEFT),
+                            text: Text::from_sections([
+                                TextSection::new("W: ", text_style.clone()),      // 0
+                                TextSection::new("0", text_style.clone()),        // 1
+                                TextSection::new(" / 0", text_style.clone()),     // 2
+                                TextSection::new("\nV: ", text_style.clone()),    // 3
+                                TextSection::new("0", text_style.clone()),        // 4
+                                TextSection::new(" / 0", text_style.clone()),     // 5
+                                TextSection::new("\n", text_style.clone()),       // 6
+                                TextSection::new("Americas", text_style.clone()), // 7
+                            ])
+                            .with_alignment(TextAlignment::TOP_LEFT),
                             transform: Transform::from_xyz(-110.0, -120.0, 1.2),
                             ..default()
                         });
