@@ -2,13 +2,16 @@ use bevy::{prelude::*, utils::HashSet};
 use iyes_loopless::prelude::IntoConditionalSystem;
 
 use crate::{
-    game::components::AnimateWithSpeed, loader::AnimationAssets, GameState, GRID_SIZE, WIDTH,
+    game::components::{AnimateWithSpeed, ShipRespawnTimer},
+    loader::AnimationAssets,
+    GameState, GRID_SIZE, WIDTH,
 };
 
 use super::{
     actions::ShipSlots,
-    components::{Ship, ShipText, Wave},
-    Animation,
+    animation::DespawnEntity,
+    components::{Ship, ShipHold, ShipText, Wave},
+    Animation, SystemLabels,
 };
 
 pub struct LaunchShipEvent {
@@ -20,7 +23,12 @@ pub struct LaunchShipPlugin;
 impl Plugin for LaunchShipPlugin {
     fn build(&self, app: &mut App) {
         app.add_event::<LaunchShipEvent>()
-            .add_system(trigger_launch.run_not_in_state(GameState::Loading));
+            .add_system(trigger_launch.run_not_in_state(GameState::Loading))
+            .add_system(
+                ship_despawn
+                    .run_in_state(GameState::Playing)
+                    .after(SystemLabels::ShipAnimationAndDespawn),
+            );
     }
 }
 
@@ -74,6 +82,39 @@ fn trigger_launch(
             }
             None => {
                 warn!("Attempted to depart ship that has already left");
+            }
+        }
+    }
+}
+
+/// Despawns ships and sets them for respawn
+pub fn ship_despawn(
+    mut commands: Commands,
+    time: Res<Time>,
+    mut events: EventReader<DespawnEntity>,
+    waves: Query<&Children, With<Wave>>,
+    ships: Query<(&Ship, &ShipHold)>,
+) {
+    for evt in events.iter() {
+        match waves.get(evt.0) {
+            Ok(wave_children) => {
+                for child in wave_children.iter() {
+                    let (ship, hold) = ships.get(*child).expect("Should have a ship hold");
+                    info!(
+                        "Despawning ship, setting it to respawn in {} seconds",
+                        hold.destination.get_travel_duration()
+                    );
+                    commands.entity(evt.0).despawn_recursive();
+                    commands.spawn().insert(ShipRespawnTimer {
+                        ship_to_respawn: ship.clone(),
+                        respawn_at: time.time_since_startup().as_secs_f32()
+                            + hold.destination.get_travel_duration(),
+                    });
+                }
+            }
+            _ => {
+                // not a wave
+                warn!("Somehow ship despawn event was called on not a ship :confused:")
             }
         }
     }

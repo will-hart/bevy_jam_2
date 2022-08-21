@@ -43,14 +43,15 @@ Ship Game:
     ☐ Display market prices
     ☐ Display market price trajectory
     ☐ Market prices move over time
-    ✔ When ship despawned player gets the value from the market at that time @done(22-08-22 07:49)
+    ✔ When ship desawned player gets the value from the market at that time @done(22-08-22 07:49)
     ☐ Lost ship (overweight) mechanic
   
   Ship system:
     ✘ ship delivery timer (off screen / unavailable) @cancelled(22-08-21 22:45)
-    ☐ Ship arrival timer
+    ☐ Ship arrival timer UI
+    ☐ Spawn ship button
     ☐ ship queue off screen
-    ☐ ship maintenance cost
+    ✔ ship maintenance cost @done(22-08-22 08:20)
     ship docking system:
       ☐ refresh ship + ship hold
       ☐ add ship to slot
@@ -77,3 +78,4 @@ Super Nice to Haves:
   ☐ Make departure animation less overlappy with waves
   ☐ Change market demand over time
   ☐ Show the crates on a ship on the screen
+  ☐ Carts pause for a bit, then get angry and depart - the player's score is penalised for carts they can't ship for

@@ -1,6 +1,9 @@
 use std::fmt::Display;
 
 use bevy::prelude::*;
+use rand::{rngs::ThreadRng, Rng};
+
+use crate::GRID_SIZE;
 
 #[derive(Component)]
 pub struct Torch;
@@ -22,6 +25,18 @@ impl Display for ShipDestination {
     }
 }
 
+impl ShipDestination {
+    /// The amount of time a ship is unavailable for when sailing
+    /// counted from the time the ship despawns
+    pub fn get_travel_duration(&self) -> f32 {
+        match self {
+            ShipDestination::Americas => 12.0,
+            ShipDestination::Carribean => 11.0,
+            ShipDestination::China => 9.0,
+        }
+    }
+}
+
 /// used for randomg selection of destinations, see notes on [BOX_TYPES] below.
 /// Keep up to date with ShipDestination above.
 pub const DESTINATIONS: [ShipDestination; 3] = [
@@ -30,10 +45,31 @@ pub const DESTINATIONS: [ShipDestination; 3] = [
     ShipDestination::China,
 ];
 
-#[derive(Component, Debug)]
+#[derive(Component, Clone, Copy, Debug)]
 pub struct Ship {
     pub y_offset: f32,
     pub phase: f32,
+    pub next_available: f32,
+    pub maintenance_cost_per_second: f32,
+    pub purchase_cost: u32,
+}
+
+impl Ship {
+    pub fn new(rng: &mut ThreadRng) -> Self {
+        Self {
+            y_offset: 4.0 * GRID_SIZE,
+            phase: rng.gen_range(-3.1..3.1),
+            next_available: 0.0,
+            maintenance_cost_per_second: 1.0,
+            purchase_cost: 350,
+        }
+    }
+}
+
+#[derive(Component)]
+pub struct ShipRespawnTimer {
+    pub ship_to_respawn: Ship,
+    pub respawn_at: f32,
 }
 
 #[derive(Component, Clone, Debug)]

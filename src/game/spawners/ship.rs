@@ -1,5 +1,5 @@
 use bevy::{prelude::*, sprite::MaterialMesh2dBundle};
-use rand::{seq::SliceRandom, thread_rng, Rng};
+use rand::{seq::SliceRandom, thread_rng};
 
 use crate::{
     game::{
@@ -19,6 +19,7 @@ pub fn spawn_ship(
     meshes: &mut Assets<Mesh>,
     materials: &mut Assets<CustomSpriteMaterial>,
     location: Vec3,
+    previous_ship: Option<Ship>,
 ) -> Entity {
     let mut rng = thread_rng();
     let mut entity: Option<Entity> = None;
@@ -56,10 +57,7 @@ pub fn spawn_ship(
                         transform: Transform::from_xyz(0.5 * GRID_SIZE, 0.0, -0.5),
                         ..Default::default()
                     })
-                    .insert(Ship {
-                        y_offset: 4.0 * GRID_SIZE,
-                        phase: rng.gen_range(-3.1..3.1),
-                    })
+                    .insert(previous_ship.unwrap_or(Ship::new(&mut rng)))
                     .insert(animations.ship_idle.clone())
                     .insert(AnimationState::default())
                     .insert(ship_hold.clone())

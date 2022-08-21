@@ -37,6 +37,12 @@ use animation::AnimationPlugin;
 
 use self::{actions::ShipSlots, custom_sprite::CustomSpriteMaterial};
 
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, SystemLabel)]
+pub enum SystemLabels {
+    ShipAnimationAndDespawn,
+    ScoreDisplay,
+}
+
 pub struct GamePlugin;
 
 impl Plugin for GamePlugin {
@@ -105,6 +111,7 @@ fn setup_world(
         &mut meshes,
         &mut materials,
         Vec3::new(-GRID_SIZE * 10., -GRID_SIZE * 4., 1.6),
+        None,
     ));
     info!("Added ship {:?} at slot 0", ship_slots.slots[0]);
 
@@ -116,6 +123,7 @@ fn setup_world(
         &mut meshes,
         &mut materials,
         Vec3::new(0., -GRID_SIZE * 4., 1.3),
+        None,
     ));
     info!("Added ship {:?} at slot 1", ship_slots.slots[1]);
 
@@ -127,6 +135,7 @@ fn setup_world(
         &mut meshes,
         &mut materials,
         Vec3::new(GRID_SIZE * 10., -GRID_SIZE * 4., 1.0),
+        None,
     ));
     info!("Added ship {:?} at slot 2", ship_slots.slots[2]);
 

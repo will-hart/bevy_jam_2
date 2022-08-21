@@ -8,7 +8,7 @@ mod waves;
 pub use animation::{Animation, AnimationState};
 use iyes_loopless::prelude::IntoConditionalSystem;
 
-use crate::GameState;
+use crate::{game::SystemLabels, GameState};
 
 pub struct AnimationPlugin;
 
@@ -21,7 +21,11 @@ impl Plugin for AnimationPlugin {
             .add_event::<DespawnEntity>()
             .init_asset_loader::<animation::BenimationLoader>()
             .add_system(animation::update_animation_frames)
-            .add_system(animate_entity::animate_entity.run_not_in_state(GameState::Loading))
+            .add_system(
+                animate_entity::animate_entity
+                    .run_not_in_state(GameState::Loading)
+                    .label(SystemLabels::ShipAnimationAndDespawn),
+            )
             .add_system(ship_bob::ship_bob.run_not_in_state(GameState::Loading))
             .add_system(waves::scroll_wave_texture.run_not_in_state(GameState::Loading));
     }
