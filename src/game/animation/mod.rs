@@ -3,6 +3,7 @@ use bevy::{log, prelude::*};
 mod animate_x;
 mod animation;
 mod ship_bob;
+mod waves;
 pub use animation::{Animation, AnimationState};
 use iyes_loopless::prelude::IntoConditionalSystem;
 
@@ -19,6 +20,7 @@ impl Plugin for AnimationPlugin {
             .init_asset_loader::<animation::BenimationLoader>()
             .add_system(animation::update_animation_frames)
             .add_system(animate_x::animate_x.run_not_in_state(GameState::Loading))
-            .add_system(ship_bob::ship_bob.run_not_in_state(GameState::Loading));
+            .add_system(ship_bob::ship_bob.run_not_in_state(GameState::Loading))
+            .add_system(waves::scroll_wave_texture.run_not_in_state(GameState::Loading));
     }
 }

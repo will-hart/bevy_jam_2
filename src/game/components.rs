@@ -42,3 +42,6 @@ pub struct FollowMouse;
 pub struct CartCrate {
     pub is_front_slot: bool,
 }
+
+#[derive(Component)]
+pub struct Wave;

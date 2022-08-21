@@ -2,7 +2,7 @@ Ship Game:
   ✔ Reorganise spawning systems to be more reusable @done(22-08-21 11:15)
 
   Ship departure system:
-    ☐ make waves a single scrolling texture and parent to ship
+    ✔ make waves a single scrolling texture and the ship's parent @done(22-08-21 12:52)
     ☐ add departure button
     ☐ animate sails unfurling
     ☐ remove from ship slot

@@ -4,6 +4,7 @@ pub mod components;
 mod day_night_cycle;
 mod spawners;
 
+mod custom_sprite;
 #[cfg(feature = "debug_system")]
 mod debug;
 
@@ -15,7 +16,8 @@ use iyes_loopless::prelude::AppLooplessStateExt;
 use crate::{
     game::{
         actions::ActionPlugin,
-        components::{AnimateX, BoxType},
+        components::BoxType,
+        custom_sprite::CustomSpritePlugin,
         day_night_cycle::DayNightCyclePlugin,
         spawners::{spawn_cart, spawn_ship, spawn_torch},
     },
@@ -28,14 +30,15 @@ use crate::game::debug::DebugPlugin;
 
 use animation::AnimationPlugin;
 
-use self::actions::ShipSlots;
+use self::{actions::ShipSlots, custom_sprite::CustomSpriteMaterial};
 
 pub struct GamePlugin;
 
 impl Plugin for GamePlugin {
     fn build(&self, app: &mut App) {
         info!("Mounting GamePlugin");
-        app.add_plugin(AnimationPlugin)
+        app.add_plugin(CustomSpritePlugin)
+            .add_plugin(AnimationPlugin)
             .add_plugin(ActionPlugin)
             .add_plugin(DayNightCyclePlugin)
             .add_enter_system(GameState::Playing, setup_world);
@@ -52,6 +55,8 @@ fn setup_world(
     textures: Res<TextureAssets>,
     animations: Res<AnimationAssets>,
     mut ship_slots: ResMut<ShipSlots>,
+    mut meshes: ResMut<Assets<Mesh>>,
+    mut materials: ResMut<Assets<CustomSpriteMaterial>>,
 ) {
     info!("Setting up game world");
 
@@ -85,40 +90,26 @@ fn setup_world(
     ship_slots.slots[0] = Some(spawn_ship(
         &mut commands,
         &textures,
+        &mut meshes,
+        &mut materials,
         Vec3::new(-GRID_SIZE * 10., -GRID_SIZE * 4., 0.6),
-        -4.0 * GRID_SIZE,
     ));
 
     ship_slots.slots[1] = Some(spawn_ship(
         &mut commands,
         &textures,
+        &mut meshes,
+        &mut materials,
         Vec3::new(0., -GRID_SIZE * 4., 0.6),
-        -4.0 * GRID_SIZE,
     ));
 
     ship_slots.slots[2] = Some(spawn_ship(
         &mut commands,
         &textures,
+        &mut meshes,
+        &mut materials,
         Vec3::new(GRID_SIZE * 10., -GRID_SIZE * 4., 0.6),
-        -4.0 * GRID_SIZE,
     ));
-
-    /* WAVES */
-    let mut x = -WIDTH / 2.0 - 5. * GRID_SIZE;
-
-    while x < WIDTH / 2.0 + 5. * GRID_SIZE {
-        commands
-            .spawn_bundle(SpriteBundle {
-                texture: textures.waves.clone(),
-                transform: Transform::from_xyz(x, -GRID_SIZE * 8., 0.9),
-                ..Default::default()
-            })
-            .insert(AnimateX {
-                looped: true,
-                speed: 15.0,
-            });
-        x += 160.;
-    }
 
     /* CARTS */
     spawn_cart(
