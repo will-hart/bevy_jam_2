@@ -66,6 +66,21 @@ pub fn spawn_ship_buttons(mut commands: Commands, fonts: Res<FontAssets>) {
         });
 }
 
+pub fn button_visibility(
+    mut hide_events: EventReader<LaunchShipEvent>,
+    mut buttons: Query<(&mut Visibility, &ShipLaunchButton)>,
+) {
+    for evt in hide_events.iter() {
+        let slot_idx = evt.slot_id;
+
+        for (mut button_vis, button) in buttons.iter_mut() {
+            if button.0 == slot_idx {
+                button_vis.is_visible = false;
+            }
+        }
+    }
+}
+
 pub fn button_interaction(
     mut events: EventWriter<LaunchShipEvent>,
     mut interaction_query: Query<

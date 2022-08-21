@@ -27,6 +27,7 @@ impl Plugin for UiPlugin {
                     .before("score_display"),
             )
             .add_enter_system(GameState::Playing, launch_ships::spawn_ship_buttons)
+            .add_system(launch_ships::button_visibility.run_in_state(GameState::Playing))
             .add_system(launch_ships::button_interaction.run_in_state(GameState::Playing));
     }
 }

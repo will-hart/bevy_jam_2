@@ -60,7 +60,7 @@ fn trigger_launch(
                     speed: 20.0,
                     target: Vec2::new(WIDTH, -10.0 * GRID_SIZE),
                 });
-                wave_tx.translation.z = 8.0;
+                wave_tx.translation.z = 6.0 + evt.slot_id as f32 * 3.0; // not sure why this does prevent overlapping of waves + other ships :thinking:
             }
             None => {
                 warn!("Attempted to depart ship that has already left");

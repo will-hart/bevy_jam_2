@@ -9,8 +9,8 @@ Ship Game:
     ✔ remove from ship slot @done(22-08-21 19:29)
     ✔ move down @done(22-08-21 19:29)
     ✔ move off screen @done(22-08-21 19:29)
-    ☐ Ship launch button becomes invisible after a ship is launched
-    ☐ hide renderer
+    ✔ Ship launch button becomes invisible after a ship is launched @done(22-08-21 19:42)
+    ✘ hide renderer @cancelled(22-08-21 19:42)
   
   Ship Weight system:
     ✔ Add ship weight and volume capacity @done(22-08-21 13:18)
