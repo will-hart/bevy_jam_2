@@ -1,6 +1,6 @@
 use bevy::{log, prelude::*};
 
-mod animate_x;
+mod animate_entity;
 mod animation;
 mod ship_bob;
 mod waves;
@@ -19,7 +19,7 @@ impl Plugin for AnimationPlugin {
         app.add_asset::<Animation>()
             .init_asset_loader::<animation::BenimationLoader>()
             .add_system(animation::update_animation_frames)
-            .add_system(animate_x::animate_x.run_not_in_state(GameState::Loading))
+            .add_system(animate_entity::animate_entity.run_not_in_state(GameState::Loading))
             .add_system(ship_bob::ship_bob.run_not_in_state(GameState::Loading))
             .add_system(waves::scroll_wave_texture.run_not_in_state(GameState::Loading));
     }

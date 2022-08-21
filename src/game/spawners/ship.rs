@@ -5,8 +5,9 @@ use crate::{
     game::{
         components::{Ship, ShipHold, Wave},
         custom_sprite::CustomSpriteMaterial,
+        AnimationState,
     },
-    loader::{FontAssets, TextureAssets},
+    loader::{AnimationAssets, FontAssets, TextureAssets},
     GRID_SIZE,
 };
 
@@ -14,6 +15,7 @@ pub fn spawn_ship(
     commands: &mut Commands,
     textures: &TextureAssets,
     fonts: &FontAssets,
+    animations: &AnimationAssets,
     meshes: &mut Assets<Mesh>,
     materials: &mut Assets<CustomSpriteMaterial>,
     location: Vec3,
@@ -57,6 +59,8 @@ pub fn spawn_ship(
                         y_offset: 4.0 * GRID_SIZE,
                         phase: rng.gen_range(-3.1..3.1),
                     })
+                    .insert(animations.ship_idle.clone())
+                    .insert(AnimationState::default())
                     .insert(ship_hold.clone())
                     .with_children(|ship_child_commands| {
                         ship_child_commands.spawn_bundle(Text2dBundle {

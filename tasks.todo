@@ -4,11 +4,12 @@ Ship Game:
   Ship departure system:
     ✔ make waves a single scrolling texture and the ship's parent @done(22-08-21 12:52)
     ✔ add departure button @done(22-08-21 18:30)
-    ☐ Departure button makes the ship leave
-    ☐ animate sails unfurling
-    ☐ remove from ship slot
-    ☐ move down
-    ☐ move off screen
+    ✔ Departure button makes the ship leave @done(22-08-21 19:29)
+    ✔ animate sails unfurling @done(22-08-21 19:29)
+    ✔ remove from ship slot @done(22-08-21 19:29)
+    ✔ move down @done(22-08-21 19:29)
+    ✔ move off screen @done(22-08-21 19:29)
+    ☐ Ship launch button becomes invisible after a ship is launched
     ☐ hide renderer
   
   Ship Weight system:
@@ -57,3 +58,4 @@ Super Nice to Haves:
   ☐ Weather effects
   ☐ Money ticking down in chunks, with world text "damage" indicators when money is spent
   ☐ Maintenance / docking fees
+  ☐ Make departure animation less overlappy with waves

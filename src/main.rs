@@ -33,7 +33,7 @@ fn main() {
             height: 768.,
             title: "Bevy Jam 2".to_string(),
             canvas: Some("#bevy".to_owned()),
-            resizable: false,
+            // resizable: false,
             ..Default::default()
         })
         .add_plugins(DefaultPlugins)

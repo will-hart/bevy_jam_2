@@ -1,10 +1,14 @@
 use bevy::prelude::*;
 
-use crate::{game::components::ShipLaunchButton, loader::FontAssets, GRID_SIZE};
+use crate::{
+    game::{components::ShipLaunchButton, ship_launch::LaunchShipEvent},
+    loader::FontAssets,
+    GRID_SIZE,
+};
 
-const NORMAL_BUTTON: Color = Color::rgba(0.15, 0.15, 0.15, 0.5);
-const HOVERED_BUTTON: Color = Color::rgba(0.15, 0.15, 0.15, 0.75);
-const PRESSED_BUTTON: Color = Color::rgba(0.15, 0.15, 0.15, 0.25);
+const NORMAL_BUTTON: Color = Color::rgba(0.15, 0.15, 0.15, 0.05);
+const HOVERED_BUTTON: Color = Color::rgba(0.15, 0.15, 0.15, 0.25);
+const PRESSED_BUTTON: Color = Color::rgba(0.15, 0.15, 0.15, 0.75);
 
 pub fn spawn_ship_buttons(mut commands: Commands, fonts: Res<FontAssets>) {
     commands
@@ -36,7 +40,7 @@ pub fn spawn_ship_buttons(mut commands: Commands, fonts: Res<FontAssets>) {
                             button_node
                                 .spawn_bundle(ButtonBundle {
                                     style: Style {
-                                        size: Size::new(Val::Px(60.0), Val::Px(32.0)),
+                                        size: Size::new(Val::Px(70.0), Val::Px(40.0)),
                                         margin: UiRect::all(Val::Auto),
                                         justify_content: JustifyContent::Center,
                                         align_items: AlignItems::Center,
@@ -63,16 +67,21 @@ pub fn spawn_ship_buttons(mut commands: Commands, fonts: Res<FontAssets>) {
 }
 
 pub fn button_interaction(
+    mut events: EventWriter<LaunchShipEvent>,
     mut interaction_query: Query<
         (&Interaction, &mut UiColor, &ShipLaunchButton),
         (Changed<Interaction>, With<Button>),
     >,
 ) {
-    for (interaction, mut color, ship) in &mut interaction_query {
+    for (interaction, mut color, button_data) in &mut interaction_query {
         match *interaction {
             Interaction::Clicked => {
                 *color = PRESSED_BUTTON.into();
-                warn!("Launch ship {}", ship.0);
+                info!("Launching ship from slot {}", button_data.0);
+
+                events.send(LaunchShipEvent {
+                    slot_id: button_data.0,
+                })
             }
             Interaction::Hovered => {
                 *color = HOVERED_BUTTON.into();

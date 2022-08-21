@@ -1,0 +1,3 @@
+mode: Once
+fps: 4
+frames: [3, 2, 1, 0]

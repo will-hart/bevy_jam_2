@@ -2,10 +2,11 @@ use bevy::prelude::*;
 
 use crate::{
     game::{
-        components::{AnimateX, BoxType, Cart, CartCrate},
+        components::{AnimateWithSpeed, BoxType, Cart, CartCrate},
         AnimationState,
     },
     loader::{AnimationAssets, TextureAssets},
+    WIDTH,
 };
 
 pub fn spawn_cart(
@@ -21,9 +22,9 @@ pub fn spawn_cart(
             transform: Transform::from_translation(location),
             ..Default::default()
         })
-        .insert(AnimateX {
-            looped: false,
-            speed: -30.,
+        .insert(AnimateWithSpeed {
+            speed: 30.,
+            target: Vec2::new(-0.75 * WIDTH, location.y),
         })
         .insert(Cart {
             front: Some(box_types[0]),

@@ -7,6 +7,7 @@ mod spawners;
 mod custom_sprite;
 #[cfg(feature = "debug_system")]
 mod debug;
+mod ship_launch;
 mod ui;
 
 pub use animation::{Animation, AnimationState};
@@ -20,6 +21,7 @@ use crate::{
         components::BoxType,
         custom_sprite::CustomSpritePlugin,
         day_night_cycle::DayNightCyclePlugin,
+        ship_launch::LaunchShipPlugin,
         spawners::{spawn_cart, spawn_ship, spawn_torch},
         ui::UiPlugin,
     },
@@ -43,6 +45,7 @@ impl Plugin for GamePlugin {
             .add_plugin(AnimationPlugin)
             .add_plugin(ActionPlugin)
             .add_plugin(DayNightCyclePlugin)
+            .add_plugin(LaunchShipPlugin)
             .add_plugin(UiPlugin)
             .add_enter_system(GameState::Playing, setup_world);
 
@@ -95,28 +98,34 @@ fn setup_world(
         &mut commands,
         &textures,
         &fonts,
+        &animations,
         &mut meshes,
         &mut materials,
-        Vec3::new(-GRID_SIZE * 10., -GRID_SIZE * 4., 0.6),
+        Vec3::new(-GRID_SIZE * 10., -GRID_SIZE * 4., 1.6),
     ));
+    info!("Added ship {:?} at slot 0", ship_slots.slots[0]);
 
     ship_slots.slots[1] = Some(spawn_ship(
         &mut commands,
         &textures,
         &fonts,
+        &animations,
         &mut meshes,
         &mut materials,
-        Vec3::new(0., -GRID_SIZE * 4., 0.6),
+        Vec3::new(0., -GRID_SIZE * 4., 1.3),
     ));
+    info!("Added ship {:?} at slot 1", ship_slots.slots[1]);
 
     ship_slots.slots[2] = Some(spawn_ship(
         &mut commands,
         &textures,
         &fonts,
+        &animations,
         &mut meshes,
         &mut materials,
-        Vec3::new(GRID_SIZE * 10., -GRID_SIZE * 4., 0.6),
+        Vec3::new(GRID_SIZE * 10., -GRID_SIZE * 4., 1.0),
     ));
+    info!("Added ship {:?} at slot 2", ship_slots.slots[2]);
 
     /* CARTS */
     spawn_cart(

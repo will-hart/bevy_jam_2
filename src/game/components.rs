@@ -30,9 +30,9 @@ impl ShipHold {
 }
 
 #[derive(Component)]
-pub struct AnimateX {
+pub struct AnimateWithSpeed {
     pub speed: f32,
-    pub looped: bool,
+    pub target: Vec2,
 }
 
 #[derive(Component)]

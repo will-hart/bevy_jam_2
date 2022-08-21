@@ -90,4 +90,10 @@ pub struct AnimationAssets {
     pub torch_off: Handle<Animation>,
     #[asset(path = "animations/cart.animation.yml")]
     pub cart: Handle<Animation>,
+    #[asset(path = "animations/ship_unfurl.animation.yml")]
+    pub ship_unfurl: Handle<Animation>,
+    #[asset(path = "animations/ship_furl.animation.yml")]
+    pub ship_furl: Handle<Animation>,
+    #[asset(path = "animations/ship_idle.animation.yml")]
+    pub ship_idle: Handle<Animation>,
 }
