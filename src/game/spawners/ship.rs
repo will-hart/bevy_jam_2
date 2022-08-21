@@ -3,16 +3,17 @@ use rand::{thread_rng, Rng};
 
 use crate::{
     game::{
-        components::{Ship, Wave},
+        components::{Ship, ShipHold, Wave},
         custom_sprite::CustomSpriteMaterial,
     },
-    loader::TextureAssets,
+    loader::{FontAssets, TextureAssets},
     GRID_SIZE,
 };
 
 pub fn spawn_ship(
     commands: &mut Commands,
     textures: &TextureAssets,
+    fonts: &FontAssets,
     meshes: &mut Assets<Mesh>,
     materials: &mut Assets<CustomSpriteMaterial>,
     location: Vec3,
@@ -20,17 +21,31 @@ pub fn spawn_ship(
     let mut rng = thread_rng();
     let mut entity: Option<Entity> = None;
 
+    let text_style = TextStyle {
+        font: fonts.default_font.clone(),
+        font_size: 14.0,
+        color: Color::WHITE,
+    };
+
     commands
         .spawn_bundle(MaterialMesh2dBundle {
             mesh: meshes
-                .add(Mesh::from(shape::Quad::new(Vec2::new(228.0, 64.0))))
+                .add(Mesh::from(shape::Quad::new(Vec2::new(288.0, 64.0))))
                 .into(),
-            transform: Transform::from_translation(location - Vec3::Y * GRID_SIZE * 5.0),
+            transform: Transform::from_translation(location - Vec3::Y * GRID_SIZE * 4.0),
             material: materials.add(textures.waves.clone().into()),
             ..Default::default()
         })
         .insert(Wave)
         .with_children(|child_commands| {
+            let ship_hold = ShipHold {
+                crates: vec![],
+                weight_capacity: 5,
+                current_weight: 0,
+                volume_capacity: 4,
+                current_volume: 0,
+            };
+
             entity = Some(
                 child_commands
                     .spawn_bundle(SpriteSheetBundle {
@@ -39,9 +54,17 @@ pub fn spawn_ship(
                         ..Default::default()
                     })
                     .insert(Ship {
-                        y: 4.0 * GRID_SIZE,
+                        y_offset: 4.0 * GRID_SIZE,
                         phase: rng.gen_range(-3.1..3.1),
-                        crates: vec![],
+                    })
+                    .insert(ship_hold.clone())
+                    .with_children(|ship_child_commands| {
+                        ship_child_commands.spawn_bundle(Text2dBundle {
+                            text: Text::from_section(format!("{}", ship_hold), text_style)
+                                .with_alignment(TextAlignment::CENTER_LEFT),
+                            transform: Transform::from_xyz(-110.0, -120.0, 1.2),
+                            ..default()
+                        });
                     })
                     .id(),
             )

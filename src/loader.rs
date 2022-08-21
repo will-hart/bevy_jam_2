@@ -24,7 +24,7 @@ impl Plugin for LoadingPlugin {
 #[derive(AssetCollection)]
 pub struct FontAssets {
     #[asset(path = "fonts/FiraSans-Bold.ttf")]
-    pub fira_sans: Handle<Font>,
+    pub default_font: Handle<Font>,
 }
 
 /// Contains audio assets loaded from file

@@ -11,13 +11,14 @@ Ship Game:
     ☐ hide renderer
   
   Ship Weight system:
-    ☐ Add ship weight and volume capacity
-    ☐ Add weight/volume to resources
+    ✔ Add ship weight and volume capacity @done(22-08-21 13:18)
+    ✔ Add weight/volume to resources @done(22-08-21 13:31)
     ☐ Show weight/vol on resources crates
-    ☐ Calculate weight/vol on ship when loaded
-    ☐ Show weight/vol below ship
+    ✔ Calculate weight/vol on ship when loaded @done(22-08-21 13:31)
+    ✔ Show weight/vol below ship @done(22-08-21 13:18)
     ☐ Highlght overweight
     ☐ Drop crates if too much volume
+    ✔ Ship sinks lower with weight @done(22-08-21 13:37)
   
   Economy system:
     ☐ Different markets
@@ -36,3 +37,10 @@ Ship Game:
       ☐ add ship to slot
       ☐ park ship
       ☐ furl sails
+
+
+Super Nice to Haves:
+  ☐ Physics / dropping to crates so you can hover them above the ship and drop them
+  ☐ If you miss the ship the crate falls in the water and is lost
+  ☐ A warehouse on the shore with very limited capacity that you can use to stockpile interesting items
+  ☐ Smuggling :D

@@ -7,6 +7,7 @@ mod spawners;
 mod custom_sprite;
 #[cfg(feature = "debug_system")]
 mod debug;
+mod ui;
 
 pub use animation::{Animation, AnimationState};
 
@@ -20,8 +21,9 @@ use crate::{
         custom_sprite::CustomSpritePlugin,
         day_night_cycle::DayNightCyclePlugin,
         spawners::{spawn_cart, spawn_ship, spawn_torch},
+        ui::UiPlugin,
     },
-    loader::{AnimationAssets, TextureAssets},
+    loader::{AnimationAssets, FontAssets, TextureAssets},
     GameState, GRID_SIZE, WIDTH,
 };
 
@@ -41,6 +43,7 @@ impl Plugin for GamePlugin {
             .add_plugin(AnimationPlugin)
             .add_plugin(ActionPlugin)
             .add_plugin(DayNightCyclePlugin)
+            .add_plugin(UiPlugin)
             .add_enter_system(GameState::Playing, setup_world);
 
         #[cfg(feature = "debug_system")]
@@ -54,6 +57,7 @@ fn setup_world(
     mut commands: Commands,
     textures: Res<TextureAssets>,
     animations: Res<AnimationAssets>,
+    fonts: Res<FontAssets>,
     mut ship_slots: ResMut<ShipSlots>,
     mut meshes: ResMut<Assets<Mesh>>,
     mut materials: ResMut<Assets<CustomSpriteMaterial>>,
@@ -90,6 +94,7 @@ fn setup_world(
     ship_slots.slots[0] = Some(spawn_ship(
         &mut commands,
         &textures,
+        &fonts,
         &mut meshes,
         &mut materials,
         Vec3::new(-GRID_SIZE * 10., -GRID_SIZE * 4., 0.6),
@@ -98,6 +103,7 @@ fn setup_world(
     ship_slots.slots[1] = Some(spawn_ship(
         &mut commands,
         &textures,
+        &fonts,
         &mut meshes,
         &mut materials,
         Vec3::new(0., -GRID_SIZE * 4., 0.6),
@@ -106,6 +112,7 @@ fn setup_world(
     ship_slots.slots[2] = Some(spawn_ship(
         &mut commands,
         &textures,
+        &fonts,
         &mut meshes,
         &mut materials,
         Vec3::new(GRID_SIZE * 10., -GRID_SIZE * 4., 0.6),

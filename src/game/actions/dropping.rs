@@ -1,6 +1,6 @@
 use bevy::prelude::*;
 
-use crate::game::components::{Cart, CartCrate, FollowMouse, Ship};
+use crate::game::components::{Cart, CartCrate, FollowMouse, ShipHold};
 
 use super::dragging::DraggingBox;
 
@@ -21,7 +21,7 @@ pub struct OnDropCrate {
     pub ship: Option<Entity>,
 }
 
-pub struct OnCrateDroppedOnShip;
+pub struct OnCrateDroppedOnShip(pub Entity);
 
 pub fn handle_drop(
     mut commands: Commands,
@@ -31,7 +31,7 @@ pub fn handle_drop(
     followers: Query<Entity, With<FollowMouse>>,
     mut carts: Query<(&mut Cart, &Children)>,
     mut child_crates: Query<(&mut Visibility, &CartCrate)>,
-    mut ships: Query<&mut Ship>,
+    mut ships: Query<&mut ShipHold>,
 ) {
     let mut done = false;
     for evt in on_drop_events.iter() {
@@ -58,11 +58,11 @@ pub fn handle_drop(
         // set the cart crate to visible again, or add it to the ship if it was dropped on a ship
         match evt.ship {
             Some(ship_ent) => {
-                let mut ship = ships
+                let mut ship_hold = ships
                     .get_mut(ship_ent)
                     .expect("Should be able to find ship");
-                ship.crates.push(dragging.box_type.unwrap());
-                on_drop_on_ship_events.send(OnCrateDroppedOnShip);
+                ship_hold.accept_crate(dragging.box_type.unwrap());
+                on_drop_on_ship_events.send(OnCrateDroppedOnShip(ship_ent));
             }
             None => {
                 // "drop back" on the cart
