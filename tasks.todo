@@ -31,17 +31,21 @@ Ship Game:
   Economy system:
     ☐ Different markets
     ☐ Demands per market
-    ☐ Change demand over time
+    Cart spawning:
+      ✔ Random time between @done(22-08-21 22:23)
+      ✔ random resources @done(22-08-21 22:23)
+      ✘ maximum number of carts at once @cancelled(22-08-21 22:24)
     ✔ player score @done(22-08-21 14:10)
     ✔ display player score @done(22-08-21 14:10)
-    ☐ buy/sell mechanic
+    ☐ buy/sell mechanic for resources
     ☐ Lost ship (overweight) mechanic
   
   Ship system:
     ☐ ship delivery timer (off screen / unavailable)
     ☐ ship queue off screen
     ☐ ship maintenance cost
-    ☐ ship docking system
+    ship docking system:
+      ☐ refresh ship + ship hold
       ☐ add ship to slot
       ☐ park ship
       ☐ furl sails
@@ -52,7 +56,6 @@ Ship Game:
     ☐ Ship arriving
     ☐ Weather
     ☐ Storm noise when a ship is lost
-
 
 Super Nice to Haves:
   ☐ Physics / dropping to crates so you can hover them above the ship and drop them
@@ -65,3 +68,5 @@ Super Nice to Haves:
   ☐ Money ticking down in chunks, with world text "damage" indicators when money is spent
   ☐ Maintenance / docking fees
   ☐ Make departure animation less overlappy with waves
+  ☐ Change market demand over time
+  ☐ Show the crates on a ship on the screen

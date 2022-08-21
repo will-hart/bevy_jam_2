@@ -13,7 +13,7 @@ benimator = {version = "4.0.0-rc.1", features = ["serde"] }
 bevy = "0.8"
 bevy_asset_loader = { version = "0.12", features = ["stageless", "2d"] }
 bevy_prototype_debug_lines = { version = "0.8", optional = true }
-bevy_kira_audio = { version = "0.12", features = ["ogg", "wav"] } # this seems to stop linker errors lol
+bevy_kira_audio = { version = "0.12", features = ["ogg"] }
 iyes_loopless = "0.7.1"
 leafwing-input-manager = "0.5.1"
 num-format = "0.4.0"

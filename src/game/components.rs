@@ -49,6 +49,16 @@ pub enum BoxType {
     Rum = 3,
 }
 
+// Because we can't loop or rand::choose over all enum values, we need
+// to define a list of possible enum values here for randomly spawning
+// crates. Make sure to keep this up to date with the enum above.
+pub const BOX_TYPES: [BoxType; 4] = [
+    BoxType::MedicalSupplies,
+    BoxType::Fruit,
+    BoxType::Iron,
+    BoxType::Rum,
+];
+
 impl BoxType {
     pub fn get_weight(&self) -> u32 {
         match self {

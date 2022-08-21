@@ -1,12 +1,13 @@
 use bevy::prelude::*;
+use rand::{seq::SliceRandom, thread_rng, Rng};
 
 use crate::{
     game::{
-        components::{AnimateWithSpeed, BoxType, Cart, CartCrate},
+        components::{AnimateWithSpeed, BoxType, Cart, CartCrate, BOX_TYPES},
         AnimationState,
     },
     loader::{AnimationAssets, TextureAssets},
-    WIDTH,
+    GRID_SIZE, WIDTH,
 };
 
 pub fn spawn_cart(
@@ -58,4 +59,35 @@ pub fn spawn_cart(
                     is_front_slot: false,
                 });
         });
+}
+
+#[derive(Default)]
+pub struct NextSpawnTime(pub u64);
+
+pub fn cart_spawning_system(
+    mut commands: Commands,
+    time: Res<Time>,
+    textures: Res<TextureAssets>,
+    animations: Res<AnimationAssets>,
+    mut spawns: Local<NextSpawnTime>,
+) {
+    let t = time.time_since_startup().as_secs();
+    if t > spawns.0 {
+        let mut rng = thread_rng();
+
+        // set the next spawn time
+        spawns.0 += rng.gen_range(5..15);
+
+        // spawn a cart
+        spawn_cart(
+            &mut commands,
+            &textures,
+            &animations,
+            Vec3::new(WIDTH / 2.0 + GRID_SIZE * 5.0, -GRID_SIZE * 1.5, 0.4),
+            [
+                BOX_TYPES.choose(&mut rng).unwrap().clone(),
+                BOX_TYPES.choose(&mut rng).unwrap().clone(),
+            ],
+        );
+    }
 }

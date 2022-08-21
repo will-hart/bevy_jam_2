@@ -13,20 +13,19 @@ mod ui;
 pub use animation::{Animation, AnimationState};
 
 use bevy::prelude::*;
-use iyes_loopless::prelude::AppLooplessStateExt;
+use iyes_loopless::prelude::{AppLooplessStateExt, IntoConditionalSystem};
 
 use crate::{
     game::{
         actions::ActionPlugin,
-        components::BoxType,
         custom_sprite::CustomSpritePlugin,
         day_night_cycle::DayNightCyclePlugin,
         ship_launch::LaunchShipPlugin,
-        spawners::{spawn_cart, spawn_ship, spawn_torch},
+        spawners::{cart_spawning_system, spawn_ship, spawn_torch},
         ui::UiPlugin,
     },
     loader::{AnimationAssets, FontAssets, TextureAssets},
-    GameState, GRID_SIZE, WIDTH,
+    GameState, GRID_SIZE,
 };
 
 #[cfg(feature = "debug_system")]
@@ -47,6 +46,7 @@ impl Plugin for GamePlugin {
             .add_plugin(DayNightCyclePlugin)
             .add_plugin(LaunchShipPlugin)
             .add_plugin(UiPlugin)
+            .add_system(cart_spawning_system.run_in_state(GameState::Playing))
             .add_enter_system(GameState::Playing, setup_world);
 
         #[cfg(feature = "debug_system")]
@@ -127,19 +127,19 @@ fn setup_world(
     ));
     info!("Added ship {:?} at slot 2", ship_slots.slots[2]);
 
-    /* CARTS */
-    spawn_cart(
-        &mut commands,
-        &textures,
-        &animations,
-        Vec3::new(WIDTH / 2.0 + GRID_SIZE * 5.0, -GRID_SIZE * 1.5, 0.4),
-        [BoxType::MedicalSupplies, BoxType::Fruit],
-    );
-    spawn_cart(
-        &mut commands,
-        &textures,
-        &animations,
-        Vec3::new(WIDTH / 2.0 + GRID_SIZE * 15.0, -GRID_SIZE * 1.5, 0.4),
-        [BoxType::Iron, BoxType::Rum],
-    );
+    // /* CARTS */
+    // spawn_cart(
+    //     &mut commands,
+    //     &textures,
+    //     &animations,
+    //     Vec3::new(WIDTH / 2.0 + GRID_SIZE * 5.0, -GRID_SIZE * 1.5, 0.4),
+    //     [BoxType::MedicalSupplies, BoxType::Fruit],
+    // );
+    // spawn_cart(
+    //     &mut commands,
+    //     &textures,
+    //     &animations,
+    //     Vec3::new(WIDTH / 2.0 + GRID_SIZE * 15.0, -GRID_SIZE * 1.5, 0.4),
+    //     [BoxType::Iron, BoxType::Rum],
+    // );
 }
