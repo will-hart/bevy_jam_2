@@ -3,7 +3,8 @@ Ship Game:
 
   Ship departure system:
     ✔ make waves a single scrolling texture and the ship's parent @done(22-08-21 12:52)
-    ☐ add departure button
+    ✔ add departure button @done(22-08-21 18:30)
+    ☐ Departure button makes the ship leave
     ☐ animate sails unfurling
     ☐ remove from ship slot
     ☐ move down

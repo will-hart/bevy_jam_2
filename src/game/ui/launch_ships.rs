@@ -25,8 +25,8 @@ pub fn spawn_ship_buttons(mut commands: Commands, fonts: Res<FontAssets>) {
                     layout_node
                         .spawn_bundle(NodeBundle {
                             style: Style {
-                                size: Size::new(Val::Auto, Val::Percent(100.0)),
-                                align_items: AlignItems::FlexEnd,
+                                size: Size::new(Val::Percent(33.0), Val::Px(100.0)),
+                                justify_content: JustifyContent::FlexStart,
                                 ..default()
                             },
                             color: Color::NONE.into(),
@@ -40,6 +40,7 @@ pub fn spawn_ship_buttons(mut commands: Commands, fonts: Res<FontAssets>) {
                                         margin: UiRect::all(Val::Auto),
                                         justify_content: JustifyContent::Center,
                                         align_items: AlignItems::Center,
+                                        border: UiRect::all(Val::Px(2.0)),
                                         ..default()
                                     },
                                     color: NORMAL_BUTTON.into(),
