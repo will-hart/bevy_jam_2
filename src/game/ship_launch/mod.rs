@@ -60,7 +60,7 @@ fn trigger_launch(
                     .expect("Ship needs a parent wave");
                 commands.entity(wave_entity).insert(AnimateWithSpeed {
                     speed: 20.0,
-                    target: Vec2::new(WIDTH, -10.0 * GRID_SIZE),
+                    target: Vec2::new(0.7 * WIDTH, -10.0 * GRID_SIZE),
                 });
                 wave_tx.translation.z = 6.0 + evt.slot_id as f32 * 3.0; // not sure why this does prevent overlapping of waves + other ships :thinking:
 

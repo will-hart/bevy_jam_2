@@ -43,7 +43,7 @@ Ship Game:
     ☐ Display market prices
     ☐ Display market price trajectory
     ☐ Market prices move over time
-    ☐ When ship despawned player gets the value from the market at that time
+    ✔ When ship despawned player gets the value from the market at that time @done(22-08-22 07:49)
     ☐ Lost ship (overweight) mechanic
   
   Ship system:
