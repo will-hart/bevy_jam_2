@@ -70,7 +70,7 @@ Ship Game:
     ☐ Ship triggered
     ☐ Ship arriving
     ☐ Weather
-    ☐ Storm noise when a ship is lost
+    ✘ Storm noise when a ship is lost @cancelled(22-08-22 23:49)
 
 Super Nice to Haves:
   ☐ Physics / dropping to crates so you can hover them above the ship and drop them
