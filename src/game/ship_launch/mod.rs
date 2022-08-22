@@ -74,9 +74,8 @@ fn trigger_launch(
 
                 // hide the ship text
                 for child in children.iter() {
-                    match ship_texts.get(*child) {
-                        Ok(text_ent) => commands.entity(text_ent).despawn(),
-                        _ => {}
+                    if let Ok(text_ent) = ship_texts.get(*child) {
+                        commands.entity(text_ent).despawn()
                     }
                 }
             }
@@ -106,7 +105,7 @@ pub fn ship_despawn(
                     );
                     commands.entity(evt.0).despawn_recursive();
                     commands.spawn().insert(ShipRespawnTimer {
-                        ship_to_respawn: ship.clone(),
+                        ship_to_respawn: *ship,
                         respawn_at: time.time_since_startup().as_secs_f32()
                             + hold.destination.get_travel_duration(),
                     });

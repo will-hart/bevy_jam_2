@@ -26,26 +26,18 @@ pub fn update_market_price_ui(
             .unwrap();
 
         for child in children.iter() {
-            match texts.get_mut(*child) {
-                Ok(mut t) => {
-                    t.sections[0].value = format!("{:3}", market_val.current_price.round() as u32);
-                    continue;
-                }
-                _ => {}
+            if let Ok(mut t) = texts.get_mut(*child) {
+                t.sections[0].value = format!("{:3}", market_val.current_price.round() as u32);
+                continue;
             }
 
-            match icons.get_mut(*child) {
-                Ok(mut i) => {
-                    *i = if market_val.price_acceleration > 0.0 {
-                        textures.up.clone()
-                    } else {
-                        textures.down.clone()
-                    }
-                    .into();
-
-                    continue;
+            if let Ok(mut i) = icons.get_mut(*child) {
+                *i = if market_val.price_acceleration > 0.0 {
+                    textures.up.clone()
+                } else {
+                    textures.down.clone()
                 }
-                _ => {}
+                .into();
             }
         }
     }

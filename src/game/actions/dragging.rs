@@ -37,11 +37,11 @@ pub fn start_dragging(
 
         // update the cart and set the dragging item here
         dragging.box_type = if event.is_front_slot {
-            let item = cart.front.clone();
+            let item = cart.front;
             cart.front = None;
             item
         } else {
-            let item = cart.back.clone();
+            let item = cart.back;
             cart.back = None;
             item
         };

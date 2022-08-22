@@ -42,7 +42,7 @@ pub fn spawn_ship(
         .insert(Wave)
         .with_children(|child_commands| {
             let ship_hold = ShipHold {
-                destination: DESTINATIONS.choose(&mut rng).unwrap().clone(),
+                destination: *DESTINATIONS.choose(&mut rng).unwrap(),
                 crates: vec![],
                 weight_capacity: 5,
                 current_weight: 0,
@@ -57,7 +57,7 @@ pub fn spawn_ship(
                         transform: Transform::from_xyz(0.5 * GRID_SIZE, 0.0, -0.5),
                         ..Default::default()
                     })
-                    .insert(previous_ship.unwrap_or(Ship::new(&mut rng)))
+                    .insert(previous_ship.unwrap_or_else(|| Ship::new(&mut rng)))
                     .insert(animations.ship_idle.clone())
                     .insert(AnimationState::default())
                     .insert(ship_hold.clone())

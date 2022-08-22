@@ -27,7 +27,7 @@ pub fn click_to_pickup(
     let y = mouse_pos.world.y;
 
     if action_state.just_pressed(PlayerActions::Click) {
-        if y < CART_MIN_Y || y > CART_MAX_Y {
+        if !(CART_MIN_Y..=CART_MAX_Y).contains(&y) {
             return;
         }
 
@@ -35,7 +35,8 @@ pub fn click_to_pickup(
             let delta = x - cart_tx.translation.x;
             // carts are 160px wide, the last two grid squares (32px) are for boxes.
             // be a bit flexible with the clicking (i.e. doen't require directly on the sprite)
-            if delta < (CART_SPRITE_HALF_WIDTH - 2.0 * GRID_SIZE) || delta > CART_SPRITE_HALF_WIDTH
+            if !((CART_SPRITE_HALF_WIDTH - 2.0 * GRID_SIZE)..=CART_SPRITE_HALF_WIDTH)
+                .contains(&delta)
             {
                 continue;
             }

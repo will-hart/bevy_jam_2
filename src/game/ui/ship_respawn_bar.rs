@@ -217,10 +217,7 @@ pub fn spawn_ship_respawn_bar(
                                             color: Color::NONE.into(),
                                             ..default()
                                         })
-                                        .insert(MarketPriceIndicator(
-                                            destination.clone(),
-                                            bt.clone(),
-                                        ))
+                                        .insert(MarketPriceIndicator(*destination, *bt))
                                         .with_children(|market_item| {
                                             market_item
                                                 .spawn_bundle(TextBundle {

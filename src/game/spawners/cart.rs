@@ -85,8 +85,8 @@ pub fn cart_spawning_system(
             &animations,
             Vec3::new(WIDTH / 2.0 + GRID_SIZE * 5.0, -GRID_SIZE * 1.5, 0.4),
             [
-                BOX_TYPES.choose(&mut rng).unwrap().clone(),
-                BOX_TYPES.choose(&mut rng).unwrap().clone(),
+                *BOX_TYPES.choose(&mut rng).unwrap(),
+                *BOX_TYPES.choose(&mut rng).unwrap(),
             ],
         );
     }

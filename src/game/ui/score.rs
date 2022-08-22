@@ -35,7 +35,7 @@ pub fn score_update(
                             .market
                             .get(&hold.destination)
                             .unwrap()
-                            .get(&box_type)
+                            .get(box_type)
                             .unwrap()
                             .current_price;
                         info!(
