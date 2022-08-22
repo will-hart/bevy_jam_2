@@ -76,6 +76,30 @@ pub struct TextureAssets {
     #[asset(path = "textures/waves.png")]
     pub waves: Handle<Image>,
 
+    #[asset(path = "textures/coin.png")]
+    pub coin: Handle<Image>,
+
+    #[asset(path = "textures/ship_small.png")]
+    pub ship_small: Handle<Image>,
+
+    #[asset(path = "textures/up.png")]
+    pub up: Handle<Image>,
+
+    #[asset(path = "textures/down.png")]
+    pub down: Handle<Image>,
+
+    #[asset(path = "textures/box_type_medical.png")]
+    pub box_type_medical: Handle<Image>,
+
+    #[asset(path = "textures/box_type_fruit.png")]
+    pub box_type_fruit: Handle<Image>,
+
+    #[asset(path = "textures/box_type_iron.png")]
+    pub box_type_iron: Handle<Image>,
+
+    #[asset(path = "textures/box_type_rum.png")]
+    pub box_type_rum: Handle<Image>,
+
     #[asset(texture_atlas(tile_size_x = 288., tile_size_y = 224., columns = 4, rows = 1))]
     #[asset(path = "textures/ship.png")]
     pub ship: Handle<TextureAtlas>,

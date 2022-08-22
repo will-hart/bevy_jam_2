@@ -1,14 +1,10 @@
 use bevy::prelude::*;
 use num_format::{Locale, ToFormattedString};
 
-use crate::{
-    game::{
-        animation::DespawnEntity,
-        components::{ScoreUi, Ship, ShipHold, Wave},
-        market::Market,
-    },
-    loader::FontAssets,
-    HEIGHT, WIDTH,
+use crate::game::{
+    animation::DespawnEntity,
+    components::{ScoreUi, Ship, ShipHold, Wave},
+    market::Market,
 };
 
 #[derive(Default, Debug)]
@@ -66,20 +62,4 @@ pub fn score_update(
     // for (ship, _) in ships.iter() {
     //     score.0 -= ship.maintenance_cost_per_second * dt;
     // }
-}
-
-pub fn spawn_score_ui(mut commands: Commands, fonts: Res<FontAssets>) {
-    let text_style = TextStyle {
-        font: fonts.default_font.clone(),
-        font_size: 24.0,
-        color: Color::WHITE,
-    };
-
-    commands
-        .spawn_bundle(Text2dBundle {
-            text: Text::from_section("0", text_style).with_alignment(TextAlignment::TOP_RIGHT),
-            transform: Transform::from_xyz(WIDTH / 2.0 - 15.0, HEIGHT / 2.0 - 15.0, 0.3),
-            ..default()
-        })
-        .insert(ScoreUi);
 }

@@ -1,4 +1,5 @@
 use bevy::{prelude::*, utils::HashMap};
+use rand::{thread_rng, Rng};
 
 use super::components::{BoxType, ShipDestination};
 
@@ -11,10 +12,12 @@ pub struct MarketPrice {
 
 impl From<f32> for MarketPrice {
     fn from(current_price: f32) -> Self {
+        let mut rng = thread_rng();
+
         MarketPrice {
             current_price,
-            price_acceleration: 0.0,
-            volatility: 0.05,
+            price_acceleration: rng.gen_range(-1.0..1.0),
+            volatility: rng.gen_range(0.01..0.10),
         }
     }
 }

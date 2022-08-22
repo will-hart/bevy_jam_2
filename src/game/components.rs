@@ -3,7 +3,7 @@ use std::fmt::Display;
 use bevy::prelude::*;
 use rand::{rngs::ThreadRng, Rng};
 
-use crate::GRID_SIZE;
+use crate::{loader::TextureAssets, GRID_SIZE};
 
 #[derive(Component)]
 pub struct Torch;
@@ -72,6 +72,9 @@ pub struct ShipRespawnTimer {
     pub respawn_at: f32,
 }
 
+#[derive(Component)]
+pub struct ShipRespawnBar;
+
 #[derive(Component, Clone, Debug)]
 pub struct ShipHold {
     pub destination: ShipDestination,
@@ -92,6 +95,15 @@ impl ShipHold {
         self.crates.push(crate_type);
     }
 }
+
+#[derive(Component)]
+pub struct MarketPriceIndicator(pub ShipDestination, pub BoxType);
+
+#[derive(Component)]
+pub struct MarketPriceDirectionIndicator;
+
+#[derive(Component)]
+pub struct MarketPriceValueIndicator;
 
 #[derive(Component)]
 pub struct AnimateWithSpeed {
@@ -139,6 +151,15 @@ impl BoxType {
             BoxType::Fruit => 1,
             BoxType::Iron => 1,
             BoxType::Rum => 1,
+        }
+    }
+
+    pub(crate) fn get_image(&self, textures: &TextureAssets) -> Handle<Image> {
+        match self {
+            BoxType::MedicalSupplies => textures.box_type_medical.clone(),
+            BoxType::Fruit => textures.box_type_fruit.clone(),
+            BoxType::Iron => textures.box_type_iron.clone(),
+            BoxType::Rum => textures.box_type_rum.clone(),
         }
     }
 }

@@ -10,7 +10,8 @@ const NORMAL_BUTTON: Color = Color::rgba(0.15, 0.15, 0.15, 0.05);
 const HOVERED_BUTTON: Color = Color::rgba(0.15, 0.15, 0.15, 0.25);
 const PRESSED_BUTTON: Color = Color::rgba(0.15, 0.15, 0.15, 0.75);
 
-pub fn spawn_ship_buttons(mut commands: Commands, fonts: Res<FontAssets>) {
+/// NOT A SYSTEM, called by ship_respawn_bar to spawn ship buttons
+pub fn spawn_ship_buttons(commands: &mut ChildBuilder, fonts: &FontAssets) {
     commands
         .spawn_bundle(NodeBundle {
             style: Style {
