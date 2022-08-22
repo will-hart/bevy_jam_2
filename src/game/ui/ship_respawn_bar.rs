@@ -107,7 +107,7 @@ pub fn spawn_ship_respawn_bar(
                         margin: UiRect::new(
                             Val::Undefined,
                             Val::Undefined,
-                            Val::Px(5.0),
+                            Val::Px(15.0),
                             Val::Undefined,
                         ),
                         ..default()
