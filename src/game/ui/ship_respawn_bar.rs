@@ -104,6 +104,12 @@ pub fn spawn_ship_respawn_bar(
                         justify_content: JustifyContent::FlexStart,
                         align_items: AlignItems::FlexEnd,
                         flex_direction: FlexDirection::ColumnReverse,
+                        margin: UiRect::new(
+                            Val::Undefined,
+                            Val::Undefined,
+                            Val::Px(5.0),
+                            Val::Undefined,
+                        ),
                         ..default()
                     },
                     color: Color::rgba(0.15, 0.15, 0.15, 0.35).into(),
@@ -164,7 +170,7 @@ pub fn spawn_ship_respawn_bar(
                                 style: Style {
                                     size: Size::new(Val::Percent(100.), Val::Px(GRID_SIZE)),
                                     justify_content: JustifyContent::Center,
-                                    align_items: AlignItems::FlexEnd,
+                                    align_items: AlignItems::Center,
                                     ..default()
                                 },
                                 color: Color::NONE.into(),
@@ -177,7 +183,10 @@ pub fn spawn_ship_respawn_bar(
                                         small_text_style.clone(),
                                     ),
                                     style: Style {
-                                        size: Size::new(Val::Px(3.0 * GRID_SIZE), Val::Auto),
+                                        size: Size::new(
+                                            Val::Px(3.0 * GRID_SIZE),
+                                            Val::Px(GRID_SIZE),
+                                        ),
                                         ..default()
                                     },
                                     ..default()
