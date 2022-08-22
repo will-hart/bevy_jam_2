@@ -18,7 +18,7 @@ use iyes_loopless::prelude::{AppLooplessStateExt, IntoConditionalSystem};
 
 use crate::{
     game::{
-        actions::ActionPlugin,
+        actions::{ActionPlugin, ShipSlotType},
         custom_sprite::CustomSpritePlugin,
         day_night_cycle::DayNightCyclePlugin,
         market::MarketPlugin,
@@ -103,55 +103,15 @@ fn setup_world(
     });
 
     /* SHIPS */
-    ship_slots.slots[0] = Some(spawn_ship(
+    ship_slots.slots[0] = ShipSlotType::Arriving(spawn_ship(
         &mut commands,
         &textures,
         &fonts,
         &animations,
         &mut meshes,
         &mut materials,
-        Vec3::new(-GRID_SIZE * 10., -GRID_SIZE * 4., 1.6),
+        0,
         None,
     ));
     info!("Added ship {:?} at slot 0", ship_slots.slots[0]);
-
-    ship_slots.slots[1] = Some(spawn_ship(
-        &mut commands,
-        &textures,
-        &fonts,
-        &animations,
-        &mut meshes,
-        &mut materials,
-        Vec3::new(0., -GRID_SIZE * 4., 1.3),
-        None,
-    ));
-    info!("Added ship {:?} at slot 1", ship_slots.slots[1]);
-
-    ship_slots.slots[2] = Some(spawn_ship(
-        &mut commands,
-        &textures,
-        &fonts,
-        &animations,
-        &mut meshes,
-        &mut materials,
-        Vec3::new(GRID_SIZE * 10., -GRID_SIZE * 4., 1.0),
-        None,
-    ));
-    info!("Added ship {:?} at slot 2", ship_slots.slots[2]);
-
-    // /* CARTS */
-    // spawn_cart(
-    //     &mut commands,
-    //     &textures,
-    //     &animations,
-    //     Vec3::new(WIDTH / 2.0 + GRID_SIZE * 5.0, -GRID_SIZE * 1.5, 0.4),
-    //     [BoxType::MedicalSupplies, BoxType::Fruit],
-    // );
-    // spawn_cart(
-    //     &mut commands,
-    //     &textures,
-    //     &animations,
-    //     Vec3::new(WIDTH / 2.0 + GRID_SIZE * 15.0, -GRID_SIZE * 1.5, 0.4),
-    //     [BoxType::Iron, BoxType::Rum],
-    // );
 }

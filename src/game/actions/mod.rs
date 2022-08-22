@@ -14,7 +14,7 @@ mod dragging;
 mod dropping;
 mod pickup;
 
-pub use dropping::{OnCrateDroppedOnShip, ShipSlots};
+pub use dropping::{OnCrateDroppedOnShip, ShipSlotType, ShipSlots};
 
 // Numbers that are the range cart boxes can fall into
 pub const CART_MIN_Y: f32 = -2.5 * GRID_SIZE + 24.0; // magic numbers

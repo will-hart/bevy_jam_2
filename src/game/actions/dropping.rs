@@ -4,9 +4,22 @@ use crate::game::components::{Cart, CartCrate, FollowMouse, ShipHold};
 
 use super::dragging::DraggingBox;
 
+#[derive(Clone, Copy, Debug)]
+pub enum ShipSlotType {
+    Empty,
+    Arriving(Entity),
+    Occupied(Entity),
+}
+
+impl Default for ShipSlotType {
+    fn default() -> Self {
+        ShipSlotType::Empty
+    }
+}
+
 #[derive(Default, Debug)]
 pub struct ShipSlots {
-    pub slots: [Option<Entity>; 3],
+    pub slots: [ShipSlotType; 3],
 }
 
 pub struct OnDropCrate {

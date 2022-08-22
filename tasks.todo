@@ -54,7 +54,7 @@ Ship Game:
       ☐ Lost score for missed ship arrivals
       ☐ Ships disappear when the timer expires
     ☐ Clicking the timer button spawns the ship
-      ☐ add ship to slot immediately
+      ✔ add ship to slot immediately @done(22-08-23 07:57)
     ☐ Can't spawn ships if no slots are free
     ✘ ship queue off screen @cancelled(22-08-22 23:27)
     ☐ Random ship demands
@@ -66,11 +66,11 @@ Ship Game:
     ☐ Remove ship maintenance cost
     ship docking system:
       ✘ refresh ship + ship hold @cancelled(22-08-22 23:27)
-      ☐ spawn ship off screen
-      ☐ Move to target in L shape rather than diagonally.
-        ☐ Update animate entity system to allow chained animations or waypoints
-        ☐ Update animate system to handle events on ship arrival
-        ☐ furl sails on arrival
+      ✔ spawn ship off screen @done(22-08-23 07:57)
+      ✔ Move to target in L shape rather than diagonally. @done(22-08-23 07:57)
+        ✔ Update animate entity system to allow chained animations or waypoints @done(22-08-23 07:31)
+        ✔ Update animate system to handle events on ship arrival @done(22-08-23 07:57)
+        ✔ furl sails on arrival @done(22-08-23 07:57)
       ☐ Only allow dropping on a ship once it has arrived and the sails are furled
 
   Sound effects:

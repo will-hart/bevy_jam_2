@@ -105,6 +105,9 @@ impl ShipHold {
 }
 
 #[derive(Component)]
+pub struct ShipArriving(pub usize);
+
+#[derive(Component)]
 pub struct MarketPriceIndicator(pub ShipDestination, pub BoxType);
 
 #[derive(Component)]
@@ -116,7 +119,7 @@ pub struct MarketPriceValueIndicator;
 #[derive(Component)]
 pub struct AnimateWithSpeed {
     pub speed: f32,
-    pub target: Vec2,
+    pub target: Vec<Vec3>,
 }
 
 #[derive(Component)]

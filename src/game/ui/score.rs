@@ -2,7 +2,7 @@ use bevy::prelude::*;
 use num_format::{Locale, ToFormattedString};
 
 use crate::game::{
-    animation::DespawnEntity,
+    animation::ShipArrivedAtDestination,
     components::{ScoreUi, Ship, ShipHold, Wave},
     market::Market,
 };
@@ -20,7 +20,7 @@ pub fn score_update(
     market: Res<Market>,
     time: Res<Time>,
     mut score: ResMut<Score>,
-    mut events: EventReader<DespawnEntity>,
+    mut events: EventReader<ShipArrivedAtDestination>,
     waves: Query<&Children, With<Wave>>,
     ships: Query<(&Ship, &ShipHold)>,
 ) {

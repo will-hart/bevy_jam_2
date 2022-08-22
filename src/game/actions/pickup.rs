@@ -2,7 +2,10 @@ use bevy::prelude::*;
 use leafwing_input_manager::prelude::ActionState;
 
 use crate::{
-    game::{actions::CART_SPRITE_HALF_WIDTH, components::Cart},
+    game::{
+        actions::{dropping::ShipSlotType, CART_SPRITE_HALF_WIDTH},
+        components::Cart,
+    },
     input::{MousePosition, PlayerActions},
     GRID_SIZE,
 };
@@ -62,11 +65,11 @@ pub fn click_to_pickup(
                     info!("Dropped crate on ship slot {}", idx);
 
                     match ship_slots.slots[idx] {
-                        Some(entity) => {
+                        ShipSlotType::Occupied(entity) => {
                             stop_events.send(OnDropCrate { ship: Some(entity) });
                             return;
                         }
-                        None => {
+                        _ => {
                             info!("--> ship slot {} is empty", idx);
                             break;
                         }

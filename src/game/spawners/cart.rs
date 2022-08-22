@@ -10,6 +10,8 @@ use crate::{
     GRID_SIZE, WIDTH,
 };
 
+pub const CART_Z_POS: f32 = 0.4;
+
 pub fn spawn_cart(
     commands: &mut Commands,
     textures: &TextureAssets,
@@ -25,7 +27,7 @@ pub fn spawn_cart(
         })
         .insert(AnimateWithSpeed {
             speed: 30.,
-            target: Vec2::new(-0.75 * WIDTH, location.y),
+            target: vec![Vec3::new(-0.75 * WIDTH, location.y, CART_Z_POS)],
         })
         .insert(Cart {
             front: Some(box_types[0]),
@@ -83,7 +85,7 @@ pub fn cart_spawning_system(
             &mut commands,
             &textures,
             &animations,
-            Vec3::new(WIDTH / 2.0 + GRID_SIZE * 5.0, -GRID_SIZE * 1.5, 0.4),
+            Vec3::new(WIDTH / 2.0 + GRID_SIZE * 5.0, -GRID_SIZE * 1.5, CART_Z_POS),
             [
                 *BOX_TYPES.choose(&mut rng).unwrap(),
                 *BOX_TYPES.choose(&mut rng).unwrap(),

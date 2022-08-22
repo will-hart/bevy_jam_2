@@ -5,7 +5,7 @@ use bevy::{
 };
 
 mod animate_entity;
-pub use animate_entity::DespawnEntity;
+pub use animate_entity::ShipArrivedAtDestination;
 mod ship_bob;
 mod waves;
 use iyes_loopless::prelude::IntoConditionalSystem;
@@ -20,7 +20,7 @@ impl Plugin for AnimationPlugin {
     fn build(&self, app: &mut App) {
         info!("Mounting AnimationPlugin");
         app.add_asset::<Animation>()
-            .add_event::<DespawnEntity>()
+            .add_event::<ShipArrivedAtDestination>()
             .init_asset_loader::<BenimationLoader>()
             .add_system(update_animation_frames)
             .add_system(
