@@ -25,9 +25,9 @@ pub enum PlayerActions {
 
 /// Initialises the input manager, linking commands
 fn init_input_manager(mut commands: Commands) {
-    let input_map = InputMap::default();
+    let mut input_map = InputMap::default();
 
-    // input_map.insert(MouseButton::Left, PlayerActions::Confirm);
+    input_map.insert(MouseButton::Left, PlayerActions::Click);
     commands
         .spawn()
         .insert_bundle(InputManagerBundle::<PlayerActions> {
@@ -64,7 +64,7 @@ fn update_mouse_position(
     };
 
     if let Some(position) = window.cursor_position() {
-        mouse_position.screen = position.clone();
+        mouse_position.screen = position;
         mouse_position.in_screen = true;
 
         // now convert screen to world coords for the camera
