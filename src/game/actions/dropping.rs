@@ -56,13 +56,14 @@ pub fn handle_drop(
         };
 
         // set the cart crate to visible again, or add it to the ship if it was dropped on a ship
-        match evt.ship {
+        let dropped_on_ship = match evt.ship {
             Some(ship_ent) => {
                 let mut ship_hold = ships
                     .get_mut(ship_ent)
                     .expect("Should be able to find ship");
                 ship_hold.accept_crate(dragging.box_type.unwrap());
                 on_drop_on_ship_events.send(OnCrateDroppedOnShip(ship_ent));
+                true
             }
             None => {
                 // "drop back" on the cart
@@ -73,14 +74,24 @@ pub fn handle_drop(
                         vis.is_visible = true;
                     }
                 }
+
+                false
             }
-        }
+        };
 
         // reset the dragging resources
         if dragging.is_front_slot {
-            cart.front = dragging.box_type;
+            cart.front = if dropped_on_ship {
+                None
+            } else {
+                dragging.box_type
+            };
         } else {
-            cart.back = dragging.box_type;
+            cart.back = if dropped_on_ship {
+                None
+            } else {
+                dragging.box_type
+            };
         }
 
         dragging.box_type = None;

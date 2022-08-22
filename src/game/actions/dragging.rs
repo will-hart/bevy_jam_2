@@ -36,7 +36,6 @@ pub fn start_dragging(
         };
 
         // update the cart and set the dragging item here
-        dragging.cart_entity = Some(event.cart_entity);
         dragging.box_type = if event.is_front_slot {
             let item = cart.front.clone();
             cart.front = None;
@@ -46,6 +45,13 @@ pub fn start_dragging(
             cart.back = None;
             item
         };
+
+        if dragging.box_type.is_none() {
+            // nothing to drag
+            continue;
+        }
+
+        dragging.cart_entity = Some(event.cart_entity);
         dragging.is_front_slot = event.is_front_slot;
 
         // hide the box that's being dragged
