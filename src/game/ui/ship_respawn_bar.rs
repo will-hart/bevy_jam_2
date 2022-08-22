@@ -105,11 +105,12 @@ pub fn spawn_ship_respawn_bar(
                         align_items: AlignItems::FlexEnd,
                         flex_direction: FlexDirection::ColumnReverse,
                         margin: UiRect::new(
-                            Val::Undefined,
+                            Val::Px(15.0),
                             Val::Undefined,
                             Val::Px(15.0),
                             Val::Undefined,
                         ),
+                        padding: UiRect::all(Val::Px(5.0)),
                         ..default()
                     },
                     color: Color::rgba(0.15, 0.15, 0.15, 0.35).into(),
@@ -177,6 +178,15 @@ pub fn spawn_ship_respawn_bar(
                                 ..default()
                             })
                             .with_children(|market_row| {
+                                market_row.spawn_bundle(ImageBundle {
+                                    image: destination.get_image(&textures).into(),
+                                    style: Style {
+                                        size: Size::new(Val::Px(GRID_SIZE), Val::Px(GRID_SIZE)),
+                                        ..default()
+                                    },
+                                    ..default()
+                                });
+
                                 market_row.spawn_bundle(TextBundle {
                                     text: Text::from_section(
                                         format!("{}", destination),
@@ -184,7 +194,7 @@ pub fn spawn_ship_respawn_bar(
                                     ),
                                     style: Style {
                                         size: Size::new(
-                                            Val::Px(3.0 * GRID_SIZE),
+                                            Val::Px(2.0 * GRID_SIZE),
                                             Val::Px(GRID_SIZE),
                                         ),
                                         ..default()

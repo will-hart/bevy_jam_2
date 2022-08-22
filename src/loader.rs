@@ -100,6 +100,15 @@ pub struct TextureAssets {
     #[asset(path = "textures/box_type_rum.png")]
     pub box_type_rum: Handle<Image>,
 
+    #[asset(path = "textures/flag_new_world.png")]
+    pub flag_new_world: Handle<Image>,
+
+    #[asset(path = "textures/flag_pirates.png")]
+    pub flag_pirates: Handle<Image>,
+
+    #[asset(path = "textures/flag_eastern.png")]
+    pub flag_eastern: Handle<Image>,
+
     #[asset(texture_atlas(tile_size_x = 288., tile_size_y = 224., columns = 4, rows = 1))]
     #[asset(path = "textures/ship.png")]
     pub ship: Handle<TextureAtlas>,

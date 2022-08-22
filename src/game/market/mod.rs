@@ -48,7 +48,7 @@ impl Default for Market {
         Self {
             market: HashMap::from([
                 (
-                    ShipDestination::Americas,
+                    ShipDestination::NewWorld,
                     HashMap::from([
                         (BoxType::MedicalSupplies, 85.0.into()),
                         (BoxType::Fruit, 35.0.into()),
@@ -57,7 +57,7 @@ impl Default for Market {
                     ]),
                 ),
                 (
-                    ShipDestination::Carribean,
+                    ShipDestination::Pirates,
                     HashMap::from([
                         (BoxType::MedicalSupplies, 85.0.into()),
                         (BoxType::Fruit, 35.0.into()),
@@ -66,7 +66,7 @@ impl Default for Market {
                     ]),
                 ),
                 (
-                    ShipDestination::China,
+                    ShipDestination::Eastern,
                     HashMap::from([
                         (BoxType::MedicalSupplies, 85.0.into()),
                         (BoxType::Fruit, 35.0.into()),

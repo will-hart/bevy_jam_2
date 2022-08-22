@@ -10,17 +10,17 @@ pub struct Torch;
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
 pub enum ShipDestination {
-    Americas,
-    Carribean,
-    China,
+    NewWorld,
+    Pirates,
+    Eastern,
 }
 
 impl Display for ShipDestination {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         f.write_str(match self {
-            ShipDestination::Americas => "Americas",
-            ShipDestination::Carribean => "Carribean",
-            ShipDestination::China => "China",
+            ShipDestination::NewWorld => "New World",
+            ShipDestination::Pirates => "Pirate Kingdoms",
+            ShipDestination::Eastern => "Eastern Realms",
         })
     }
 }
@@ -30,9 +30,17 @@ impl ShipDestination {
     /// counted from the time the ship despawns
     pub fn get_travel_duration(&self) -> f32 {
         match self {
-            ShipDestination::Americas => 12.0,
-            ShipDestination::Carribean => 11.0,
-            ShipDestination::China => 9.0,
+            ShipDestination::NewWorld => 12.0,
+            ShipDestination::Pirates => 11.0,
+            ShipDestination::Eastern => 9.0,
+        }
+    }
+
+    pub fn get_image(&self, textures: &TextureAssets) -> Handle<Image> {
+        match self {
+            ShipDestination::NewWorld => textures.flag_new_world.clone(),
+            ShipDestination::Pirates => textures.flag_pirates.clone(),
+            ShipDestination::Eastern => textures.flag_eastern.clone(),
         }
     }
 }
@@ -40,9 +48,9 @@ impl ShipDestination {
 /// used for randomg selection of destinations, see notes on [BOX_TYPES] below.
 /// Keep up to date with ShipDestination above.
 pub const DESTINATIONS: [ShipDestination; 3] = [
-    ShipDestination::Americas,
-    ShipDestination::Carribean,
-    ShipDestination::China,
+    ShipDestination::NewWorld,
+    ShipDestination::Pirates,
+    ShipDestination::Eastern,
 ];
 
 #[derive(Component, Clone, Copy, Debug)]
