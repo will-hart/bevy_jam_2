@@ -51,18 +51,27 @@ Ship Game:
     ✘ ship delivery timer (off screen / unavailable) @cancelled(22-08-21 22:45)
     ☐ Ship arrival queue
     ☐ Timers for ship arrivals
-    ☐ Lost score for missed ship arrivals
-    ☐ Spawn ship button
+      ☐ Lost score for missed ship arrivals
+      ☐ Ships disappear when the timer expires
+    ☐ Clicking the timer button spawns the ship
+      ☐ add ship to slot immediately
     ☐ Can't spawn ships if no slots are free
     ✘ ship queue off screen @cancelled(22-08-22 23:27)
-    ☐ Remove ship maintenance cost
-    ☐ Ship demands
+    ☐ Random ship demands
+      ☐ Penalties for incorrectly loaded goods
+      ☐ Display UI for demands
+      ☐ Update UI as demands are met
+      ☐ Bonus if all demands met
     ✔ ship maintenance cost @done(22-08-22 08:20)
+    ☐ Remove ship maintenance cost
     ship docking system:
       ✘ refresh ship + ship hold @cancelled(22-08-22 23:27)
-      ☐ add ship to slot
-      ☐ park ship
-      ☐ furl sails
+      ☐ spawn ship off screen
+      ☐ Move to target in L shape rather than diagonally.
+        ☐ Update animate entity system to allow chained animations or waypoints
+        ☐ Update animate system to handle events on ship arrival
+        ☐ furl sails on arrival
+      ☐ Only allow dropping on a ship once it has arrived and the sails are furled
 
   Sound effects:
     ☐ Morning
@@ -74,14 +83,14 @@ Ship Game:
 
 Super Nice to Haves:
   ☐ Physics / dropping to crates so you can hover them above the ship and drop them
-  ☐ If you miss the ship the crate falls in the water and is lost
-    ☐  also if your ship has no more volume it bounces off
+    ☐ If you miss the ship the crate falls in the water and is lost
   ☐ A warehouse on the shore with very limited capacity that you can use to stockpile interesting items
   ☐ Smuggling :D
   ☐ Nice art
   ☐ Weather effects
-  ☐ Money ticking down in chunks, with world text "damage" indicators when money is spent
-  ☐ Maintenance / docking fees
   ☐ Make departure animation less overlappy with waves
-  ☐ Change market demand over time
-  ☐ Show the crates on a ship on the screen
+  ✘ if your ship has no more volume the crate bounces off @cancelled(22-08-23 00:11)
+  ✘ Money ticking down in chunks, with world text "damage" indicators when money is spent @cancelled(22-08-23 00:11)
+  ✘ Maintenance / docking fees @cancelled(22-08-23 00:11)
+  ✔ Change market demand over time @done(22-08-23 00:11)
+  ✘ Show the crates on a ship on the screen @cancelled(22-08-23 00:11)
