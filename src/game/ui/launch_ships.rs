@@ -58,7 +58,7 @@ pub fn spawn_ship_buttons(commands: &mut ChildBuilder, fonts: &FontAssets) {
                                 })
                                 .with_children(|parent| {
                                     parent.spawn_bundle(TextBundle::from_section(
-                                        "Launch",
+                                        "Set Sail",
                                         TextStyle {
                                             font: fonts.default_font.clone(),
                                             font_size: 18.,
