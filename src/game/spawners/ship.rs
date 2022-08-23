@@ -4,12 +4,13 @@ use rand::thread_rng;
 use crate::{
     game::{
         components::{
-            AnimateWithSpeed, RequestShip, Ship, ShipArriving, ShipDemandItemMarker, ShipHold, Wave,
+            AnimateWithSpeed, RequestShip, Ship, ShipArriving, ShipDemandItemMarker, ShipHold,
+            TutorialMarker, Wave,
         },
         custom_sprite::CustomSpriteMaterial,
         AnimationState,
     },
-    loader::{AnimationAssets, TextureAssets},
+    loader::{AnimationAssets, FontAssets, TextureAssets},
     GRID_SIZE, WIDTH,
 };
 
@@ -25,8 +26,10 @@ pub const SHIP_SPAWN_OFFSCREEN_POSITION: Vec3 =
 
 pub fn spawn_ship(
     commands: &mut Commands,
+    tutorial_level: u8,
     textures: &TextureAssets,
     animations: &AnimationAssets,
+    fonts: &FontAssets,
     meshes: &mut Assets<Mesh>,
     materials: &mut Assets<CustomSpriteMaterial>,
     slot_id: usize,
@@ -36,6 +39,12 @@ pub fn spawn_ship(
     let mut entity: Option<Entity> = None;
 
     let slot_pos = SHIP_SLOTS_POSITIONS[slot_id];
+
+    let text_style = TextStyle {
+        font: fonts.default_font.clone(),
+        font_size: 12.0,
+        color: Color::WHITE,
+    };
 
     commands
         .spawn_bundle(MaterialMesh2dBundle {
@@ -86,6 +95,19 @@ pub fn spawn_ship(
                                     ..default()
                                 })
                                 .insert(ShipDemandItemMarker(*demand));
+                        }
+
+                        if tutorial_level == 1 {
+                            ship_child_commands
+                                .spawn_bundle(Text2dBundle {
+                                    text: Text::from_section(
+                                        "^^^ Drag these crates on to the ship",
+                                        text_style,
+                                    ),
+                                    transform: Transform::from_xyz(-130., -140., 2.0),
+                                    ..default()
+                                })
+                                .insert(TutorialMarker(1));
                         }
                     })
                     .id(),

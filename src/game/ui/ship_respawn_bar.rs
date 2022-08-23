@@ -117,7 +117,7 @@ pub fn spawn_ship_respawn_bar(
                                     ),
                                     ..default()
                                 })
-                                .insert(TutorialMarker);
+                                .insert(TutorialMarker(0));
                         });
 
                     bar_layout
@@ -192,7 +192,7 @@ pub fn spawn_ship_respawn_bar(
                         .with_children(|parent_row| {
                             parent_row.spawn_bundle(NodeBundle {
                                 style: Style {
-                                    size: Size::new(Val::Px(3.0 * GRID_SIZE), Val::Auto),
+                                    size: Size::new(Val::Px(4.0 * GRID_SIZE), Val::Auto),
                                     ..default()
                                 },
                                 color: Color::NONE.into(),

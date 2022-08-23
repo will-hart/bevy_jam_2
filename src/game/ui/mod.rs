@@ -3,13 +3,15 @@ mod market;
 mod request_ship;
 mod score;
 mod ship_respawn_bar;
+mod tutorial;
+pub use tutorial::CurrentTutorialLevel;
 
 use bevy::prelude::*;
 use iyes_loopless::prelude::{AppLooplessStateExt, IntoConditionalSystem};
 
 use crate::GameState;
 
-use self::{request_ship::OnRequestShipSpawn, score::Score};
+use self::{request_ship::OnRequestShipSpawn, score::Score, tutorial::TutorialPlugin};
 
 use super::SystemLabels;
 
@@ -17,8 +19,9 @@ pub struct UiPlugin;
 
 impl Plugin for UiPlugin {
     fn build(&self, app: &mut App) {
-        app.insert_resource(Score(10000.0))
+        app.insert_resource(Score(0.0))
             .add_event::<OnRequestShipSpawn>()
+            .add_plugin(TutorialPlugin)
             .add_enter_system(GameState::Playing, ship_respawn_bar::spawn_ship_respawn_bar)
             .add_system(
                 score::score_display

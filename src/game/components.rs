@@ -171,4 +171,4 @@ pub struct RequestShip {
 }
 
 #[derive(Component)]
-pub struct TutorialMarker;
+pub struct TutorialMarker(pub u8);

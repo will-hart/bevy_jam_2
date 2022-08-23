@@ -7,20 +7,24 @@ use crate::{
         custom_sprite::CustomSpriteMaterial,
         spawners::spawn_ship,
     },
-    loader::{AnimationAssets, TextureAssets},
+    loader::{AnimationAssets, FontAssets, TextureAssets},
 };
+
+use super::CurrentTutorialLevel;
 
 pub struct OnRequestShipSpawn(pub Entity, pub RequestShip);
 
 pub fn ship_spawn_handler(
     mut commands: Commands,
-    mut slots: ResMut<ShipSlots>,
+    tutorial: Res<CurrentTutorialLevel>,
     textures: Res<TextureAssets>,
     animations: Res<AnimationAssets>,
+    fonts: Res<FontAssets>,
+    mut slots: ResMut<ShipSlots>,
     mut meshes: ResMut<Assets<Mesh>>,
     mut materials: ResMut<Assets<CustomSpriteMaterial>>,
     mut spawn_events: EventReader<OnRequestShipSpawn>,
-    tutorial_markers: Query<Entity, With<TutorialMarker>>,
+    tutorial_markers: Query<(Entity, &TutorialMarker)>,
 ) {
     let mut spawned = false;
 
@@ -40,8 +44,10 @@ pub fn ship_spawn_handler(
         // spawn the ship
         slots.slots[slot_id] = ShipSlotType::Arriving(spawn_ship(
             &mut commands,
+            tutorial.0,
             &textures,
             &animations,
+            &fonts,
             &mut meshes,
             &mut materials,
             slot_id,
@@ -55,8 +61,11 @@ pub fn ship_spawn_handler(
     }
 
     if spawned {
-        for ent in tutorial_markers.iter() {
-            commands.entity(ent).despawn_recursive();
+        for (ent, marker) in tutorial_markers.iter() {
+            // ensure level 0 tutorial is hidden
+            if marker.0 == 0 {
+                commands.entity(ent).despawn_recursive();
+            }
         }
     }
 }
