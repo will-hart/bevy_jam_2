@@ -27,7 +27,7 @@ pub fn update_market_price_ui(
 
         for child in children.iter() {
             if let Ok(mut t) = texts.get_mut(*child) {
-                t.sections[0].value = format!("{:3}", market_val.current_price.round() as u32);
+                t.sections[0].value = format!("{}", market_val.current_price.round() as i32);
                 continue;
             }
 

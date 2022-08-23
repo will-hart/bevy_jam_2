@@ -190,14 +190,27 @@ pub fn spawn_ship_respawn_bar(
                             ..default()
                         })
                         .with_children(|parent_row| {
-                            parent_row.spawn_bundle(NodeBundle {
-                                style: Style {
-                                    size: Size::new(Val::Px(4.0 * GRID_SIZE), Val::Auto),
+                            parent_row
+                                .spawn_bundle(NodeBundle {
+                                    style: Style {
+                                        size: Size::new(Val::Px(4.0 * GRID_SIZE), Val::Auto),
+                                        align_items: AlignItems::Center,
+                                        justify_content: JustifyContent::Center,
+                                        align_content: AlignContent::Center,
+                                        ..default()
+                                    },
+                                    color: Color::NONE.into(),
                                     ..default()
-                                },
-                                color: Color::NONE.into(),
-                                ..default()
-                            });
+                                })
+                                .with_children(|builder| {
+                                    builder.spawn_bundle(TextBundle {
+                                        text: Text::from_section(
+                                            "PROFIT",
+                                            small_text_style.clone(),
+                                        ),
+                                        ..default()
+                                    });
+                                });
 
                             BOX_TYPES.iter().for_each(|bt| {
                                 parent_row

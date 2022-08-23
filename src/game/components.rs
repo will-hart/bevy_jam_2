@@ -26,16 +26,6 @@ impl Display for ShipDestination {
 }
 
 impl ShipDestination {
-    /// The amount of time a ship is unavailable for when sailing
-    /// counted from the time the ship despawns
-    pub fn get_travel_duration(&self) -> f32 {
-        match self {
-            ShipDestination::NewWorld => 12.0,
-            ShipDestination::Pirates => 11.0,
-            ShipDestination::Eastern => 9.0,
-        }
-    }
-
     pub fn get_image(&self, textures: &TextureAssets) -> Handle<Image> {
         match self {
             ShipDestination::NewWorld => textures.flag_new_world.clone(),

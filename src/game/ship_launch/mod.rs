@@ -10,7 +10,7 @@ use crate::{
 use super::{
     actions::ShipSlots,
     animation::ShipArrivedAtDestination,
-    components::{Ship, ShipArriving, ShipDemandItemMarker, ShipHold, Wave},
+    components::{Ship, ShipArriving, ShipDemandItemMarker, Wave},
     Animation, AnimationState, SystemLabels,
 };
 
@@ -110,7 +110,6 @@ pub fn ship_despawn(
     waves: Query<&Children, With<Wave>>,
     mut ships: Query<(
         Entity,
-        &ShipHold,
         &mut Handle<Animation>,
         &mut AnimationState,
         Option<&ShipArriving>,
@@ -120,7 +119,7 @@ pub fn ship_despawn(
         match waves.get(evt.0) {
             Ok(wave_children) => {
                 for child in wave_children.iter() {
-                    let (ship_ent, hold, mut anim, mut anim_state, arriving) =
+                    let (ship_ent, mut anim, mut anim_state, arriving) =
                         ships.get_mut(*child).expect("Should have a ship hold");
 
                     match arriving {
@@ -129,14 +128,12 @@ pub fn ship_despawn(
 
                             *anim = animations.ship_furl.clone();
                             anim_state.reset();
+                            commands.entity(ship_ent).remove::<ShipArriving>();
 
                             slots.slots[arr.0] = ShipSlotType::Occupied(ship_ent);
                         }
                         None => {
-                            info!(
-                                "Despawning ship, setting it to respawn in {} seconds",
-                                hold.destination.get_travel_duration()
-                            );
+                            info!("Despawning ship",);
                             commands.entity(evt.0).despawn_recursive();
                         }
                     }

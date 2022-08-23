@@ -53,7 +53,7 @@ pub fn score_update(
         }
     }
 
-    if score.0 < 0.01 {
+    if score.0 < 0.0 {
         warn!("Game Over");
         return;
     }
