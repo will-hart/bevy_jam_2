@@ -10,7 +10,7 @@ use crate::{
 use super::{
     actions::ShipSlots,
     animation::ShipArrivedAtDestination,
-    components::{Ship, ShipArriving, ShipHold, Wave},
+    components::{Ship, ShipArriving, ShipDemandItemMarker, ShipHold, Wave},
     Animation, AnimationState, SystemLabels,
 };
 
@@ -38,7 +38,16 @@ fn trigger_launch(
     animations: Res<AnimationAssets>,
     mut slots: ResMut<ShipSlots>,
     mut waves: Query<Entity, With<Wave>>,
-    mut ships: Query<(&mut Handle<Animation>, &mut AnimationState, &Parent), With<Ship>>,
+    mut ships: Query<
+        (
+            &mut Handle<Animation>,
+            &mut AnimationState,
+            &Parent,
+            &Children,
+        ),
+        With<Ship>,
+    >,
+    markers: Query<Entity, &ShipDemandItemMarker>,
 ) {
     let mut launched = HashSet::<usize>::new();
 
@@ -55,7 +64,7 @@ fn trigger_launch(
 
         match slots.slots[evt.slot_id] {
             ShipSlotType::Occupied(se) => {
-                let (mut ship_anim, mut anim_state, parent) =
+                let (mut ship_anim, mut anim_state, parent, children) =
                     ships.get_mut(se).expect("Should find ship");
 
                 // update the animation
@@ -67,7 +76,7 @@ fn trigger_launch(
                     .get_mut(parent.get())
                     .expect("Ship needs a parent wave");
                 commands.entity(wave_entity).insert(AnimateWithSpeed {
-                    speed: 20.0,
+                    speed: 25.0,
                     target: vec![Vec3::new(
                         0.7 * WIDTH,
                         -10.0 * GRID_SIZE,
@@ -77,6 +86,13 @@ fn trigger_launch(
 
                 // empty the slot
                 slots.slots[evt.slot_id] = ShipSlotType::Empty;
+
+                // remove the demand markers
+                for child in children.iter() {
+                    if markers.contains(*child) {
+                        commands.entity(*child).despawn();
+                    }
+                }
             }
             _ => {
                 warn!("Attempted to depart ship that has already left");

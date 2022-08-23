@@ -3,7 +3,9 @@ use rand::thread_rng;
 
 use crate::{
     game::{
-        components::{AnimateWithSpeed, RequestShip, Ship, ShipArriving, ShipHold, Wave},
+        components::{
+            AnimateWithSpeed, RequestShip, Ship, ShipArriving, ShipDemandItemMarker, ShipHold, Wave,
+        },
         custom_sprite::CustomSpriteMaterial,
         AnimationState,
     },
@@ -73,15 +75,17 @@ pub fn spawn_ship(
                     .insert(ship_hold.clone())
                     .with_children(|ship_child_commands| {
                         for (idx, demand) in ship_hold.demands.iter().enumerate() {
-                            ship_child_commands.spawn_bundle(SpriteBundle {
-                                texture: demand.get_image(&textures).clone().into(),
-                                transform: Transform::from_xyz(
-                                    -110. + (idx as f32 * GRID_SIZE),
-                                    -120.,
-                                    2.,
-                                ),
-                                ..default()
-                            });
+                            ship_child_commands
+                                .spawn_bundle(SpriteBundle {
+                                    texture: demand.get_image(&textures).clone().into(),
+                                    transform: Transform::from_xyz(
+                                        -110. + (idx as f32 * GRID_SIZE),
+                                        -120.,
+                                        2.,
+                                    ),
+                                    ..default()
+                                })
+                                .insert(ShipDemandItemMarker(*demand));
                         }
                     })
                     .id(),

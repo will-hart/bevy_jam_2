@@ -89,6 +89,9 @@ impl ShipHold {
 pub struct ShipArriving(pub usize);
 
 #[derive(Component)]
+pub struct ShipDemandItemMarker(pub BoxType);
+
+#[derive(Component)]
 pub struct MarketPriceIndicator(pub ShipDestination, pub BoxType);
 
 #[derive(Component)]

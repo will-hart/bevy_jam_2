@@ -49,6 +49,7 @@ impl Plugin for ActionPlugin {
         .add_system(pickup::click_to_pickup.run_in_state(GameState::Playing))
         .add_system(dragging::start_dragging.run_in_state(GameState::Playing))
         .add_system(dragging::mouse_follower.run_in_state(GameState::Playing))
-        .add_system(dropping::handle_drop.run_in_state(GameState::Playing));
+        .add_system(dropping::handle_drop.run_in_state(GameState::Playing))
+        .add_system(dropping::handle_drop_side_effects.run_in_state(GameState::Playing));
     }
 }

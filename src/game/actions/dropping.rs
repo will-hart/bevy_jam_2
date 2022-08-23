@@ -1,6 +1,8 @@
 use bevy::prelude::*;
 
-use crate::game::components::{Cart, CartCrate, FollowMouse, ShipHold};
+use crate::game::components::{
+    BoxType, Cart, CartCrate, FollowMouse, Ship, ShipDemandItemMarker, ShipHold,
+};
 
 use super::dragging::DraggingBox;
 
@@ -26,7 +28,7 @@ pub struct OnDropCrate {
     pub ship: Option<Entity>,
 }
 
-pub struct OnCrateDroppedOnShip(pub Entity);
+pub struct OnCrateDroppedOnShip(pub Entity, pub BoxType);
 
 pub fn handle_drop(
     mut commands: Commands,
@@ -67,7 +69,9 @@ pub fn handle_drop(
                     .get_mut(ship_ent)
                     .expect("Should be able to find ship");
                 ship_hold.accept_crate(dragging.box_type.unwrap());
-                on_drop_on_ship_events.send(OnCrateDroppedOnShip(ship_ent));
+                on_drop_on_ship_events
+                    .send(OnCrateDroppedOnShip(ship_ent, dragging.box_type.unwrap()));
+
                 true
             }
             None => {
@@ -101,5 +105,33 @@ pub fn handle_drop(
 
         dragging.box_type = None;
         dragging.cart_entity = None;
+    }
+}
+
+pub fn handle_drop_side_effects(
+    mut commands: Commands,
+    mut on_drop_on_ship_events: EventReader<OnCrateDroppedOnShip>,
+    ships: Query<&Children, With<Ship>>,
+    markers: Query<(Entity, &ShipDemandItemMarker)>,
+) {
+    for evt in on_drop_on_ship_events.iter() {
+        let ship_ent = evt.0;
+        let box_type = evt.1;
+
+        let children = match ships.get(ship_ent) {
+            Ok(c) => c,
+            _ => {
+                return;
+            }
+        };
+
+        for child in children.iter().rev() {
+            if let Ok((marker, demand_item)) = markers.get(*child) {
+                if demand_item.0 == box_type {
+                    commands.entity(marker).despawn();
+                    break;
+                }
+            }
+        }
     }
 }
