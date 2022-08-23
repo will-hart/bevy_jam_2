@@ -2,9 +2,11 @@ use bevy::{prelude::*, utils::HashSet};
 use iyes_loopless::prelude::IntoConditionalSystem;
 
 use crate::{
-    game::{actions::ShipSlotType, components::AnimateWithSpeed},
+    game::{
+        actions::ShipSlotType, components::AnimateWithSpeed, spawners::SHIP_SAILING_POSITION_Y,
+    },
     loader::AnimationAssets,
-    GameState, GRID_SIZE, WIDTH,
+    GameState, WIDTH,
 };
 
 use super::{
@@ -79,7 +81,7 @@ fn trigger_launch(
                     speed: 25.0,
                     target: vec![Vec3::new(
                         0.7 * WIDTH,
-                        -10.0 * GRID_SIZE,
+                        SHIP_SAILING_POSITION_Y,
                         6.0 + evt.slot_id as f32 * 3.0,
                     )],
                 });

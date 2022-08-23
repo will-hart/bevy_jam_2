@@ -18,7 +18,6 @@ pub fn score_display(score: Res<Score>, mut texts: Query<&mut Text, With<ScoreUi
 
 pub fn score_update(
     market: Res<Market>,
-    time: Res<Time>,
     mut score: ResMut<Score>,
     mut events: EventReader<ShipArrivedAtDestination>,
     waves: Query<&Children, With<Wave>>,
@@ -53,10 +52,8 @@ pub fn score_update(
         }
     }
 
-    if score.0 < 0.0 {
-        warn!("Game Over");
-        return;
-    }
-
-    let _dt = time.delta_seconds();
+    // if score.0 < 0.0 {
+    //     warn!("Game Over");
+    //     return;
+    // }
 }

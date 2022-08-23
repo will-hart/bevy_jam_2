@@ -1,13 +1,15 @@
 use bevy::{prelude::*, sprite::MaterialMesh2dBundle};
-use rand::thread_rng;
+use rand::{seq::SliceRandom, thread_rng, Rng};
 
 use crate::{
     game::{
         components::{
             AnimateWithSpeed, RequestShip, Ship, ShipArriving, ShipDemandItemMarker, ShipHold,
-            TutorialMarker, Wave,
+            TopUiBar, TutorialMarker, Wave, BOX_TYPES, DESTINATIONS,
         },
         custom_sprite::CustomSpriteMaterial,
+        rng::RandomEvent,
+        ui::{spawn_ship_request_button, CurrentTutorialLevel},
         AnimationState,
     },
     loader::{AnimationAssets, FontAssets, TextureAssets},
@@ -20,9 +22,54 @@ pub const SHIP_SLOTS_POSITIONS: [Vec3; 3] = [
     Vec3::new(GRID_SIZE * 10., -GRID_SIZE * 8., 1.0),
 ];
 
-pub const SHIP_SAILING_POSITION_Y: f32 = -10.0 * GRID_SIZE;
+pub const SHIP_SAILING_POSITION_Y: f32 = -12.0 * GRID_SIZE;
 pub const SHIP_SPAWN_OFFSCREEN_POSITION: Vec3 =
     Vec3::new(-0.7 * WIDTH, SHIP_SAILING_POSITION_Y, 8.0);
+
+pub const MAX_SPAWN_REQUESTS: usize = 5;
+
+pub fn ship_spawning_system(
+    mut commands: Commands,
+    tutorial_level: Res<CurrentTutorialLevel>,
+    time: Res<Time>,
+    textures: Res<TextureAssets>,
+    mut event_test: Local<RandomEvent>,
+    mut next_test: Local<f64>,
+    spawn_requests: Query<&RequestShip>,
+    top_bar_query: Query<Entity, With<TopUiBar>>,
+) {
+    let elapsed = time.seconds_since_startup();
+    if elapsed < *next_test || tutorial_level.0 < 3 {
+        return;
+    }
+
+    if spawn_requests.iter().collect::<Vec<_>>().len() > MAX_SPAWN_REQUESTS {
+        return;
+    }
+
+    *next_test = elapsed + 1.0;
+
+    let mut rng = thread_rng();
+    if event_test.test(&mut rng) {
+        info!("Spawning a ship request");
+
+        let top_bar = top_bar_query.single();
+
+        let mut demands = vec![];
+        for _ in 0..rng.gen_range(1..=4) {
+            demands.push(*BOX_TYPES.choose(&mut rng).unwrap());
+        }
+
+        commands.entity(top_bar).with_children(|layout| {
+            spawn_ship_request_button(
+                &textures,
+                layout,
+                *DESTINATIONS.choose(&mut rng).unwrap(),
+                demands,
+            );
+        });
+    }
+}
 
 pub fn spawn_ship(
     commands: &mut Commands,

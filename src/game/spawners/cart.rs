@@ -4,6 +4,7 @@ use rand::{seq::SliceRandom, thread_rng, Rng};
 use crate::{
     game::{
         components::{AnimateWithSpeed, BoxType, Cart, CartCrate, BOX_TYPES},
+        ui::CurrentTutorialLevel,
         AnimationState,
     },
     loader::{AnimationAssets, TextureAssets},
@@ -68,6 +69,7 @@ pub struct NextSpawnTime(pub u64);
 
 pub fn cart_spawning_system(
     mut commands: Commands,
+    tutorial_level: Res<CurrentTutorialLevel>,
     time: Res<Time>,
     textures: Res<TextureAssets>,
     animations: Res<AnimationAssets>,
@@ -86,10 +88,14 @@ pub fn cart_spawning_system(
             &textures,
             &animations,
             Vec3::new(WIDTH / 2.0 + GRID_SIZE * 5.0, -GRID_SIZE * 1.5, CART_Z_POS),
-            [
-                *BOX_TYPES.choose(&mut rng).unwrap(),
-                *BOX_TYPES.choose(&mut rng).unwrap(),
-            ],
+            if tutorial_level.0 < 3 {
+                [BoxType::Fruit, BoxType::Fruit]
+            } else {
+                [
+                    *BOX_TYPES.choose(&mut rng).unwrap(),
+                    *BOX_TYPES.choose(&mut rng).unwrap(),
+                ]
+            },
         );
     }
 }

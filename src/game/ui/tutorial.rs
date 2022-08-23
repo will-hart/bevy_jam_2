@@ -64,8 +64,6 @@ fn level2_tutorial(
             }
         }
 
-        tutorial.0 = 3;
-
         let bar = top_ui_bar.single();
         commands.entity(bar).with_children(|builder| {
             builder
@@ -100,6 +98,8 @@ fn level2_tutorial(
                         .insert(TutorialMarker(3));
                 });
         });
+
+        tutorial.0 = 3;
     }
 }
 
@@ -114,7 +114,7 @@ fn level3_tutorial(
     }
 
     for (entity, marker) in tutorials.iter() {
-        if marker.0 >= tutorial.0 {
+        if marker.0 > tutorial.0 {
             continue;
         }
 

@@ -51,7 +51,7 @@ Ship Game:
   Ship system:
     ✘ ship delivery timer (off screen / unavailable) @cancelled(22-08-21 22:45)
     ✔ Ship arrival queue @done(22-08-23 08:47)
-    ☐ Randomly add ships to arrival queue
+    ✔ Randomly add ships to arrival queue @done(22-08-23 20:16)
     ☐ Timers for ship arrivals
       ☐ Lost score for missed ship arrivals
       ☐ Ships disappear when the timer expires
@@ -59,7 +59,7 @@ Ship Game:
       ✔ add ship to slot immediately @done(22-08-23 07:57)
     ✔ Can't spawn ships if no slots are free @done(22-08-23 08:47)
     ✘ ship queue off screen @cancelled(22-08-22 23:27)
-    ☐ Random ship demands
+    ✔ Random ship demands @done(22-08-23 20:28)
       ☐ Penalties for incorrectly loaded goods
       ✔ Display UI for demands @done(22-08-23 09:07)
       ✔ Update UI as demands are met @done(22-08-23 17:35)
@@ -96,5 +96,6 @@ Super Nice to Haves:
   ✘ Maintenance / docking fees @cancelled(22-08-23 00:11)
   ✔ Change market demand over time @done(22-08-23 00:11)
   ✘ Show the crates on a ship on the screen @cancelled(22-08-23 00:11)
-  ☐ In-game tutorial
-  ☐ Style in-game tutorial
+  ✔ In-game tutorial @done(22-08-23 20:28)
+  ✘ Style in-game tutorial @cancelled(22-08-23 20:28)
+  ☐ Work out why the game spends 15 seconds on a white screen

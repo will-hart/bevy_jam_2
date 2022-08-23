@@ -63,50 +63,12 @@ pub fn spawn_ship_respawn_bar(
                         .insert(TopUiBar)
                         .with_children(|respawn_bar_layout| {
                             // first spawn ship button
-                            respawn_bar_layout
-                                .spawn_bundle(ButtonBundle {
-                                    style: Style {
-                                        size: Size::new(Val::Px(70.0), Val::Px(40.0)),
-                                        margin: UiRect::new(
-                                            Val::Undefined,
-                                            Val::Px(15.0),
-                                            Val::Undefined,
-                                            Val::Undefined,
-                                        ),
-                                        padding: UiRect::new(
-                                            Val::Px(5.0),
-                                            Val::Px(5.0),
-                                            Val::Px(5.0),
-                                            Val::Px(5.0),
-                                        ),
-                                        justify_content: JustifyContent::Center,
-                                        align_items: AlignItems::Center,
-                                        ..default()
-                                    },
-                                    color: NORMAL_BUTTON.into(),
-                                    ..default()
-                                })
-                                .insert(RequestShip {
-                                    destination: ShipDestination::NewWorld,
-                                    demands: vec![BoxType::Fruit, BoxType::Fruit],
-                                })
-                                .with_children(|parent| {
-                                    parent.spawn_bundle(ImageBundle {
-                                        image: textures.ship_small.clone().into(),
-                                        focus_policy: FocusPolicy::Pass,
-                                        ..default()
-                                    });
-                                    parent.spawn_bundle(ImageBundle {
-                                        image: textures.box_type_fruit.clone().into(),
-                                        focus_policy: FocusPolicy::Pass,
-                                        ..default()
-                                    });
-                                    parent.spawn_bundle(ImageBundle {
-                                        image: textures.box_type_fruit.clone().into(),
-                                        focus_policy: FocusPolicy::Pass,
-                                        ..default()
-                                    });
-                                });
+                            spawn_ship_request_button(
+                                &textures,
+                                respawn_bar_layout,
+                                ShipDestination::NewWorld,
+                                vec![BoxType::Fruit, BoxType::Fruit],
+                            );
 
                             // tutorial text
                             respawn_bar_layout
@@ -336,5 +298,50 @@ pub fn spawn_ship_respawn_bar(
                 .with_children(|parent| {
                     spawn_ship_buttons(parent, &fonts);
                 });
+        });
+}
+
+pub fn spawn_ship_request_button(
+    textures: &TextureAssets,
+    layout: &mut ChildBuilder,
+    destination: ShipDestination,
+    demands: Vec<BoxType>,
+) {
+    layout
+        .spawn_bundle(ButtonBundle {
+            style: Style {
+                size: Size::new(Val::Auto, Val::Px(40.0)),
+                margin: UiRect::new(
+                    Val::Undefined,
+                    Val::Px(15.0),
+                    Val::Undefined,
+                    Val::Undefined,
+                ),
+                padding: UiRect::new(Val::Px(5.0), Val::Px(5.0), Val::Px(5.0), Val::Px(5.0)),
+                justify_content: JustifyContent::Center,
+                align_items: AlignItems::Center,
+                ..default()
+            },
+            color: NORMAL_BUTTON.into(),
+            ..default()
+        })
+        .with_children(|parent| {
+            parent.spawn_bundle(ImageBundle {
+                image: textures.ship_small.clone().into(),
+                focus_policy: FocusPolicy::Pass,
+                ..default()
+            });
+
+            for demand in demands.iter() {
+                parent.spawn_bundle(ImageBundle {
+                    image: demand.get_image(&textures).into(),
+                    focus_policy: FocusPolicy::Pass,
+                    ..default()
+                });
+            }
+        })
+        .insert(RequestShip {
+            destination,
+            demands,
         });
 }

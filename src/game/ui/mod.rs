@@ -1,8 +1,10 @@
 mod launch_ships;
+
 mod market;
 mod request_ship;
 mod score;
 mod ship_respawn_bar;
+pub use ship_respawn_bar::spawn_ship_request_button;
 mod tutorial;
 pub use tutorial::CurrentTutorialLevel;
 
