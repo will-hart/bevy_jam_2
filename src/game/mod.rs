@@ -8,6 +8,7 @@ mod custom_sprite;
 #[cfg(feature = "debug_system")]
 mod debug;
 mod market;
+pub mod rng;
 mod ship_launch;
 mod ui;
 
@@ -23,10 +24,10 @@ use crate::{
         day_night_cycle::DayNightCyclePlugin,
         market::MarketPlugin,
         ship_launch::LaunchShipPlugin,
-        spawners::{cart_spawning_system, spawn_ship, spawn_torch},
+        spawners::{cart_spawning_system, ship_spawning_system, spawn_torch},
         ui::UiPlugin,
     },
-    loader::{AnimationAssets, FontAssets, TextureAssets},
+    loader::{AnimationAssets, TextureAssets},
     GameState, GRID_SIZE,
 };
 
@@ -34,8 +35,6 @@ use crate::{
 use crate::game::debug::DebugPlugin;
 
 use animation::AnimationPlugin;
-
-use self::{actions::ShipSlots, custom_sprite::CustomSpriteMaterial};
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, SystemLabel)]
 pub enum SystemLabels {
@@ -56,6 +55,7 @@ impl Plugin for GamePlugin {
             .add_plugin(LaunchShipPlugin)
             .add_plugin(UiPlugin)
             .add_system(cart_spawning_system.run_in_state(GameState::Playing))
+            .add_system(ship_spawning_system.run_in_state(GameState::Playing))
             .add_enter_system(GameState::Playing, setup_world);
 
         #[cfg(feature = "debug_system")]
@@ -69,10 +69,6 @@ fn setup_world(
     mut commands: Commands,
     textures: Res<TextureAssets>,
     animations: Res<AnimationAssets>,
-    fonts: Res<FontAssets>,
-    mut ship_slots: ResMut<ShipSlots>,
-    mut meshes: ResMut<Assets<Mesh>>,
-    mut materials: ResMut<Assets<CustomSpriteMaterial>>,
 ) {
     info!("Setting up game world");
 
@@ -101,57 +97,4 @@ fn setup_world(
             i > 1,
         );
     });
-
-    /* SHIPS */
-    ship_slots.slots[0] = Some(spawn_ship(
-        &mut commands,
-        &textures,
-        &fonts,
-        &animations,
-        &mut meshes,
-        &mut materials,
-        Vec3::new(-GRID_SIZE * 10., -GRID_SIZE * 4., 1.6),
-        None,
-    ));
-    info!("Added ship {:?} at slot 0", ship_slots.slots[0]);
-
-    ship_slots.slots[1] = Some(spawn_ship(
-        &mut commands,
-        &textures,
-        &fonts,
-        &animations,
-        &mut meshes,
-        &mut materials,
-        Vec3::new(0., -GRID_SIZE * 4., 1.3),
-        None,
-    ));
-    info!("Added ship {:?} at slot 1", ship_slots.slots[1]);
-
-    ship_slots.slots[2] = Some(spawn_ship(
-        &mut commands,
-        &textures,
-        &fonts,
-        &animations,
-        &mut meshes,
-        &mut materials,
-        Vec3::new(GRID_SIZE * 10., -GRID_SIZE * 4., 1.0),
-        None,
-    ));
-    info!("Added ship {:?} at slot 2", ship_slots.slots[2]);
-
-    // /* CARTS */
-    // spawn_cart(
-    //     &mut commands,
-    //     &textures,
-    //     &animations,
-    //     Vec3::new(WIDTH / 2.0 + GRID_SIZE * 5.0, -GRID_SIZE * 1.5, 0.4),
-    //     [BoxType::MedicalSupplies, BoxType::Fruit],
-    // );
-    // spawn_cart(
-    //     &mut commands,
-    //     &textures,
-    //     &animations,
-    //     Vec3::new(WIDTH / 2.0 + GRID_SIZE * 15.0, -GRID_SIZE * 1.5, 0.4),
-    //     [BoxType::Iron, BoxType::Rum],
-    // );
 }

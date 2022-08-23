@@ -2,19 +2,21 @@ use bevy::{prelude::*, utils::HashSet};
 use iyes_loopless::prelude::IntoConditionalSystem;
 
 use crate::{
-    game::components::{AnimateWithSpeed, ShipRespawnTimer},
+    game::{
+        actions::ShipSlotType, components::AnimateWithSpeed, spawners::SHIP_SAILING_POSITION_Y,
+    },
     loader::AnimationAssets,
-    GameState, GRID_SIZE, WIDTH,
+    GameState, WIDTH,
 };
 
 use super::{
     actions::ShipSlots,
-    animation::DespawnEntity,
-    components::{Ship, ShipHold, ShipText, Wave},
-    Animation, SystemLabels,
+    animation::ShipArrivedAtDestination,
+    components::{Ship, ShipArriving, ShipDemandItemMarker, Wave},
+    Animation, AnimationState, SystemLabels,
 };
 
-pub struct LaunchShipEvent {
+pub struct OnLaunchShip {
     pub slot_id: usize,
 }
 
@@ -22,7 +24,7 @@ pub struct LaunchShipPlugin;
 
 impl Plugin for LaunchShipPlugin {
     fn build(&self, app: &mut App) {
-        app.add_event::<LaunchShipEvent>()
+        app.add_event::<OnLaunchShip>()
             .add_system(trigger_launch.run_not_in_state(GameState::Loading))
             .add_system(
                 ship_despawn
@@ -34,12 +36,20 @@ impl Plugin for LaunchShipPlugin {
 
 fn trigger_launch(
     mut commands: Commands,
-    mut events: EventReader<LaunchShipEvent>,
+    mut events: EventReader<OnLaunchShip>,
     animations: Res<AnimationAssets>,
     mut slots: ResMut<ShipSlots>,
-    mut waves: Query<(Entity, &mut Transform), With<Wave>>,
-    mut ships: Query<(&mut Handle<Animation>, &Parent, &Children), With<Ship>>,
-    ship_texts: Query<Entity, With<ShipText>>,
+    mut waves: Query<Entity, With<Wave>>,
+    mut ships: Query<
+        (
+            &mut Handle<Animation>,
+            &mut AnimationState,
+            &Parent,
+            &Children,
+        ),
+        With<Ship>,
+    >,
+    markers: Query<Entity, &ShipDemandItemMarker>,
 ) {
     let mut launched = HashSet::<usize>::new();
 
@@ -54,33 +64,39 @@ fn trigger_launch(
             evt.slot_id, slots.slots[evt.slot_id]
         );
 
-        match slots.slots[evt.slot_id].take() {
-            Some(se) => {
-                let (mut ship_anim, parent, children) =
+        match slots.slots[evt.slot_id] {
+            ShipSlotType::Occupied(se) => {
+                let (mut ship_anim, mut anim_state, parent, children) =
                     ships.get_mut(se).expect("Should find ship");
 
                 // update the animation
                 *ship_anim = animations.ship_unfurl.clone();
+                anim_state.reset();
 
                 // get the parent and add an animation to it to depart
-                let (wave_entity, mut wave_tx) = waves
+                let wave_entity = waves
                     .get_mut(parent.get())
                     .expect("Ship needs a parent wave");
                 commands.entity(wave_entity).insert(AnimateWithSpeed {
-                    speed: 20.0,
-                    target: Vec2::new(0.7 * WIDTH, -10.0 * GRID_SIZE),
+                    speed: 25.0,
+                    target: vec![Vec3::new(
+                        0.7 * WIDTH,
+                        SHIP_SAILING_POSITION_Y,
+                        6.0 + evt.slot_id as f32 * 3.0,
+                    )],
                 });
-                wave_tx.translation.z = 6.0 + evt.slot_id as f32 * 3.0; // not sure why this does prevent overlapping of waves + other ships :thinking:
 
-                // hide the ship text
+                // empty the slot
+                slots.slots[evt.slot_id] = ShipSlotType::Empty;
+
+                // remove the demand markers
                 for child in children.iter() {
-                    match ship_texts.get(*child) {
-                        Ok(text_ent) => commands.entity(text_ent).despawn(),
-                        _ => {}
+                    if markers.contains(*child) {
+                        commands.entity(*child).despawn();
                     }
                 }
             }
-            None => {
+            _ => {
                 warn!("Attempted to depart ship that has already left");
             }
         }
@@ -90,26 +106,39 @@ fn trigger_launch(
 /// Despawns ships and sets them for respawn
 pub fn ship_despawn(
     mut commands: Commands,
-    time: Res<Time>,
-    mut events: EventReader<DespawnEntity>,
+    mut slots: ResMut<ShipSlots>,
+    animations: Res<AnimationAssets>,
+    mut events: EventReader<ShipArrivedAtDestination>,
     waves: Query<&Children, With<Wave>>,
-    ships: Query<(&Ship, &ShipHold)>,
+    mut ships: Query<(
+        Entity,
+        &mut Handle<Animation>,
+        &mut AnimationState,
+        Option<&ShipArriving>,
+    )>,
 ) {
     for evt in events.iter() {
         match waves.get(evt.0) {
             Ok(wave_children) => {
                 for child in wave_children.iter() {
-                    let (ship, hold) = ships.get(*child).expect("Should have a ship hold");
-                    info!(
-                        "Despawning ship, setting it to respawn in {} seconds",
-                        hold.destination.get_travel_duration()
-                    );
-                    commands.entity(evt.0).despawn_recursive();
-                    commands.spawn().insert(ShipRespawnTimer {
-                        ship_to_respawn: ship.clone(),
-                        respawn_at: time.time_since_startup().as_secs_f32()
-                            + hold.destination.get_travel_duration(),
-                    });
+                    let (ship_ent, mut anim, mut anim_state, arriving) =
+                        ships.get_mut(*child).expect("Should have a ship hold");
+
+                    match arriving {
+                        Some(arr) => {
+                            info!("Ship arrived at slot {}", arr.0);
+
+                            *anim = animations.ship_furl.clone();
+                            anim_state.reset();
+                            commands.entity(ship_ent).remove::<ShipArriving>();
+
+                            slots.slots[arr.0] = ShipSlotType::Occupied(ship_ent);
+                        }
+                        None => {
+                            info!("Despawning ship",);
+                            commands.entity(evt.0).despawn_recursive();
+                        }
+                    }
                 }
             }
             _ => {

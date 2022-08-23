@@ -4,11 +4,14 @@ use rand::{seq::SliceRandom, thread_rng, Rng};
 use crate::{
     game::{
         components::{AnimateWithSpeed, BoxType, Cart, CartCrate, BOX_TYPES},
+        ui::CurrentTutorialLevel,
         AnimationState,
     },
     loader::{AnimationAssets, TextureAssets},
     GRID_SIZE, WIDTH,
 };
+
+pub const CART_Z_POS: f32 = 0.4;
 
 pub fn spawn_cart(
     commands: &mut Commands,
@@ -25,7 +28,7 @@ pub fn spawn_cart(
         })
         .insert(AnimateWithSpeed {
             speed: 30.,
-            target: Vec2::new(-0.75 * WIDTH, location.y),
+            target: vec![Vec3::new(-0.75 * WIDTH, location.y, CART_Z_POS)],
         })
         .insert(Cart {
             front: Some(box_types[0]),
@@ -66,6 +69,7 @@ pub struct NextSpawnTime(pub u64);
 
 pub fn cart_spawning_system(
     mut commands: Commands,
+    tutorial_level: Res<CurrentTutorialLevel>,
     time: Res<Time>,
     textures: Res<TextureAssets>,
     animations: Res<AnimationAssets>,
@@ -83,11 +87,15 @@ pub fn cart_spawning_system(
             &mut commands,
             &textures,
             &animations,
-            Vec3::new(WIDTH / 2.0 + GRID_SIZE * 5.0, -GRID_SIZE * 1.5, 0.4),
-            [
-                BOX_TYPES.choose(&mut rng).unwrap().clone(),
-                BOX_TYPES.choose(&mut rng).unwrap().clone(),
-            ],
+            Vec3::new(WIDTH / 2.0 + GRID_SIZE * 5.0, -GRID_SIZE * 1.5, CART_Z_POS),
+            if tutorial_level.0 < 3 {
+                [BoxType::Fruit, BoxType::Fruit]
+            } else {
+                [
+                    *BOX_TYPES.choose(&mut rng).unwrap(),
+                    *BOX_TYPES.choose(&mut rng).unwrap(),
+                ]
+            },
         );
     }
 }

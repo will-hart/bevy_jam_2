@@ -1,15 +1,15 @@
-use bevy::prelude::*;
+use bevy::{prelude::*, ui::FocusPolicy};
 
 use crate::{
     game::components::{
-        MarketPriceDirectionIndicator, MarketPriceIndicator, MarketPriceValueIndicator, ScoreUi,
-        ShipRespawnBar, BOX_TYPES, DESTINATIONS,
+        BoxType, MarketPriceDirectionIndicator, MarketPriceIndicator, MarketPriceValueIndicator,
+        RequestShip, ScoreUi, ShipDestination, TopUiBar, TutorialMarker, BOX_TYPES, DESTINATIONS,
     },
     loader::{FontAssets, TextureAssets},
     GRID_SIZE,
 };
 
-use super::launch_ships::spawn_ship_buttons;
+use super::launch_ships::{spawn_ship_buttons, NORMAL_BUTTON};
 
 pub fn spawn_ship_respawn_bar(
     mut commands: Commands,
@@ -43,6 +43,7 @@ pub fn spawn_ship_respawn_bar(
                 .spawn_bundle(NodeBundle {
                     style: Style {
                         size: Size::new(Val::Percent(100.0), Val::Px(48.0)),
+                        align_items: AlignItems::Center,
                         ..default()
                     },
                     color: Color::rgba(0.15, 0.15, 0.15, 0.35).into(),
@@ -53,12 +54,33 @@ pub fn spawn_ship_respawn_bar(
                         .spawn_bundle(NodeBundle {
                             style: Style {
                                 size: Size::new(Val::Percent(80.0), Val::Px(48.0)),
+                                align_items: AlignItems::Center,
                                 ..default()
                             },
                             color: Color::NONE.into(),
                             ..default()
                         })
-                        .insert(ShipRespawnBar);
+                        .insert(TopUiBar)
+                        .with_children(|respawn_bar_layout| {
+                            // first spawn ship button
+                            spawn_ship_request_button(
+                                &textures,
+                                respawn_bar_layout,
+                                ShipDestination::NewWorld,
+                                vec![BoxType::Fruit, BoxType::Fruit],
+                            );
+
+                            // tutorial text
+                            respawn_bar_layout
+                                .spawn_bundle(TextBundle {
+                                    text: Text::from_section(
+                                        "< click here to request a ship",
+                                        small_text_style.clone(),
+                                    ),
+                                    ..default()
+                                })
+                                .insert(TutorialMarker(0));
+                        });
 
                     bar_layout
                         .spawn_bundle(NodeBundle {
@@ -100,7 +122,7 @@ pub fn spawn_ship_respawn_bar(
             layout
                 .spawn_bundle(NodeBundle {
                     style: Style {
-                        size: Size::new(Val::Px(11. * GRID_SIZE), Val::Px(4.0 * GRID_SIZE)),
+                        size: Size::new(Val::Px(13. * GRID_SIZE), Val::Px(4.0 * GRID_SIZE)),
                         justify_content: JustifyContent::FlexStart,
                         align_items: AlignItems::FlexEnd,
                         flex_direction: FlexDirection::ColumnReverse,
@@ -130,14 +152,27 @@ pub fn spawn_ship_respawn_bar(
                             ..default()
                         })
                         .with_children(|parent_row| {
-                            parent_row.spawn_bundle(NodeBundle {
-                                style: Style {
-                                    size: Size::new(Val::Px(3.0 * GRID_SIZE), Val::Auto),
+                            parent_row
+                                .spawn_bundle(NodeBundle {
+                                    style: Style {
+                                        size: Size::new(Val::Px(4.0 * GRID_SIZE), Val::Auto),
+                                        align_items: AlignItems::Center,
+                                        justify_content: JustifyContent::Center,
+                                        align_content: AlignContent::Center,
+                                        ..default()
+                                    },
+                                    color: Color::NONE.into(),
                                     ..default()
-                                },
-                                color: Color::NONE.into(),
-                                ..default()
-                            });
+                                })
+                                .with_children(|builder| {
+                                    builder.spawn_bundle(TextBundle {
+                                        text: Text::from_section(
+                                            "PROFIT",
+                                            small_text_style.clone(),
+                                        ),
+                                        ..default()
+                                    });
+                                });
 
                             BOX_TYPES.iter().for_each(|bt| {
                                 parent_row
@@ -194,7 +229,7 @@ pub fn spawn_ship_respawn_bar(
                                     ),
                                     style: Style {
                                         size: Size::new(
-                                            Val::Px(2.0 * GRID_SIZE),
+                                            Val::Px(4.0 * GRID_SIZE),
                                             Val::Px(GRID_SIZE),
                                         ),
                                         ..default()
@@ -217,10 +252,7 @@ pub fn spawn_ship_respawn_bar(
                                             color: Color::NONE.into(),
                                             ..default()
                                         })
-                                        .insert(MarketPriceIndicator(
-                                            destination.clone(),
-                                            bt.clone(),
-                                        ))
+                                        .insert(MarketPriceIndicator(*destination, *bt))
                                         .with_children(|market_item| {
                                             market_item
                                                 .spawn_bundle(TextBundle {
@@ -266,5 +298,50 @@ pub fn spawn_ship_respawn_bar(
                 .with_children(|parent| {
                     spawn_ship_buttons(parent, &fonts);
                 });
+        });
+}
+
+pub fn spawn_ship_request_button(
+    textures: &TextureAssets,
+    layout: &mut ChildBuilder,
+    destination: ShipDestination,
+    demands: Vec<BoxType>,
+) {
+    layout
+        .spawn_bundle(ButtonBundle {
+            style: Style {
+                size: Size::new(Val::Auto, Val::Px(40.0)),
+                margin: UiRect::new(
+                    Val::Undefined,
+                    Val::Px(15.0),
+                    Val::Undefined,
+                    Val::Undefined,
+                ),
+                padding: UiRect::new(Val::Px(5.0), Val::Px(5.0), Val::Px(5.0), Val::Px(5.0)),
+                justify_content: JustifyContent::Center,
+                align_items: AlignItems::Center,
+                ..default()
+            },
+            color: NORMAL_BUTTON.into(),
+            ..default()
+        })
+        .with_children(|parent| {
+            parent.spawn_bundle(ImageBundle {
+                image: textures.ship_small.clone().into(),
+                focus_policy: FocusPolicy::Pass,
+                ..default()
+            });
+
+            for demand in demands.iter() {
+                parent.spawn_bundle(ImageBundle {
+                    image: demand.get_image(textures).into(),
+                    focus_policy: FocusPolicy::Pass,
+                    ..default()
+                });
+            }
+        })
+        .insert(RequestShip {
+            destination,
+            demands,
         });
 }

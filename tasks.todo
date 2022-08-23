@@ -27,7 +27,7 @@ Ship Game:
     ✔ Show weight/vol below ship @done(22-08-21 13:18)
     ✔ Highlght overweight @done(22-08-21 13:44)
     ✔ Ship sinks lower with weight @done(22-08-21 13:37)
-    ☐ use icons for weight / volume
+    ✘ use icons for weight / volume @cancelled(22-08-23 17:40)
   
   Economy system:
     ✔ Different markets @done(22-08-21 22:38)
@@ -46,23 +46,34 @@ Ship Game:
     ✔ Market prices move over time @done(22-08-22 22:46)
     ✔ When ship desawned player gets the value from the market at that time @done(22-08-22 07:49)
     ✘ Lost ship (overweight) mechanic @cancelled(22-08-22 23:24)
+    ☐ Refactor market to single global price
   
   Ship system:
     ✘ ship delivery timer (off screen / unavailable) @cancelled(22-08-21 22:45)
-    ☐ Ship arrival queue
+    ✔ Ship arrival queue @done(22-08-23 08:47)
+    ✔ Randomly add ships to arrival queue @done(22-08-23 20:16)
     ☐ Timers for ship arrivals
-    ☐ Lost score for missed ship arrivals
-    ☐ Spawn ship button
-    ☐ Can't spawn ships if no slots are free
+      ☐ Lost score for missed ship arrivals
+      ☐ Ships disappear when the timer expires
+    ✔ Clicking the timer button spawns the ship @done(22-08-23 08:47)
+      ✔ add ship to slot immediately @done(22-08-23 07:57)
+    ✔ Can't spawn ships if no slots are free @done(22-08-23 08:47)
     ✘ ship queue off screen @cancelled(22-08-22 23:27)
-    ☐ Remove ship maintenance cost
-    ☐ Ship demands
+    ✔ Random ship demands @done(22-08-23 20:28)
+      ☐ Penalties for incorrectly loaded goods
+      ✔ Display UI for demands @done(22-08-23 09:07)
+      ✔ Update UI as demands are met @done(22-08-23 17:35)
+      ☐ Bonus if all demands met
     ✔ ship maintenance cost @done(22-08-22 08:20)
+    ✔ Remove ship maintenance cost @done(22-08-23 08:54)
     ship docking system:
       ✘ refresh ship + ship hold @cancelled(22-08-22 23:27)
-      ☐ add ship to slot
-      ☐ park ship
-      ☐ furl sails
+      ✔ spawn ship off screen @done(22-08-23 07:57)
+      ✔ Move to target in L shape rather than diagonally. @done(22-08-23 07:57)
+        ✔ Update animate entity system to allow chained animations or waypoints @done(22-08-23 07:31)
+        ✔ Update animate system to handle events on ship arrival @done(22-08-23 07:57)
+        ✔ furl sails on arrival @done(22-08-23 07:57)
+      ✔ Only allow dropping on a ship once it has arrived and the sails are furled @done(22-08-23 08:47)
 
   Sound effects:
     ☐ Morning
@@ -74,14 +85,17 @@ Ship Game:
 
 Super Nice to Haves:
   ☐ Physics / dropping to crates so you can hover them above the ship and drop them
-  ☐ If you miss the ship the crate falls in the water and is lost
-    ☐  also if your ship has no more volume it bounces off
+    ☐ If you miss the ship the crate falls in the water and is lost
   ☐ A warehouse on the shore with very limited capacity that you can use to stockpile interesting items
   ☐ Smuggling :D
   ☐ Nice art
   ☐ Weather effects
-  ☐ Money ticking down in chunks, with world text "damage" indicators when money is spent
-  ☐ Maintenance / docking fees
   ☐ Make departure animation less overlappy with waves
-  ☐ Change market demand over time
-  ☐ Show the crates on a ship on the screen
+  ✘ if your ship has no more volume the crate bounces off @cancelled(22-08-23 00:11)
+  ✘ Money ticking down in chunks, with world text "damage" indicators when money is spent @cancelled(22-08-23 00:11)
+  ✘ Maintenance / docking fees @cancelled(22-08-23 00:11)
+  ✔ Change market demand over time @done(22-08-23 00:11)
+  ✘ Show the crates on a ship on the screen @cancelled(22-08-23 00:11)
+  ✔ In-game tutorial @done(22-08-23 20:28)
+  ✘ Style in-game tutorial @cancelled(22-08-23 20:28)
+  ☐ Work out why the game spends 15 seconds on a white screen

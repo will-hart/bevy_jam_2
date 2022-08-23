@@ -1,5 +1,7 @@
 # Bevy GitHub CI Template
 
+[![CI](https://github.com/will-hart/bevy_jam_2/actions/workflows/ci.yaml/badge.svg?branch=main)](https://github.com/will-hart/bevy_jam_2/actions/workflows/ci.yaml) [![Release](https://github.com/will-hart/bevy_jam_2/actions/workflows/release.yaml/badge.svg?branch=main)](https://github.com/will-hart/bevy_jam_2/actions/workflows/release.yaml)
+
 This repo show how to setup CI on a github project for Bevy.
 
 It creates two workflows:
@@ -28,6 +30,7 @@ Definition: [.github/workflows/release.yaml](./.github/workflows/release.yaml)
 This workflow runs on every tag.
 
 It will build:
+
 * For Linux and Windows, a .zip archive containing the executable and the `assets`.
 * For macOS, a dmg image with a .app containing the assets.
 * For wasm, a .zip archive with the wasm binary, the js bindings, an html file loading it, and the assets.
@@ -40,7 +43,7 @@ You can follow [Managing releases in a repository](https://docs.github.com/en/re
 
 ### Git Tag from the CLI
 
-Execute the following commands: 
+Execute the following commands:
 
 ```sh
 git tag -a "my-game-1.0" -m "First official release"

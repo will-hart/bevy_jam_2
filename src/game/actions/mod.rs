@@ -14,7 +14,7 @@ mod dragging;
 mod dropping;
 mod pickup;
 
-pub use dropping::{OnCrateDroppedOnShip, ShipSlots};
+pub use dropping::{OnCrateDroppedOnShip, ShipSlotType, ShipSlots};
 
 // Numbers that are the range cart boxes can fall into
 pub const CART_MIN_Y: f32 = -2.5 * GRID_SIZE + 24.0; // magic numbers
@@ -49,6 +49,7 @@ impl Plugin for ActionPlugin {
         .add_system(pickup::click_to_pickup.run_in_state(GameState::Playing))
         .add_system(dragging::start_dragging.run_in_state(GameState::Playing))
         .add_system(dragging::mouse_follower.run_in_state(GameState::Playing))
-        .add_system(dropping::handle_drop.run_in_state(GameState::Playing));
+        .add_system(dropping::handle_drop.run_in_state(GameState::Playing))
+        .add_system(dropping::handle_drop_side_effects.run_in_state(GameState::Playing));
     }
 }

@@ -2,7 +2,7 @@ use bevy::prelude::*;
 use num_format::{Locale, ToFormattedString};
 
 use crate::game::{
-    animation::DespawnEntity,
+    animation::ShipArrivedAtDestination,
     components::{ScoreUi, Ship, ShipHold, Wave},
     market::Market,
 };
@@ -18,9 +18,8 @@ pub fn score_display(score: Res<Score>, mut texts: Query<&mut Text, With<ScoreUi
 
 pub fn score_update(
     market: Res<Market>,
-    time: Res<Time>,
     mut score: ResMut<Score>,
-    mut events: EventReader<DespawnEntity>,
+    mut events: EventReader<ShipArrivedAtDestination>,
     waves: Query<&Children, With<Wave>>,
     ships: Query<(&Ship, &ShipHold)>,
 ) {
@@ -35,7 +34,7 @@ pub fn score_update(
                             .market
                             .get(&hold.destination)
                             .unwrap()
-                            .get(&box_type)
+                            .get(box_type)
                             .unwrap()
                             .current_price;
                         info!(
@@ -53,13 +52,8 @@ pub fn score_update(
         }
     }
 
-    if score.0 < 0.01 {
-        warn!("Game Over");
-        return;
-    }
-
-    let _dt = time.delta_seconds();
-    // for (ship, _) in ships.iter() {
-    //     score.0 -= ship.maintenance_cost_per_second * dt;
+    // if score.0 < 0.0 {
+    //     warn!("Game Over");
+    //     return;
     // }
 }
