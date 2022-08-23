@@ -18,15 +18,15 @@ use iyes_loopless::prelude::{AppLooplessStateExt, IntoConditionalSystem};
 
 use crate::{
     game::{
-        actions::{ActionPlugin, ShipSlotType},
+        actions::ActionPlugin,
         custom_sprite::CustomSpritePlugin,
         day_night_cycle::DayNightCyclePlugin,
         market::MarketPlugin,
         ship_launch::LaunchShipPlugin,
-        spawners::{cart_spawning_system, spawn_ship, spawn_torch},
+        spawners::{cart_spawning_system, spawn_torch},
         ui::UiPlugin,
     },
-    loader::{AnimationAssets, FontAssets, TextureAssets},
+    loader::{AnimationAssets, TextureAssets},
     GameState, GRID_SIZE,
 };
 
@@ -34,8 +34,6 @@ use crate::{
 use crate::game::debug::DebugPlugin;
 
 use animation::AnimationPlugin;
-
-use self::{actions::ShipSlots, custom_sprite::CustomSpriteMaterial};
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, SystemLabel)]
 pub enum SystemLabels {
@@ -69,10 +67,6 @@ fn setup_world(
     mut commands: Commands,
     textures: Res<TextureAssets>,
     animations: Res<AnimationAssets>,
-    fonts: Res<FontAssets>,
-    mut ship_slots: ResMut<ShipSlots>,
-    mut meshes: ResMut<Assets<Mesh>>,
-    mut materials: ResMut<Assets<CustomSpriteMaterial>>,
 ) {
     info!("Setting up game world");
 
@@ -101,17 +95,4 @@ fn setup_world(
             i > 1,
         );
     });
-
-    /* SHIPS */
-    ship_slots.slots[0] = ShipSlotType::Arriving(spawn_ship(
-        &mut commands,
-        &textures,
-        &fonts,
-        &animations,
-        &mut meshes,
-        &mut materials,
-        0,
-        None,
-    ));
-    info!("Added ship {:?} at slot 0", ship_slots.slots[0]);
 }

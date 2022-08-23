@@ -57,9 +57,6 @@ pub const DESTINATIONS: [ShipDestination; 3] = [
 pub struct Ship {
     pub y_offset: f32,
     pub phase: f32,
-    pub next_available: f32,
-    pub maintenance_cost_per_second: f32,
-    pub purchase_cost: u32,
 }
 
 impl Ship {
@@ -67,39 +64,23 @@ impl Ship {
         Self {
             y_offset: 4.0 * GRID_SIZE,
             phase: rng.gen_range(-3.1..3.1),
-            next_available: 0.0,
-            maintenance_cost_per_second: 1.0,
-            purchase_cost: 350,
         }
     }
 }
 
 #[derive(Component)]
-pub struct ShipRespawnTimer {
-    pub ship_to_respawn: Ship,
-    pub respawn_at: f32,
-}
-
-#[derive(Component)]
-pub struct ShipRespawnBar;
+pub struct TopUiBar;
 
 #[derive(Component, Clone, Debug)]
 pub struct ShipHold {
     pub destination: ShipDestination,
     pub crates: Vec<BoxType>,
-
-    pub weight_capacity: u32,
-    pub current_weight: u32,
-
-    pub volume_capacity: u32,
-    pub current_volume: u32,
+    pub demands: Vec<BoxType>,
 }
 
 impl ShipHold {
     pub fn accept_crate(&mut self, crate_type: BoxType) {
-        self.current_volume += crate_type.get_volume();
-        self.current_weight += crate_type.get_weight();
-
+        // TODO: update demands
         self.crates.push(crate_type);
     }
 }
@@ -147,24 +128,6 @@ pub const BOX_TYPES: [BoxType; 4] = [
 ];
 
 impl BoxType {
-    pub fn get_weight(&self) -> u32 {
-        match self {
-            BoxType::MedicalSupplies => 1,
-            BoxType::Fruit => 2,
-            BoxType::Iron => 4,
-            BoxType::Rum => 2,
-        }
-    }
-
-    pub fn get_volume(&self) -> u32 {
-        match self {
-            BoxType::MedicalSupplies => 1,
-            BoxType::Fruit => 1,
-            BoxType::Iron => 1,
-            BoxType::Rum => 1,
-        }
-    }
-
     pub(crate) fn get_image(&self, textures: &TextureAssets) -> Handle<Image> {
         match self {
             BoxType::MedicalSupplies => textures.box_type_medical.clone(),
@@ -198,5 +161,11 @@ pub struct ScoreUi;
 #[derive(Component)]
 pub struct ShipLaunchButton(pub usize);
 
+#[derive(Clone, Component, Debug)]
+pub struct RequestShip {
+    pub destination: ShipDestination,
+    pub demands: Vec<BoxType>,
+}
+
 #[derive(Component)]
-pub struct ShipText;
+pub struct TutorialMarker;

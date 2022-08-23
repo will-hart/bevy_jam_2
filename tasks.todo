@@ -49,21 +49,21 @@ Ship Game:
   
   Ship system:
     ✘ ship delivery timer (off screen / unavailable) @cancelled(22-08-21 22:45)
-    ☐ Ship arrival queue
+    ✔ Ship arrival queue @done(22-08-23 08:47)
     ☐ Timers for ship arrivals
       ☐ Lost score for missed ship arrivals
       ☐ Ships disappear when the timer expires
-    ☐ Clicking the timer button spawns the ship
+    ✔ Clicking the timer button spawns the ship @done(22-08-23 08:47)
       ✔ add ship to slot immediately @done(22-08-23 07:57)
-    ☐ Can't spawn ships if no slots are free
+    ✔ Can't spawn ships if no slots are free @done(22-08-23 08:47)
     ✘ ship queue off screen @cancelled(22-08-22 23:27)
     ☐ Random ship demands
       ☐ Penalties for incorrectly loaded goods
-      ☐ Display UI for demands
+      ✔ Display UI for demands @done(22-08-23 09:07)
       ☐ Update UI as demands are met
       ☐ Bonus if all demands met
     ✔ ship maintenance cost @done(22-08-22 08:20)
-    ☐ Remove ship maintenance cost
+    ✔ Remove ship maintenance cost @done(22-08-23 08:54)
     ship docking system:
       ✘ refresh ship + ship hold @cancelled(22-08-22 23:27)
       ✔ spawn ship off screen @done(22-08-23 07:57)
@@ -71,7 +71,7 @@ Ship Game:
         ✔ Update animate entity system to allow chained animations or waypoints @done(22-08-23 07:31)
         ✔ Update animate system to handle events on ship arrival @done(22-08-23 07:57)
         ✔ furl sails on arrival @done(22-08-23 07:57)
-      ☐ Only allow dropping on a ship once it has arrived and the sails are furled
+      ✔ Only allow dropping on a ship once it has arrived and the sails are furled @done(22-08-23 08:47)
 
   Sound effects:
     ☐ Morning
@@ -94,3 +94,5 @@ Super Nice to Haves:
   ✘ Maintenance / docking fees @cancelled(22-08-23 00:11)
   ✔ Change market demand over time @done(22-08-23 00:11)
   ✘ Show the crates on a ship on the screen @cancelled(22-08-23 00:11)
+  ☐ In-game tutorial
+  ☐ Style in-game tutorial

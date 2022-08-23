@@ -1,15 +1,15 @@
-use bevy::prelude::*;
+use bevy::{prelude::*, ui::FocusPolicy};
 
 use crate::{
     game::components::{
-        MarketPriceDirectionIndicator, MarketPriceIndicator, MarketPriceValueIndicator, ScoreUi,
-        ShipRespawnBar, BOX_TYPES, DESTINATIONS,
+        BoxType, MarketPriceDirectionIndicator, MarketPriceIndicator, MarketPriceValueIndicator,
+        RequestShip, ScoreUi, ShipDestination, TopUiBar, TutorialMarker, BOX_TYPES, DESTINATIONS,
     },
     loader::{FontAssets, TextureAssets},
     GRID_SIZE,
 };
 
-use super::launch_ships::spawn_ship_buttons;
+use super::launch_ships::{spawn_ship_buttons, NORMAL_BUTTON};
 
 pub fn spawn_ship_respawn_bar(
     mut commands: Commands,
@@ -43,6 +43,7 @@ pub fn spawn_ship_respawn_bar(
                 .spawn_bundle(NodeBundle {
                     style: Style {
                         size: Size::new(Val::Percent(100.0), Val::Px(48.0)),
+                        align_items: AlignItems::Center,
                         ..default()
                     },
                     color: Color::rgba(0.15, 0.15, 0.15, 0.35).into(),
@@ -53,12 +54,71 @@ pub fn spawn_ship_respawn_bar(
                         .spawn_bundle(NodeBundle {
                             style: Style {
                                 size: Size::new(Val::Percent(80.0), Val::Px(48.0)),
+                                align_items: AlignItems::Center,
                                 ..default()
                             },
                             color: Color::NONE.into(),
                             ..default()
                         })
-                        .insert(ShipRespawnBar);
+                        .insert(TopUiBar)
+                        .with_children(|respawn_bar_layout| {
+                            // first spawn ship button
+                            respawn_bar_layout
+                                .spawn_bundle(ButtonBundle {
+                                    style: Style {
+                                        size: Size::new(Val::Px(70.0), Val::Px(40.0)),
+                                        margin: UiRect::new(
+                                            Val::Undefined,
+                                            Val::Px(15.0),
+                                            Val::Undefined,
+                                            Val::Undefined,
+                                        ),
+                                        padding: UiRect::new(
+                                            Val::Px(5.0),
+                                            Val::Px(5.0),
+                                            Val::Px(5.0),
+                                            Val::Px(5.0),
+                                        ),
+                                        justify_content: JustifyContent::Center,
+                                        align_items: AlignItems::Center,
+                                        ..default()
+                                    },
+                                    color: NORMAL_BUTTON.into(),
+                                    ..default()
+                                })
+                                .insert(RequestShip {
+                                    destination: ShipDestination::NewWorld,
+                                    demands: vec![BoxType::Fruit, BoxType::Fruit],
+                                })
+                                .with_children(|parent| {
+                                    parent.spawn_bundle(ImageBundle {
+                                        image: textures.ship_small.clone().into(),
+                                        focus_policy: FocusPolicy::Pass,
+                                        ..default()
+                                    });
+                                    parent.spawn_bundle(ImageBundle {
+                                        image: textures.box_type_fruit.clone().into(),
+                                        focus_policy: FocusPolicy::Pass,
+                                        ..default()
+                                    });
+                                    parent.spawn_bundle(ImageBundle {
+                                        image: textures.box_type_fruit.clone().into(),
+                                        focus_policy: FocusPolicy::Pass,
+                                        ..default()
+                                    });
+                                });
+
+                            // tutorial text
+                            respawn_bar_layout
+                                .spawn_bundle(TextBundle {
+                                    text: Text::from_section(
+                                        "< click here to request a ship",
+                                        small_text_style.clone(),
+                                    ),
+                                    ..default()
+                                })
+                                .insert(TutorialMarker);
+                        });
 
                     bar_layout
                         .spawn_bundle(NodeBundle {
@@ -100,7 +160,7 @@ pub fn spawn_ship_respawn_bar(
             layout
                 .spawn_bundle(NodeBundle {
                     style: Style {
-                        size: Size::new(Val::Px(11. * GRID_SIZE), Val::Px(4.0 * GRID_SIZE)),
+                        size: Size::new(Val::Px(13. * GRID_SIZE), Val::Px(4.0 * GRID_SIZE)),
                         justify_content: JustifyContent::FlexStart,
                         align_items: AlignItems::FlexEnd,
                         flex_direction: FlexDirection::ColumnReverse,
@@ -194,7 +254,7 @@ pub fn spawn_ship_respawn_bar(
                                     ),
                                     style: Style {
                                         size: Size::new(
-                                            Val::Px(2.0 * GRID_SIZE),
+                                            Val::Px(4.0 * GRID_SIZE),
                                             Val::Px(GRID_SIZE),
                                         ),
                                         ..default()

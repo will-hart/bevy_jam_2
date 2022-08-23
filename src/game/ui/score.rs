@@ -59,7 +59,4 @@ pub fn score_update(
     }
 
     let _dt = time.delta_seconds();
-    // for (ship, _) in ships.iter() {
-    //     score.0 -= ship.maintenance_cost_per_second * dt;
-    // }
 }
