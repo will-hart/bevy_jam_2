@@ -2,6 +2,7 @@ use bevy::prelude::*;
 
 use crate::{
     game::{
+        actions::{ShipSlotType, ShipSlots},
         components::{RequestShip, ShipLaunchButton},
         ship_launch::OnLaunchShip,
     },
@@ -73,17 +74,14 @@ pub fn spawn_ship_buttons(commands: &mut ChildBuilder, fonts: &FontAssets) {
 }
 
 pub fn button_visibility(
-    mut hide_events: EventReader<OnLaunchShip>,
+    ship_slots: ResMut<ShipSlots>,
     mut buttons: Query<(&mut Visibility, &ShipLaunchButton)>,
 ) {
-    for evt in hide_events.iter() {
-        let slot_idx = evt.slot_id;
-
-        for (mut button_vis, button) in buttons.iter_mut() {
-            if button.0 == slot_idx {
-                button_vis.is_visible = false;
-            }
-        }
+    for (mut button_vis, button) in buttons.iter_mut() {
+        button_vis.is_visible = match ship_slots.slots[button.0] {
+            ShipSlotType::Occupied(_) => true,
+            _ => false,
+        };
     }
 }
 
