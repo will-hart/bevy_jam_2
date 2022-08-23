@@ -78,13 +78,11 @@ pub fn button_visibility(
     mut buttons: Query<(&mut Visibility, &ShipLaunchButton)>,
 ) {
     for (mut button_vis, button) in buttons.iter_mut() {
-        button_vis.is_visible = match ship_slots.slots[button.0] {
-            ShipSlotType::Occupied(_) => true,
-            _ => false,
-        };
+        button_vis.is_visible = matches!(ship_slots.slots[button.0], ShipSlotType::Occupied(_));
     }
 }
 
+#[allow(clippy::type_complexity)]
 pub fn button_interaction(
     mut launch_events: EventWriter<OnLaunchShip>,
     mut spawn_events: EventWriter<OnRequestShipSpawn>,

@@ -26,7 +26,7 @@ pub fn animate_entity(
         if delta.length_squared() < 0.01 {
             anim.target.remove(0);
 
-            if anim.target.len() == 0 {
+            if anim.target.is_empty() {
                 info!("Despawning an animated item");
                 if wave.is_some() {
                     arrival_events.send(ShipArrivedAtDestination(ent));

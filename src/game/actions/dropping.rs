@@ -30,6 +30,7 @@ pub struct OnDropCrate {
 
 pub struct OnCrateDroppedOnShip(pub Entity, pub BoxType);
 
+#[allow(clippy::too_many_arguments)]
 pub fn handle_drop(
     mut commands: Commands,
     mut on_drop_events: EventReader<OnDropCrate>,
