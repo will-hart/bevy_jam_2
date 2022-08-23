@@ -3024,6 +3024,24 @@ dependencies = [
 ]
 
 [[package]]
+name = "the_company"
+version = "0.2.0"
+dependencies = [
+ "anyhow",
+ "benimator",
+ "bevy",
+ "bevy_asset_loader",
+ "bevy_kira_audio",
+ "bevy_prototype_debug_lines",
+ "iyes_loopless",
+ "leafwing-input-manager",
+ "num-format",
+ "rand",
+ "rand_chacha",
+ "serde_yaml",
+]
+
+[[package]]
 name = "thiserror"
 version = "1.0.32"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -3404,24 +3422,6 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "1f762cbc08e1a51389859cf9c199c7aef544789cf3510889aab12c607f701604"
 dependencies = [
  "bitflags",
-]
-
-[[package]]
-name = "wh_bevy_jam_2_tbd"
-version = "0.2.0"
-dependencies = [
- "anyhow",
- "benimator",
- "bevy",
- "bevy_asset_loader",
- "bevy_kira_audio",
- "bevy_prototype_debug_lines",
- "iyes_loopless",
- "leafwing-input-manager",
- "num-format",
- "rand",
- "rand_chacha",
- "serde_yaml",
 ]
 
 [[package]]
