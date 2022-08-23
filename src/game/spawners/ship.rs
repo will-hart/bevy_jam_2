@@ -28,6 +28,7 @@ pub const SHIP_SPAWN_OFFSCREEN_POSITION: Vec3 =
 
 pub const MAX_SPAWN_REQUESTS: usize = 5;
 
+#[allow(clippy::too_many_arguments)]
 pub fn ship_spawning_system(
     mut commands: Commands,
     tutorial_level: Res<CurrentTutorialLevel>,
@@ -43,7 +44,7 @@ pub fn ship_spawning_system(
         return;
     }
 
-    if spawn_requests.iter().collect::<Vec<_>>().len() > MAX_SPAWN_REQUESTS {
+    if spawn_requests.iter().count() >= MAX_SPAWN_REQUESTS {
         return;
     }
 
@@ -71,6 +72,7 @@ pub fn ship_spawning_system(
     }
 }
 
+#[allow(clippy::too_many_arguments)]
 pub fn spawn_ship(
     commands: &mut Commands,
     tutorial_level: u8,
@@ -133,7 +135,7 @@ pub fn spawn_ship(
                         for (idx, demand) in ship_hold.demands.iter().enumerate() {
                             ship_child_commands
                                 .spawn_bundle(SpriteBundle {
-                                    texture: demand.get_image(&textures).clone().into(),
+                                    texture: demand.get_image(textures),
                                     transform: Transform::from_xyz(
                                         -110. + (idx as f32 * GRID_SIZE),
                                         -120.,

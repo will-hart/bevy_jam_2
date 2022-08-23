@@ -334,7 +334,7 @@ pub fn spawn_ship_request_button(
 
             for demand in demands.iter() {
                 parent.spawn_bundle(ImageBundle {
-                    image: demand.get_image(&textures).into(),
+                    image: demand.get_image(textures).into(),
                     focus_policy: FocusPolicy::Pass,
                     ..default()
                 });

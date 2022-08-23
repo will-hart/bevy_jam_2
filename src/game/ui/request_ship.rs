@@ -14,6 +14,7 @@ use super::CurrentTutorialLevel;
 
 pub struct OnRequestShipSpawn(pub Entity, pub RequestShip);
 
+#[allow(clippy::too_many_arguments)]
 pub fn ship_spawn_handler(
     mut commands: Commands,
     tutorial: Res<CurrentTutorialLevel>,
@@ -30,10 +31,12 @@ pub fn ship_spawn_handler(
 
     for evt in spawn_events.iter() {
         // find a free slot
-        let (slot_id, _) = match slots.slots.iter().enumerate().find(|(_, s)| match s {
-            ShipSlotType::Empty => true,
-            _ => false,
-        }) {
+        let (slot_id, _) = match slots
+            .slots
+            .iter()
+            .enumerate()
+            .find(|(_, s)| matches!(s, ShipSlotType::Empty))
+        {
             Some(s) => s,
             None => {
                 info!("No free slots to spawn");

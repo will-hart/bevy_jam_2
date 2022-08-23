@@ -3,15 +3,13 @@ name: Release
 on:
   push:
     tags:
-      - '*'
+      - "*"
 
 env:
   # update with the name of the main binary
-  binary: bevy_github_ci_template
-
+  binary: the_company
 
 jobs:
-
   # Build for wasm
   release-wasm:
     runs-on: ubuntu-latest
