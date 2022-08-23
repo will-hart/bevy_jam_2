@@ -40,7 +40,7 @@ fn level1_tutorial(
     for _ in on_crate_dropped.iter() {
         for (mut marker, mut text) in tutorials.iter_mut() {
             if marker.0 == 1 {
-                text.sections[0].value = "Good! Now \"Set Sail\" when the ship is loaded!".into();
+                text.sections[0].value = "Good! Now \"Set Sail\" when the ship is loaded.\nEarn bonus money if all the demands are met!".into();
                 marker.0 = 2;
             }
         }
@@ -69,18 +69,36 @@ fn level2_tutorial(
         let bar = top_ui_bar.single();
         commands.entity(bar).with_children(|builder| {
             builder
-                .spawn_bundle(TextBundle {
-                    text: Text::from_section(
-                        "More ships will appear here!",
-                        TextStyle {
-                            font: fonts.default_font.clone(),
-                            font_size: 12.0,
-                            color: Color::WHITE,
-                        },
-                    ),
+                .spawn_bundle(NodeBundle {
+                    style: Style {
+                        justify_content: JustifyContent::Center,
+                        align_items: AlignItems::Center,
+                        padding: UiRect::new(
+                            Val::Px(5.0),
+                            Val::Px(5.0),
+                            Val::Undefined,
+                            Val::Undefined,
+                        ),
+                        ..default()
+                    },
+                    color: Color::NONE.into(),
                     ..default()
                 })
-                .insert(TutorialMarker(3));
+                .with_children(|builder| {
+                    builder
+                        .spawn_bundle(TextBundle {
+                            text: Text::from_section(
+                                "More ships will appear here!",
+                                TextStyle {
+                                    font: fonts.default_font.clone(),
+                                    font_size: 12.0,
+                                    color: Color::WHITE,
+                                },
+                            ),
+                            ..default()
+                        })
+                        .insert(TutorialMarker(3));
+                });
         });
     }
 }
