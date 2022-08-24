@@ -26,7 +26,7 @@ fn play_music(music_channel: Res<AudioChannel<MusicChannel>>, audio_assets: Res<
     info!("Starting game music");
     music_channel
         .play(audio_assets.music.clone())
-        .with_volume(0.4)
+        .with_volume(0.2)
         .looped();
 }
 
