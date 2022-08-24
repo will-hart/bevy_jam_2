@@ -28,5 +28,5 @@ opt-level = 3
 opt-level = 1
 
 [features]
-default = []
+default = ["debug_system"]
 debug_system = ["bevy_prototype_debug_lines"]

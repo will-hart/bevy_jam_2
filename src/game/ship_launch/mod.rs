@@ -3,7 +3,9 @@ use iyes_loopless::prelude::IntoConditionalSystem;
 
 use crate::{
     game::{
-        actions::ShipSlotType, components::AnimateWithSpeed, spawners::SHIP_SAILING_POSITION_Y,
+        actions::ShipSlotType,
+        components::AnimateWithSpeed,
+        spawners::{SHIP_SAILING_POSITION_Y, SHIP_SPEED},
     },
     loader::AnimationAssets,
     GameState, WIDTH,
@@ -78,7 +80,7 @@ fn trigger_launch(
                     .get_mut(parent.get())
                     .expect("Ship needs a parent wave");
                 commands.entity(wave_entity).insert(AnimateWithSpeed {
-                    speed: 25.0,
+                    speed: SHIP_SPEED,
                     target: vec![Vec3::new(
                         0.7 * WIDTH,
                         SHIP_SAILING_POSITION_Y,

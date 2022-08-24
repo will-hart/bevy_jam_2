@@ -112,6 +112,25 @@ pub struct TextureAssets {
     #[asset(texture_atlas(tile_size_x = 288., tile_size_y = 224., columns = 4, rows = 1))]
     #[asset(path = "textures/ship.png")]
     pub ship: Handle<TextureAtlas>,
+
+    // can't do spritesheets in UI so need to load individual countdown images :(
+    // also, folders aren't supported in web builds :facepalm:
+    #[asset(
+        paths(
+            "textures/countdown/countdown_1.png",
+            "textures/countdown/countdown_2.png",
+            "textures/countdown/countdown_3.png",
+            "textures/countdown/countdown_4.png",
+            "textures/countdown/countdown_5.png",
+            "textures/countdown/countdown_6.png",
+            "textures/countdown/countdown_7.png",
+            "textures/countdown/countdown_8.png",
+            "textures/countdown/countdown_9.png",
+            "textures/countdown/countdown_10.png"
+        ),
+        collection(typed)
+    )]
+    pub countdown: Vec<Handle<Image>>,
 }
 
 /// Contains animation assets loaded from file using a custom animation loader

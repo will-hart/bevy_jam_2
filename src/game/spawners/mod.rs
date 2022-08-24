@@ -4,6 +4,6 @@ mod torch;
 
 pub use {
     cart::{cart_spawning_system, spawn_cart},
-    ship::{ship_spawning_system, spawn_ship, SHIP_SAILING_POSITION_Y},
+    ship::{ship_spawning_system, spawn_ship, SHIP_SAILING_POSITION_Y, SHIP_SPEED},
     torch::spawn_torch,
 };

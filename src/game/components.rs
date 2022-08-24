@@ -156,9 +156,13 @@ pub struct ShipLaunchButton(pub usize);
 
 #[derive(Clone, Component, Debug)]
 pub struct RequestShip {
-    pub destination: ShipDestination,
+    pub destination: Option<ShipDestination>,
     pub demands: Vec<BoxType>,
+    pub expiry: f32,
 }
 
 #[derive(Component)]
 pub struct TutorialMarker(pub u8);
+
+#[derive(Component)]
+pub struct CountDownTimer(pub Timer);

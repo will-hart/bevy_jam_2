@@ -109,7 +109,10 @@ pub fn button_interaction(
 
                 if let Some(sr) = ship_request {
                     info!("Attemping to spawn ship {:?}", sr);
-                    spawn_events.send(OnRequestShipSpawn(btn_entity, sr.clone()));
+                    spawn_events.send(OnRequestShipSpawn {
+                        request_button_entity: btn_entity,
+                        request_ship: sr.clone(),
+                    });
                 }
             }
             Interaction::Hovered => {

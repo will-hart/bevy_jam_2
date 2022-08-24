@@ -28,6 +28,11 @@ pub const SHIP_SPAWN_OFFSCREEN_POSITION: Vec3 =
 
 pub const MAX_SPAWN_REQUESTS: usize = 5;
 
+pub const SHIP_SPEED: f32 = 60.0;
+
+pub const SHIP_EXPIRY_DURATION: f64 = 10.0;
+
+/// Periodically spawns a RequestShip component and button in the ship bar
 #[allow(clippy::too_many_arguments)]
 pub fn ship_spawning_system(
     mut commands: Commands,
@@ -67,11 +72,14 @@ pub fn ship_spawning_system(
                 layout,
                 *DESTINATIONS.choose(&mut rng).unwrap(),
                 demands,
+                (time.seconds_since_startup() + SHIP_EXPIRY_DURATION) as f32,
+                true,
             );
         });
     }
 }
 
+/// Spawns a ship in teh game world based on a RequestShip
 #[allow(clippy::too_many_arguments)]
 pub fn spawn_ship(
     commands: &mut Commands,
@@ -105,7 +113,7 @@ pub fn spawn_ship(
             ..Default::default()
         })
         .insert(AnimateWithSpeed {
-            speed: 20.,
+            speed: SHIP_SPEED,
             target: vec![
                 Vec3::new(slot_pos.x - 3.0 * GRID_SIZE, SHIP_SAILING_POSITION_Y, 8.0),
                 slot_pos,
@@ -114,7 +122,7 @@ pub fn spawn_ship(
         .insert(Wave)
         .with_children(|child_commands| {
             let ship_hold = ShipHold {
-                destination: request.destination,
+                destination: request.destination.unwrap(),
                 crates: vec![],
                 demands: request.demands.clone(),
             };

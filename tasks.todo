@@ -54,7 +54,7 @@ Ship Game:
     ✔ Randomly add ships to arrival queue @done(22-08-23 20:16)
     ☐ Timers for ship arrivals
       ☐ Lost score for missed ship arrivals
-      ☐ Ships disappear when the timer expires
+      ✔ Ships disappear when the timer expires @done(22-08-24 21:30)
     ✔ Clicking the timer button spawns the ship @done(22-08-23 08:47)
       ✔ add ship to slot immediately @done(22-08-23 07:57)
     ✔ Can't spawn ships if no slots are free @done(22-08-23 08:47)
@@ -98,4 +98,4 @@ Super Nice to Haves:
   ✘ Show the crates on a ship on the screen @cancelled(22-08-23 00:11)
   ✔ In-game tutorial @done(22-08-23 20:28)
   ✘ Style in-game tutorial @cancelled(22-08-23 20:28)
-  ☐ Work out why the game spends 15 seconds on a white screen
+  ✘ Work out why the game spends 15 seconds on a white screen @cancelled(22-08-24 21:29)

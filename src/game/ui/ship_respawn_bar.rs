@@ -2,8 +2,9 @@ use bevy::{prelude::*, ui::FocusPolicy};
 
 use crate::{
     game::components::{
-        BoxType, MarketPriceDirectionIndicator, MarketPriceIndicator, MarketPriceValueIndicator,
-        RequestShip, ScoreUi, ShipDestination, TopUiBar, TutorialMarker, BOX_TYPES, DESTINATIONS,
+        BoxType, CountDownTimer, MarketPriceDirectionIndicator, MarketPriceIndicator,
+        MarketPriceValueIndicator, RequestShip, ScoreUi, ShipDestination, TopUiBar, TutorialMarker,
+        BOX_TYPES, DESTINATIONS,
     },
     loader::{FontAssets, TextureAssets},
     GRID_SIZE,
@@ -68,6 +69,8 @@ pub fn spawn_ship_respawn_bar(
                                 respawn_bar_layout,
                                 ShipDestination::NewWorld,
                                 vec![BoxType::Fruit, BoxType::Fruit],
+                                f32::MAX,
+                                false,
                             );
 
                             // tutorial text
@@ -306,6 +309,8 @@ pub fn spawn_ship_request_button(
     layout: &mut ChildBuilder,
     destination: ShipDestination,
     demands: Vec<BoxType>,
+    expiry: f32,
+    spawn_timer: bool,
 ) {
     layout
         .spawn_bundle(ButtonBundle {
@@ -326,6 +331,16 @@ pub fn spawn_ship_request_button(
             ..default()
         })
         .with_children(|parent| {
+            if spawn_timer {
+                parent
+                    .spawn_bundle(ImageBundle {
+                        image: textures.countdown[9].clone().into(),
+                        focus_policy: FocusPolicy::Pass,
+                        ..default()
+                    })
+                    .insert(CountDownTimer(Timer::from_seconds(10.0, false)));
+            }
+
             parent.spawn_bundle(ImageBundle {
                 image: textures.ship_small.clone().into(),
                 focus_policy: FocusPolicy::Pass,
@@ -341,7 +356,8 @@ pub fn spawn_ship_request_button(
             }
         })
         .insert(RequestShip {
-            destination,
+            destination: Some(destination),
             demands,
+            expiry,
         });
 }

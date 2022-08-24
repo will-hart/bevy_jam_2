@@ -12,8 +12,35 @@ use crate::{
 
 use super::CurrentTutorialLevel;
 
-pub struct OnRequestShipSpawn(pub Entity, pub RequestShip);
+pub struct OnRequestShipSpawn {
+    pub request_button_entity: Entity,
+    pub request_ship: RequestShip,
+}
 
+/// Expires ship requests when their timer is out, setting their destination to None so that we
+/// know they're an unmet ship
+#[allow(clippy::too_many_arguments)]
+pub fn ship_request_expiry_system(
+    mut commands: Commands,
+    time: Res<Time>,
+    tutorial: Res<CurrentTutorialLevel>,
+    requests: Query<(Entity, &mut RequestShip)>,
+) {
+    if tutorial.0 < 3 {
+        return;
+    }
+
+    let time_now = time.seconds_since_startup() as f32;
+
+    for (button_ent, request) in requests.iter() {
+        if time_now > request.expiry {
+            commands.entity(button_ent).despawn_recursive();
+        }
+    }
+}
+
+/// handles spawning a ship - triggered by the [OnRequestShipSpawn] event sent from
+/// the [crate::game::ui::launch_ships::button_interaction] system
 #[allow(clippy::too_many_arguments)]
 pub fn ship_spawn_handler(
     mut commands: Commands,
@@ -54,11 +81,13 @@ pub fn ship_spawn_handler(
             &mut meshes,
             &mut materials,
             slot_id,
-            evt.1.clone(),
+            evt.request_ship.clone(),
         ));
 
         // tidy up the button
-        commands.entity(evt.0).despawn_recursive();
+        commands
+            .entity(evt.request_button_entity)
+            .despawn_recursive();
 
         spawned = true;
     }
