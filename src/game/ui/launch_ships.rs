@@ -67,7 +67,7 @@ pub fn spawn_ship_buttons(commands: &mut ChildBuilder, fonts: &FontAssets) {
                                         },
                                     ));
                                 })
-                                .insert(ShipLaunchButton(i));
+                                .insert(ShipLaunchButton { slot_id: i });
                         });
                 });
         });
@@ -78,7 +78,8 @@ pub fn button_visibility(
     mut buttons: Query<(&mut Visibility, &ShipLaunchButton)>,
 ) {
     for (mut button_vis, button) in buttons.iter_mut() {
-        button_vis.is_visible = matches!(ship_slots.slots[button.0], ShipSlotType::Occupied(_));
+        button_vis.is_visible =
+            matches!(ship_slots.slots[button.slot_id], ShipSlotType::Occupied(_));
     }
 }
 
@@ -103,8 +104,8 @@ pub fn button_interaction(
                 *color = PRESSED_BUTTON.into();
 
                 if let Some(b) = button_data {
-                    info!("Launching ship from slot {}", b.0);
-                    launch_events.send(OnLaunchShip { slot_id: b.0 })
+                    info!("Launching ship from slot {}", b.slot_id);
+                    launch_events.send(OnLaunchShip { slot_id: b.slot_id })
                 }
 
                 if let Some(sr) = ship_request {

@@ -33,6 +33,9 @@ pub struct AudioAssets {
     #[asset(path = "audio/box_drop.ogg")]
     pub box_drop: Handle<bevy_kira_audio::AudioSource>,
 
+    #[asset(path = "audio/coin_drop.ogg")]
+    pub coin_drop: Handle<bevy_kira_audio::AudioSource>,
+
     #[asset(path = "audio/music.ogg")]
     pub music: Handle<bevy_kira_audio::AudioSource>,
 }

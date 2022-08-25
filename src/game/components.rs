@@ -152,7 +152,9 @@ pub struct Wave;
 pub struct ScoreUi;
 
 #[derive(Component)]
-pub struct ShipLaunchButton(pub usize);
+pub struct ShipLaunchButton {
+    pub slot_id: usize,
+}
 
 #[derive(Clone, Component, Debug)]
 pub struct RequestShip {

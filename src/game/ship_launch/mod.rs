@@ -13,8 +13,8 @@ use crate::{
 
 use super::{
     actions::ShipSlots,
-    animation::ShipArrivedAtDestination,
-    components::{Ship, ShipArriving, ShipDemandItemMarker, Wave},
+    animation::OnShipArrivedAtDestination,
+    components::{Ship, ShipArriving, ShipDemandItemMarker, ShipHold, Wave},
     Animation, AnimationState, SystemLabels,
 };
 
@@ -22,11 +22,16 @@ pub struct OnLaunchShip {
     pub slot_id: usize,
 }
 
+pub struct OnShipScore {
+    pub ship_hold: ShipHold,
+}
+
 pub struct LaunchShipPlugin;
 
 impl Plugin for LaunchShipPlugin {
     fn build(&self, app: &mut App) {
         app.add_event::<OnLaunchShip>()
+            .add_event::<OnShipScore>()
             .add_system(trigger_launch.run_not_in_state(GameState::Loading))
             .add_system(
                 ship_despawn
@@ -38,7 +43,8 @@ impl Plugin for LaunchShipPlugin {
 
 fn trigger_launch(
     mut commands: Commands,
-    mut events: EventReader<OnLaunchShip>,
+    mut launch_events: EventReader<OnLaunchShip>,
+    mut score_events: EventWriter<OnShipScore>,
     animations: Res<AnimationAssets>,
     mut slots: ResMut<ShipSlots>,
     mut waves: Query<Entity, With<Wave>>,
@@ -46,6 +52,7 @@ fn trigger_launch(
         (
             &mut Handle<Animation>,
             &mut AnimationState,
+            &ShipHold,
             &Parent,
             &Children,
         ),
@@ -55,20 +62,20 @@ fn trigger_launch(
 ) {
     let mut launched = HashSet::<usize>::new();
 
-    for evt in events.iter() {
+    for evt in launch_events.iter() {
         if launched.contains(&evt.slot_id) {
             continue;
         }
         launched.insert(evt.slot_id);
 
         info!(
-            "Launching ship from slot {}, which is ship {:?}",
+            "Handling launch of ship from slot {}, which is ship {:?}",
             evt.slot_id, slots.slots[evt.slot_id]
         );
 
         match slots.slots[evt.slot_id] {
             ShipSlotType::Occupied(se) => {
-                let (mut ship_anim, mut anim_state, parent, children) =
+                let (mut ship_anim, mut anim_state, hold, parent, children) =
                     ships.get_mut(se).expect("Should find ship");
 
                 // update the animation
@@ -97,6 +104,10 @@ fn trigger_launch(
                         commands.entity(*child).despawn();
                     }
                 }
+
+                score_events.send(OnShipScore {
+                    ship_hold: hold.clone(),
+                });
             }
             _ => {
                 warn!("Attempted to depart ship that has already left");
@@ -110,7 +121,7 @@ pub fn ship_despawn(
     mut commands: Commands,
     mut slots: ResMut<ShipSlots>,
     animations: Res<AnimationAssets>,
-    mut events: EventReader<ShipArrivedAtDestination>,
+    mut events: EventReader<OnShipArrivedAtDestination>,
     waves: Query<&Children, With<Wave>>,
     mut ships: Query<(
         Entity,

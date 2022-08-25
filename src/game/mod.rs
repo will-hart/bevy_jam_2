@@ -7,12 +7,14 @@ mod spawners;
 mod custom_sprite;
 #[cfg(feature = "debug_system")]
 mod debug;
+
 mod market;
 pub mod rng;
 mod ship_launch;
 mod ui;
 
 pub use animation::{Animation, AnimationState};
+pub use ui::OnCoinsReceived;
 
 use bevy::prelude::*;
 use iyes_loopless::prelude::{AppLooplessStateExt, IntoConditionalSystem};

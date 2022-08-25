@@ -2,13 +2,13 @@ use bevy::prelude::*;
 
 use crate::game::components::{AnimateWithSpeed, Wave};
 
-pub struct ShipArrivedAtDestination(pub Entity);
+pub struct OnShipArrivedAtDestination(pub Entity);
 
 /// moves waves and other things across the screen
 pub fn animate_entity(
     mut commands: Commands,
     time: Res<Time>,
-    mut arrival_events: EventWriter<ShipArrivedAtDestination>,
+    mut arrival_events: EventWriter<OnShipArrivedAtDestination>,
     mut animated_entities: Query<(Entity, &mut AnimateWithSpeed, &mut Transform, Option<&Wave>)>,
 ) {
     let dt = time.delta_seconds();
@@ -29,7 +29,7 @@ pub fn animate_entity(
             if anim.target.is_empty() {
                 info!("Despawning an animated item");
                 if wave.is_some() {
-                    arrival_events.send(ShipArrivedAtDestination(ent));
+                    arrival_events.send(OnShipArrivedAtDestination(ent));
                 } else {
                     commands.entity(ent).despawn_recursive();
                 }
