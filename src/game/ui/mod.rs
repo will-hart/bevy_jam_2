@@ -1,6 +1,5 @@
 mod countdown_timer;
 mod game_ui_bar;
-mod market;
 mod score;
 pub use score::OnCoinsReceived;
 // TODO: mod tutorial;
@@ -33,13 +32,6 @@ impl Plugin for UiPlugin {
                 score::score_display
                     .run_in_state(GameState::Playing)
                     .label(SystemLabels::ScoreDisplay),
-            )
-            .add_system(
-                score::score_update
-                    .run_in_state(GameState::Playing)
-                    .before(SystemLabels::ScoreDisplay)
-                    .after(SystemLabels::ShipAnimationAndDespawn),
-            )
-            .add_system(market::update_market_price_ui.run_in_state(GameState::Playing));
+            );
     }
 }

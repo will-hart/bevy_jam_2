@@ -8,7 +8,6 @@ mod custom_sprite;
 #[cfg(feature = "debug_system")]
 mod debug;
 
-mod market;
 pub mod rng;
 mod ui;
 
@@ -24,7 +23,6 @@ use crate::{
         actions::ActionPlugin,
         custom_sprite::CustomSpritePlugin,
         day_night_cycle::DayNightCyclePlugin,
-        market::MarketPlugin,
         spawners::{spawn_torch, SpawningPlugin},
         ui::UiPlugin,
     },
@@ -54,7 +52,6 @@ impl Plugin for GamePlugin {
             .add_plugin(AnimationPlugin)
             .add_plugin(ActionPlugin)
             .add_plugin(DayNightCyclePlugin)
-            .add_plugin(MarketPlugin)
             .add_plugin(UiPlugin)
             .add_plugin(SpawningPlugin)
             .add_enter_system(GameState::Playing, setup_world);

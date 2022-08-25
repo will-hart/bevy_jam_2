@@ -1,12 +1,8 @@
 use bevy::prelude::*;
 
 use crate::{
-    game::components::{
-        MarketPriceDirectionIndicator, MarketPriceIndicator, MarketPriceValueIndicator, ScoreUi,
-        TopUiBar, BOX_TYPES,
-    },
+    game::components::{ScoreUi, TopUiBar},
     loader::{FontAssets, TextureAssets},
-    GRID_SIZE,
 };
 
 pub fn spawn_ship_respawn_bar(
@@ -17,11 +13,6 @@ pub fn spawn_ship_respawn_bar(
     let text_style = TextStyle {
         font: fonts.default_font.clone(),
         font_size: 24.0,
-        color: Color::WHITE,
-    };
-    let small_text_style = TextStyle {
-        font: fonts.default_font.clone(),
-        font_size: 16.0,
         color: Color::WHITE,
     };
 
@@ -96,80 +87,6 @@ pub fn spawn_ship_respawn_bar(
                                     ..default()
                                 })
                                 .insert(ScoreUi);
-                        });
-                });
-
-            // market prices
-            layout
-                .spawn_bundle(NodeBundle {
-                    style: Style {
-                        size: Size::new(Val::Px(9. * GRID_SIZE), Val::Px(GRID_SIZE)),
-                        justify_content: JustifyContent::FlexStart,
-                        align_items: AlignItems::FlexEnd,
-                        flex_direction: FlexDirection::ColumnReverse,
-                        margin: UiRect::new(
-                            Val::Px(15.0),
-                            Val::Undefined,
-                            Val::Px(15.0),
-                            Val::Undefined,
-                        ),
-                        padding: UiRect::all(Val::Px(5.0)),
-                        ..default()
-                    },
-                    color: Color::rgba(0.15, 0.15, 0.15, 0.35).into(),
-                    ..Default::default()
-                })
-                .with_children(|market_table| {
-                    // table row
-                    market_table
-                        .spawn_bundle(NodeBundle {
-                            style: Style {
-                                size: Size::new(Val::Percent(100.), Val::Px(GRID_SIZE)),
-                                justify_content: JustifyContent::Center,
-                                align_items: AlignItems::FlexEnd,
-                                ..default()
-                            },
-                            color: Color::NONE.into(),
-                            ..default()
-                        })
-                        .with_children(|parent_row| {
-                            BOX_TYPES.iter().for_each(|bt| {
-                                parent_row
-                                    .spawn_bundle(NodeBundle {
-                                        style: Style {
-                                            size: Size::new(Val::Px(2.0 * GRID_SIZE), Val::Auto),
-                                            justify_content: JustifyContent::Center,
-                                            align_items: AlignItems::Center,
-                                            ..default()
-                                        },
-                                        color: Color::NONE.into(),
-                                        ..default()
-                                    })
-                                    .insert(MarketPriceIndicator(*bt))
-                                    .with_children(|market_item| {
-                                        market_item.spawn_bundle(ImageBundle {
-                                            image: bt.get_image(&textures).into(),
-                                            transform: Transform::from_scale(Vec3::splat(0.7)),
-                                            ..default()
-                                        });
-                                        market_item
-                                            .spawn_bundle(TextBundle {
-                                                text: Text::from_section(
-                                                    "0",
-                                                    small_text_style.clone(),
-                                                ),
-                                                ..default()
-                                            })
-                                            .insert(MarketPriceValueIndicator);
-                                        market_item
-                                            .spawn_bundle(ImageBundle {
-                                                image: textures.up.clone().into(),
-                                                transform: Transform::from_scale(Vec3::splat(0.7)),
-                                                ..default()
-                                            })
-                                            .insert(MarketPriceDirectionIndicator);
-                                    });
-                            });
                         });
                 });
         });

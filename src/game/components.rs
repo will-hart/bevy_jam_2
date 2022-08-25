@@ -62,15 +62,6 @@ pub struct ShipHold {
 pub struct ShipDemandItemMarker(pub BoxType);
 
 #[derive(Component)]
-pub struct MarketPriceIndicator(pub BoxType);
-
-#[derive(Component)]
-pub struct MarketPriceDirectionIndicator;
-
-#[derive(Component)]
-pub struct MarketPriceValueIndicator;
-
-#[derive(Component)]
 pub struct AnimateWithSpeed {
     pub speed: f32,
     pub target: Vec<Vec3>,
