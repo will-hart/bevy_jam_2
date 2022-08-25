@@ -27,10 +27,11 @@ pub fn animate_entity(
             anim.target.remove(0);
 
             if anim.target.is_empty() {
-                info!("Despawning an animated item");
                 if wave.is_some() {
+                    info!("Despawning a ship {:?}", ent);
                     arrival_events.send(OnShipArrivedAtDestination(ent));
                 } else {
+                    info!("Despawning an animated item {:?}", ent);
                     commands.entity(ent).despawn_recursive();
                 }
             }

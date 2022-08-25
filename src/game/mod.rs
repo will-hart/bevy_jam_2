@@ -10,14 +10,13 @@ mod debug;
 
 mod market;
 pub mod rng;
-mod ship_launch;
 mod ui;
 
 pub use animation::{Animation, AnimationState};
 pub use ui::OnCoinsReceived;
 
 use bevy::prelude::*;
-use iyes_loopless::prelude::{AppLooplessStateExt, IntoConditionalSystem};
+use iyes_loopless::prelude::AppLooplessStateExt;
 
 use crate::{
     game::{
@@ -25,8 +24,7 @@ use crate::{
         custom_sprite::CustomSpritePlugin,
         day_night_cycle::DayNightCyclePlugin,
         market::MarketPlugin,
-        ship_launch::LaunchShipPlugin,
-        spawners::{cart_spawning_system, ship_spawning_system, spawn_torch},
+        spawners::{spawn_torch, SpawningPlugin},
         ui::UiPlugin,
     },
     loader::{AnimationAssets, TextureAssets},
@@ -54,10 +52,8 @@ impl Plugin for GamePlugin {
             .add_plugin(ActionPlugin)
             .add_plugin(DayNightCyclePlugin)
             .add_plugin(MarketPlugin)
-            .add_plugin(LaunchShipPlugin)
             .add_plugin(UiPlugin)
-            .add_system(cart_spawning_system.run_in_state(GameState::Playing))
-            .add_system(ship_spawning_system.run_in_state(GameState::Playing))
+            .add_plugin(SpawningPlugin)
             .add_enter_system(GameState::Playing, setup_world);
 
         #[cfg(feature = "debug_system")]

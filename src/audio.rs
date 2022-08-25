@@ -28,11 +28,14 @@ impl Plugin for InternalAudioPlugin {
 }
 
 fn play_music(music_channel: Res<AudioChannel<MusicChannel>>, audio_assets: Res<AudioAssets>) {
-    info!("Starting game music");
+    info!("TODO: Starting game music");
     music_channel
         .play(audio_assets.music.clone())
         .with_volume(0.2)
         .looped();
+
+    // need better music before I can play it on loop while developing :_))
+    music_channel.pause();
 }
 
 fn on_box_drop(

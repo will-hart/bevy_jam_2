@@ -4,23 +4,17 @@ use rand::{seq::SliceRandom, thread_rng, Rng};
 use crate::{
     game::{
         components::{
-            AnimateWithSpeed, RequestShip, Ship, ShipArriving, ShipDemandItemMarker, ShipHold,
-            TopUiBar, TutorialMarker, Wave, BOX_TYPES, DESTINATIONS,
+            AnimateWithSpeed, CountDownTimer, Ship, ShipDemandItemMarker, ShipHold,
+            SpawnShipRequest, TopUiBar, TutorialMarker, Wave, BOX_TYPES, DESTINATIONS,
         },
         custom_sprite::CustomSpriteMaterial,
         rng::RandomEvent,
-        ui::{spawn_ship_request_button, CurrentTutorialLevel},
+        spawners::request::spawn_ship_request_icon,
         AnimationState,
     },
     loader::{AnimationAssets, FontAssets, TextureAssets},
     GRID_SIZE, WIDTH,
 };
-
-pub const SHIP_SLOTS_POSITIONS: [Vec3; 3] = [
-    Vec3::new(-GRID_SIZE * 10., -GRID_SIZE * 8., 1.6),
-    Vec3::new(0., -GRID_SIZE * 8., 1.3),
-    Vec3::new(GRID_SIZE * 10., -GRID_SIZE * 8., 1.0),
-];
 
 pub const SHIP_SAILING_POSITION_Y: f32 = -12.0 * GRID_SIZE;
 pub const SHIP_SPAWN_OFFSCREEN_POSITION: Vec3 =
@@ -32,20 +26,21 @@ pub const SHIP_SPEED: f32 = 60.0;
 
 pub const SHIP_EXPIRY_DURATION: f64 = 10.0;
 
-/// Periodically spawns a RequestShip component and button in the ship bar
+/// Periodically queues up a RequestShip component and button in the ship bar
+/// When the timer gets to 0, the ship spawns and sails across the screen.
 #[allow(clippy::too_many_arguments)]
-pub fn ship_spawning_system(
+pub fn ship_queuing_system(
     mut commands: Commands,
-    tutorial_level: Res<CurrentTutorialLevel>,
+    // tutorial_level: Res<CurrentTutorialLevel>, TODO: Queue ships based on the tutorial level
     time: Res<Time>,
     textures: Res<TextureAssets>,
     mut event_test: Local<RandomEvent>,
     mut next_test: Local<f64>,
-    spawn_requests: Query<&RequestShip>,
+    spawn_requests: Query<&SpawnShipRequest>,
     top_bar_query: Query<Entity, With<TopUiBar>>,
 ) {
     let elapsed = time.seconds_since_startup();
-    if elapsed < *next_test || tutorial_level.0 < 3 {
+    if elapsed < *next_test {
         return;
     }
 
@@ -67,15 +62,45 @@ pub fn ship_spawning_system(
         }
 
         commands.entity(top_bar).with_children(|layout| {
-            spawn_ship_request_button(
-                &textures,
+            spawn_ship_request_icon(
                 layout,
+                &textures,
                 *DESTINATIONS.choose(&mut rng).unwrap(),
                 demands,
                 (time.seconds_since_startup() + SHIP_EXPIRY_DURATION) as f32,
-                true,
             );
         });
+    }
+}
+
+/// Launches ships when their timer runs out
+#[allow(clippy::too_many_arguments)]
+pub fn ship_spawn_on_timer_expiry(
+    mut commands: Commands,
+    textures: Res<TextureAssets>,
+    animations: Res<AnimationAssets>,
+    fonts: Res<FontAssets>,
+    mut meshes: ResMut<Assets<Mesh>>,
+    mut materials: ResMut<Assets<CustomSpriteMaterial>>,
+    requests: Query<(&Parent, &CountDownTimer, &SpawnShipRequest)>,
+) {
+    for (parent_entity, timer, request) in requests.iter() {
+        if timer.0.just_finished() {
+            info!("Launching a ship due to timer");
+            spawn_ship(
+                &mut commands,
+                0, // TODO
+                &textures,
+                &animations,
+                &fonts,
+                &mut meshes,
+                &mut materials,
+                request.clone(),
+            );
+
+            // despawn the spawn indicator
+            commands.entity(parent_entity.get()).despawn_recursive();
+        }
     }
 }
 
@@ -89,13 +114,10 @@ pub fn spawn_ship(
     fonts: &FontAssets,
     meshes: &mut Assets<Mesh>,
     materials: &mut Assets<CustomSpriteMaterial>,
-    slot_id: usize,
-    request: RequestShip,
+    request: SpawnShipRequest,
 ) -> Entity {
     let mut rng = thread_rng();
     let mut entity: Option<Entity> = None;
-
-    let slot_pos = SHIP_SLOTS_POSITIONS[slot_id];
 
     let text_style = TextStyle {
         font: fonts.default_font.clone(),
@@ -114,10 +136,11 @@ pub fn spawn_ship(
         })
         .insert(AnimateWithSpeed {
             speed: SHIP_SPEED,
-            target: vec![
-                Vec3::new(slot_pos.x - 3.0 * GRID_SIZE, SHIP_SAILING_POSITION_Y, 8.0),
-                slot_pos,
-            ],
+            target: vec![Vec3::new(
+                -SHIP_SPAWN_OFFSCREEN_POSITION.x,
+                SHIP_SPAWN_OFFSCREEN_POSITION.y,
+                SHIP_SPAWN_OFFSCREEN_POSITION.z,
+            )],
         })
         .insert(Wave)
         .with_children(|child_commands| {
@@ -134,7 +157,6 @@ pub fn spawn_ship(
                         transform: Transform::from_xyz(0.5 * GRID_SIZE, 0.0, -0.5),
                         ..Default::default()
                     })
-                    .insert(ShipArriving(slot_id))
                     .insert(Ship::new(&mut rng))
                     .insert(animations.ship_unfurl.clone())
                     .insert(AnimationState::default())

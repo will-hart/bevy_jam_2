@@ -1,16 +1,13 @@
-use bevy::{prelude::*, ui::FocusPolicy};
+use bevy::prelude::*;
 
 use crate::{
     game::components::{
-        BoxType, CountDownTimer, MarketPriceDirectionIndicator, MarketPriceIndicator,
-        MarketPriceValueIndicator, RequestShip, ScoreUi, ShipDestination, TopUiBar, TutorialMarker,
-        BOX_TYPES,
+        MarketPriceDirectionIndicator, MarketPriceIndicator, MarketPriceValueIndicator, ScoreUi,
+        TopUiBar, BOX_TYPES,
     },
     loader::{FontAssets, TextureAssets},
     GRID_SIZE,
 };
-
-use super::launch_ships::{spawn_ship_buttons, NORMAL_BUTTON};
 
 pub fn spawn_ship_respawn_bar(
     mut commands: Commands,
@@ -62,27 +59,8 @@ pub fn spawn_ship_respawn_bar(
                             ..default()
                         })
                         .insert(TopUiBar)
-                        .with_children(|respawn_bar_layout| {
-                            // first spawn ship button
-                            spawn_ship_request_button(
-                                &textures,
-                                respawn_bar_layout,
-                                ShipDestination::NewWorld,
-                                vec![BoxType::Fruit, BoxType::Fruit],
-                                f32::MAX,
-                                false,
-                            );
-
-                            // tutorial text
-                            respawn_bar_layout
-                                .spawn_bundle(TextBundle {
-                                    text: Text::from_section(
-                                        "< click here to request a ship",
-                                        small_text_style.clone(),
-                                    ),
-                                    ..default()
-                                })
-                                .insert(TutorialMarker(0));
+                        .with_children(|_respawn_bar_layout| {
+                            // TODO: first tutorial message
                         });
 
                     bar_layout
@@ -194,84 +172,5 @@ pub fn spawn_ship_respawn_bar(
                             });
                         });
                 });
-
-            // launch buttons
-            layout
-                .spawn_bundle(NodeBundle {
-                    style: Style {
-                        size: Size::new(Val::Percent(100.0), Val::Px(120.0)),
-                        position_type: PositionType::Absolute,
-                        position: UiRect::new(
-                            Val::Px(0.0),
-                            Val::Px(0.0),
-                            Val::Undefined,
-                            Val::Px(0.0),
-                        ),
-                        ..default()
-                    },
-                    color: Color::NONE.into(),
-                    ..Default::default()
-                })
-                .with_children(|parent| {
-                    spawn_ship_buttons(parent, &fonts);
-                });
-        });
-}
-
-pub fn spawn_ship_request_button(
-    textures: &TextureAssets,
-    layout: &mut ChildBuilder,
-    destination: ShipDestination,
-    demands: Vec<BoxType>,
-    expiry: f32,
-    spawn_timer: bool,
-) {
-    layout
-        .spawn_bundle(ButtonBundle {
-            style: Style {
-                size: Size::new(Val::Auto, Val::Px(40.0)),
-                margin: UiRect::new(
-                    Val::Undefined,
-                    Val::Px(15.0),
-                    Val::Undefined,
-                    Val::Undefined,
-                ),
-                padding: UiRect::new(Val::Px(5.0), Val::Px(5.0), Val::Px(5.0), Val::Px(5.0)),
-                justify_content: JustifyContent::Center,
-                align_items: AlignItems::Center,
-                ..default()
-            },
-            color: NORMAL_BUTTON.into(),
-            ..default()
-        })
-        .with_children(|parent| {
-            if spawn_timer {
-                parent
-                    .spawn_bundle(ImageBundle {
-                        image: textures.countdown[9].clone().into(),
-                        focus_policy: FocusPolicy::Pass,
-                        ..default()
-                    })
-                    .insert(CountDownTimer(Timer::from_seconds(15.0, false)));
-            }
-
-            parent.spawn_bundle(ImageBundle {
-                image: textures.ship_small.clone().into(),
-                focus_policy: FocusPolicy::Pass,
-                ..default()
-            });
-
-            for demand in demands.iter() {
-                parent.spawn_bundle(ImageBundle {
-                    image: demand.get_image(textures).into(),
-                    focus_policy: FocusPolicy::Pass,
-                    ..default()
-                });
-            }
-        })
-        .insert(RequestShip {
-            destination: Some(destination),
-            demands,
-            expiry,
         });
 }

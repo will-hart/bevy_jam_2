@@ -1,9 +1,18 @@
 use bevy::prelude::*;
 use num_format::{Locale, ToFormattedString};
 
-use crate::game::{components::ScoreUi, market::Market, ship_launch::OnShipScore};
+use crate::game::{
+    components::{ScoreUi, ShipHold},
+    market::Market,
+};
 
+/// Event triggered when a player receives coins, allowing effects to be played
 pub struct OnCoinsReceived;
+
+/// Event triggered when a player should receive a score update, based on the ship hold
+pub struct OnShipScore {
+    pub ship_hold: ShipHold,
+}
 
 #[derive(Default, Debug)]
 pub struct Score(pub f32);

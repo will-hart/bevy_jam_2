@@ -25,16 +25,6 @@ impl Display for ShipDestination {
     }
 }
 
-// impl ShipDestination {
-//     pub fn get_image(&self, textures: &TextureAssets) -> Handle<Image> {
-//         match self {
-//             ShipDestination::NewWorld => textures.flag_new_world.clone(),
-//             ShipDestination::Pirates => textures.flag_pirates.clone(),
-//             ShipDestination::Eastern => textures.flag_eastern.clone(),
-//         }
-//     }
-// }
-
 /// used for randomg selection of destinations, see notes on [BOX_TYPES] below.
 /// Keep up to date with ShipDestination above.
 pub const DESTINATIONS: [ShipDestination; 3] = [
@@ -74,9 +64,6 @@ impl ShipHold {
         self.crates.push(crate_type);
     }
 }
-
-#[derive(Component)]
-pub struct ShipArriving(pub usize);
 
 #[derive(Component)]
 pub struct ShipDemandItemMarker(pub BoxType);
@@ -151,13 +138,8 @@ pub struct Wave;
 #[derive(Component)]
 pub struct ScoreUi;
 
-#[derive(Component)]
-pub struct ShipLaunchButton {
-    pub slot_id: usize,
-}
-
 #[derive(Clone, Component, Debug)]
-pub struct RequestShip {
+pub struct SpawnShipRequest {
     pub destination: Option<ShipDestination>,
     pub demands: Vec<BoxType>,
     pub expiry: f32,

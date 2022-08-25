@@ -2,24 +2,20 @@ use bevy::prelude::*;
 use leafwing_input_manager::prelude::ActionState;
 
 use crate::{
-    game::{
-        actions::{dropping::ShipSlotType, CART_SPRITE_HALF_WIDTH},
-        components::Cart,
-    },
+    game::{actions::CART_SPRITE_HALF_WIDTH, components::Cart},
     input::{MousePosition, PlayerActions},
     GRID_SIZE,
 };
 
 use super::{
     dragging::{DraggingBox, OnStartDragging},
-    dropping::{OnDropCrate, ShipSlots},
-    CART_MAX_Y, CART_MIN_Y, SHIP_MAX_Y, SHIP_MIN_Y, SHIP_ZONES,
+    dropping::OnDropCrate,
+    CART_MAX_Y, CART_MIN_Y, SHIP_MAX_Y, SHIP_MIN_Y,
 };
 
 pub fn click_to_pickup(
     mouse_pos: Res<MousePosition>,
     dragging: Res<DraggingBox>,
-    ship_slots: Res<ShipSlots>,
     mut start_events: EventWriter<OnStartDragging>,
     mut stop_events: EventWriter<OnDropCrate>,
     action_state_query: Query<&ActionState<PlayerActions>>,
@@ -60,22 +56,7 @@ pub fn click_to_pickup(
         }
     } else if dragging.cart_entity.is_some() && action_state.just_released(PlayerActions::Click) {
         if y > SHIP_MIN_Y && y < SHIP_MAX_Y {
-            for (idx, r) in SHIP_ZONES.iter().enumerate() {
-                if r.contains(&x) {
-                    info!("Dropped crate on ship slot {}", idx);
-
-                    match ship_slots.slots[idx] {
-                        ShipSlotType::Occupied(entity) => {
-                            stop_events.send(OnDropCrate { ship: Some(entity) });
-                            return;
-                        }
-                        _ => {
-                            info!("--> ship slot {} is empty", idx);
-                            break;
-                        }
-                    }
-                }
-            }
+            todo!("Todo - dropping the crate and spawning a physics entity, the colliders will determine where the crate lands");
         }
 
         stop_events.send(OnDropCrate { ship: None });

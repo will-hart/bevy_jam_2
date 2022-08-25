@@ -6,24 +6,6 @@ use crate::game::components::{
 
 use super::dragging::DraggingBox;
 
-#[derive(Clone, Copy, Debug)]
-pub enum ShipSlotType {
-    Empty,
-    Arriving(Entity),
-    Occupied(Entity),
-}
-
-impl Default for ShipSlotType {
-    fn default() -> Self {
-        ShipSlotType::Empty
-    }
-}
-
-#[derive(Default, Debug)]
-pub struct ShipSlots {
-    pub slots: [ShipSlotType; 3],
-}
-
 pub struct OnDropCrate {
     pub ship: Option<Entity>,
 }
