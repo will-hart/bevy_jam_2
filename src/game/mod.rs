@@ -8,6 +8,7 @@ mod custom_sprite;
 #[cfg(feature = "debug_system")]
 mod debug;
 
+pub mod factory;
 pub mod rng;
 mod ui;
 
@@ -21,8 +22,10 @@ use iyes_loopless::prelude::AppLooplessStateExt;
 use crate::{
     game::{
         actions::ActionPlugin,
+        components::FactoryInput,
         custom_sprite::CustomSpritePlugin,
         day_night_cycle::DayNightCyclePlugin,
+        factory::FactoryPlugin,
         spawners::{spawn_torch, GamePhysicsLayer, SpawningPlugin},
         ui::UiPlugin,
     },
@@ -54,6 +57,7 @@ impl Plugin for GamePlugin {
             .add_plugin(DayNightCyclePlugin)
             .add_plugin(UiPlugin)
             .add_plugin(SpawningPlugin)
+            .add_plugin(FactoryPlugin)
             .add_enter_system(GameState::Playing, setup_world);
 
         #[cfg(feature = "debug_system")]
@@ -113,4 +117,23 @@ fn setup_world(
             local: Transform::from_xyz(-0.25 * WIDTH, -1.5 * GRID_SIZE, 0.0),
             ..default()
         });
+
+    /* FACTORY */
+    commands
+        .spawn_bundle((
+            RigidBody::Sensor,
+            CollisionShape::Cuboid {
+                half_extends: Vec3::new(60.0, 10.0, GRID_SIZE / 2.0),
+                border_radius: None,
+            },
+            CollisionLayers::none()
+                .with_group(GamePhysicsLayer::Ship)
+                .with_mask(GamePhysicsLayer::Crate),
+        ))
+        .insert_bundle(SpriteBundle::default())
+        .insert_bundle(TransformBundle {
+            local: Transform::from_xyz(-1.0, 1.5 * GRID_SIZE, 0.0),
+            ..default()
+        })
+        .insert(FactoryInput);
 }

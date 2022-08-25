@@ -139,3 +139,6 @@ pub struct TutorialMarker(pub u8);
 
 #[derive(Component)]
 pub struct CountDownTimer(pub Timer);
+
+#[derive(Component)]
+pub struct FactoryInput;

@@ -74,14 +74,14 @@ Ship Game:
       ✔ Only allow dropping on a ship once it has arrived and the sails are furled @done(22-08-23 08:47)
 
   Refactor for fun:
-    ☐ Ships spawn when timer expires
-    ☐ Ships sail right across without docking
-    ☐ Physics for crates
-    ☐ Drop crates in a warehouse
-    ☐ Pick crates up from warehouse
-    ☐ Drop crates in a factory
-      ☐ from carts
-      ☐ from warehouse
+    ✔ Ships spawn when timer expires @done(22-08-26 08:30)
+    ✔ Ships sail right across without docking @done(22-08-26 08:30)
+    ✔ Physics for crates @done(22-08-26 08:30)
+    ✔ Drop crates in a warehouse @done(22-08-26 08:30)
+    ✔ Pick crates up from warehouse @done(22-08-26 08:30)
+    ✔ Drop crates in a factory @done(22-08-26 08:45)
+      ✔ from carts @done(22-08-26 08:45)
+      ✔ from warehouse @done(22-08-26 08:45)
     ☐ Recipes that can be dropped in the factory
     ☐ Ships request outputs from factory
     ☐ Get points for dropping the right produced resource
