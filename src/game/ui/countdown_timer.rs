@@ -23,10 +23,13 @@ fn update_countdown_animations(
     textures: Res<TextureAssets>,
     mut timers: Query<(&mut UiImage, &CountDownTimer)>,
 ) {
+    let num_textures = textures.countdown.len() as f32;
     for (mut image, timer) in timers.iter_mut() {
-        let remaining = (10.0 - timer.0.elapsed().as_secs_f32())
-            .clamp(0.0, 9.9)
-            .floor() as usize;
-        *image = textures.countdown[remaining].clone().into();
+        let remaining_proportion = (1.0
+            - timer.0.elapsed().as_secs_f32() / timer.0.duration().as_secs_f32())
+        .clamp(0.0, 0.999);
+
+        let idx = (remaining_proportion * num_textures).floor() as usize;
+        *image = textures.countdown[idx].clone().into();
     }
 }
