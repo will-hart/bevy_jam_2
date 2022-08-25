@@ -16,16 +16,16 @@ pub fn spawn_physics_crate(
     commands
         .entity(sprite_entity)
         .remove::<FollowMouse>()
+        .insert(PhysicsCrate { box_type })
         .insert(RigidBody::Dynamic)
         .insert(CollisionShape::Cuboid {
-            half_extends: Vec3::new(GRID_SIZE / 2.0, GRID_SIZE / 2.0, GRID_SIZE / 2.0),
+            half_extends: Vec3::new(GRID_SIZE / 2.5, GRID_SIZE / 2.5, GRID_SIZE / 2.5),
             border_radius: Some(2.0),
         })
-        .insert(PhysicsCrate { box_type })
         .insert(
             CollisionLayers::none()
                 .with_group(GamePhysicsLayer::Crate)
-                .with_mask(GamePhysicsLayer::Ship),
+                .with_masks(&[GamePhysicsLayer::Ship, GamePhysicsLayer::Crate]),
         )
         .insert(PhysicMaterial {
             friction: 1.0,

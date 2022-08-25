@@ -19,7 +19,7 @@ use crate::{
 
 use super::GamePhysicsLayer;
 
-pub const SHIP_SAILING_POSITION_Y: f32 = -12.0 * GRID_SIZE;
+pub const SHIP_SAILING_POSITION_Y: f32 = -10.0 * GRID_SIZE;
 pub const SHIP_SPAWN_OFFSCREEN_POSITION: Vec3 =
     Vec3::new(-0.7 * WIDTH, SHIP_SAILING_POSITION_Y, 8.0);
 

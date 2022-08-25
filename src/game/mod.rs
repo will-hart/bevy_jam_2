@@ -23,11 +23,11 @@ use crate::{
         actions::ActionPlugin,
         custom_sprite::CustomSpritePlugin,
         day_night_cycle::DayNightCyclePlugin,
-        spawners::{spawn_torch, SpawningPlugin},
+        spawners::{spawn_torch, GamePhysicsLayer, SpawningPlugin},
         ui::UiPlugin,
     },
     loader::{AnimationAssets, TextureAssets},
-    GameState, GRID_SIZE,
+    GameState, GRID_SIZE, WIDTH,
 };
 
 #[cfg(feature = "debug_system")]
@@ -95,4 +95,22 @@ fn setup_world(
             i > 1,
         );
     });
+
+    /* WAREHOUSE */
+    commands
+        .spawn_bundle((
+            RigidBody::Static,
+            CollisionShape::Cuboid {
+                half_extends: Vec3::new(100.0, 10.0, GRID_SIZE / 2.0),
+                border_radius: None,
+            },
+            CollisionLayers::none()
+                .with_group(GamePhysicsLayer::Ship)
+                .with_mask(GamePhysicsLayer::Crate),
+        ))
+        .insert_bundle(SpriteBundle::default())
+        .insert_bundle(TransformBundle {
+            local: Transform::from_xyz(-0.25 * WIDTH, -1.5 * GRID_SIZE, 0.0),
+            ..default()
+        });
 }
