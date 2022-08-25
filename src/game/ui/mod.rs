@@ -1,11 +1,11 @@
 mod launch_ships;
 
 mod countdown_timer;
+mod game_ui_bar;
 mod market;
 mod request_ship;
 mod score;
-mod ship_respawn_bar;
-pub use ship_respawn_bar::spawn_ship_request_button;
+pub use game_ui_bar::spawn_ship_request_button;
 mod tutorial;
 pub use tutorial::CurrentTutorialLevel;
 
@@ -29,7 +29,7 @@ impl Plugin for UiPlugin {
             .add_event::<OnRequestShipSpawn>()
             .add_plugin(TutorialPlugin)
             .add_plugin(CountDownTimerPlugin)
-            .add_enter_system(GameState::Playing, ship_respawn_bar::spawn_ship_respawn_bar)
+            .add_enter_system(GameState::Playing, game_ui_bar::spawn_ship_respawn_bar)
             .add_system(
                 score::score_display
                     .run_in_state(GameState::Playing)

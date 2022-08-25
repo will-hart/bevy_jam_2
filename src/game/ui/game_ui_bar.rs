@@ -4,7 +4,7 @@ use crate::{
     game::components::{
         BoxType, CountDownTimer, MarketPriceDirectionIndicator, MarketPriceIndicator,
         MarketPriceValueIndicator, RequestShip, ScoreUi, ShipDestination, TopUiBar, TutorialMarker,
-        BOX_TYPES, DESTINATIONS,
+        BOX_TYPES,
     },
     loader::{FontAssets, TextureAssets},
     GRID_SIZE,
@@ -125,7 +125,7 @@ pub fn spawn_ship_respawn_bar(
             layout
                 .spawn_bundle(NodeBundle {
                     style: Style {
-                        size: Size::new(Val::Px(13. * GRID_SIZE), Val::Px(4.0 * GRID_SIZE)),
+                        size: Size::new(Val::Px(9. * GRID_SIZE), Val::Px(GRID_SIZE)),
                         justify_content: JustifyContent::FlexStart,
                         align_items: AlignItems::FlexEnd,
                         flex_direction: FlexDirection::ColumnReverse,
@@ -155,36 +155,11 @@ pub fn spawn_ship_respawn_bar(
                             ..default()
                         })
                         .with_children(|parent_row| {
-                            parent_row
-                                .spawn_bundle(NodeBundle {
-                                    style: Style {
-                                        size: Size::new(Val::Px(4.0 * GRID_SIZE), Val::Auto),
-                                        align_items: AlignItems::Center,
-                                        justify_content: JustifyContent::Center,
-                                        align_content: AlignContent::Center,
-                                        ..default()
-                                    },
-                                    color: Color::NONE.into(),
-                                    ..default()
-                                })
-                                .with_children(|builder| {
-                                    builder.spawn_bundle(TextBundle {
-                                        text: Text::from_section(
-                                            "PROFIT",
-                                            small_text_style.clone(),
-                                        ),
-                                        ..default()
-                                    });
-                                });
-
                             BOX_TYPES.iter().for_each(|bt| {
                                 parent_row
                                     .spawn_bundle(NodeBundle {
                                         style: Style {
-                                            size: Size::new(
-                                                Val::Px(2.0 * GRID_SIZE),
-                                                Val::Px(GRID_SIZE),
-                                            ),
+                                            size: Size::new(Val::Px(2.0 * GRID_SIZE), Val::Auto),
                                             justify_content: JustifyContent::Center,
                                             align_items: AlignItems::Center,
                                             ..default()
@@ -192,93 +167,32 @@ pub fn spawn_ship_respawn_bar(
                                         color: Color::NONE.into(),
                                         ..default()
                                     })
-                                    .with_children(|nb| {
-                                        nb.spawn_bundle(ImageBundle {
+                                    .insert(MarketPriceIndicator(*bt))
+                                    .with_children(|market_item| {
+                                        market_item.spawn_bundle(ImageBundle {
                                             image: bt.get_image(&textures).into(),
-                                            transform: Transform::from_scale(Vec3::splat(0.9)),
+                                            transform: Transform::from_scale(Vec3::splat(0.7)),
                                             ..default()
                                         });
+                                        market_item
+                                            .spawn_bundle(TextBundle {
+                                                text: Text::from_section(
+                                                    "0",
+                                                    small_text_style.clone(),
+                                                ),
+                                                ..default()
+                                            })
+                                            .insert(MarketPriceValueIndicator);
+                                        market_item
+                                            .spawn_bundle(ImageBundle {
+                                                image: textures.up.clone().into(),
+                                                transform: Transform::from_scale(Vec3::splat(0.7)),
+                                                ..default()
+                                            })
+                                            .insert(MarketPriceDirectionIndicator);
                                     });
                             });
                         });
-
-                    // draw the market rows
-                    DESTINATIONS.iter().for_each(|destination| {
-                        market_table
-                            .spawn_bundle(NodeBundle {
-                                style: Style {
-                                    size: Size::new(Val::Percent(100.), Val::Px(GRID_SIZE)),
-                                    justify_content: JustifyContent::Center,
-                                    align_items: AlignItems::Center,
-                                    ..default()
-                                },
-                                color: Color::NONE.into(),
-                                ..default()
-                            })
-                            .with_children(|market_row| {
-                                market_row.spawn_bundle(ImageBundle {
-                                    image: destination.get_image(&textures).into(),
-                                    style: Style {
-                                        size: Size::new(Val::Px(GRID_SIZE), Val::Px(GRID_SIZE)),
-                                        ..default()
-                                    },
-                                    ..default()
-                                });
-
-                                market_row.spawn_bundle(TextBundle {
-                                    text: Text::from_section(
-                                        format!("{}", destination),
-                                        small_text_style.clone(),
-                                    ),
-                                    style: Style {
-                                        size: Size::new(
-                                            Val::Px(4.0 * GRID_SIZE),
-                                            Val::Px(GRID_SIZE),
-                                        ),
-                                        ..default()
-                                    },
-                                    ..default()
-                                });
-
-                                BOX_TYPES.iter().for_each(|bt| {
-                                    market_row
-                                        .spawn_bundle(NodeBundle {
-                                            style: Style {
-                                                size: Size::new(
-                                                    Val::Px(2.0 * GRID_SIZE),
-                                                    Val::Auto,
-                                                ),
-                                                justify_content: JustifyContent::Center,
-                                                align_items: AlignItems::Center,
-                                                ..default()
-                                            },
-                                            color: Color::NONE.into(),
-                                            ..default()
-                                        })
-                                        .insert(MarketPriceIndicator(*destination, *bt))
-                                        .with_children(|market_item| {
-                                            market_item
-                                                .spawn_bundle(TextBundle {
-                                                    text: Text::from_section(
-                                                        "0",
-                                                        small_text_style.clone(),
-                                                    ),
-                                                    ..default()
-                                                })
-                                                .insert(MarketPriceValueIndicator);
-                                            market_item
-                                                .spawn_bundle(ImageBundle {
-                                                    image: textures.up.clone().into(),
-                                                    transform: Transform::from_scale(Vec3::splat(
-                                                        0.7,
-                                                    )),
-                                                    ..default()
-                                                })
-                                                .insert(MarketPriceDirectionIndicator);
-                                        });
-                                });
-                            });
-                    });
                 });
 
             // launch buttons
@@ -338,7 +252,7 @@ pub fn spawn_ship_request_button(
                         focus_policy: FocusPolicy::Pass,
                         ..default()
                     })
-                    .insert(CountDownTimer(Timer::from_seconds(10.0, false)));
+                    .insert(CountDownTimer(Timer::from_seconds(15.0, false)));
             }
 
             parent.spawn_bundle(ImageBundle {

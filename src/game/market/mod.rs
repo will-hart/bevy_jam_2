@@ -6,7 +6,7 @@ use rand::{rngs::ThreadRng, thread_rng, Rng};
 
 use crate::GameState;
 
-use super::components::{BoxType, ShipDestination};
+use super::components::BoxType;
 
 pub struct MarketPlugin;
 
@@ -30,7 +30,7 @@ impl From<f32> for MarketPrice {
         let mut rng = thread_rng();
 
         MarketPrice {
-            current_price: rng.gen_range((-starting_price)..starting_price),
+            current_price: rng.gen_range((0.4 * starting_price)..(1.4 * starting_price)),
             price_acceleration: rng.gen_range(-1.0..1.0),
             volatility: rng.gen_range(0.01..0.10),
             starting_price,
@@ -41,7 +41,7 @@ impl From<f32> for MarketPrice {
 impl MarketPrice {
     fn update(&mut self, rng: &mut ThreadRng) {
         self.current_price = (self.current_price + self.price_acceleration)
-            .clamp(-self.starting_price, self.starting_price);
+            .clamp(0.4 * self.starting_price, 1.4 * self.starting_price);
         self.price_acceleration = (self.price_acceleration
             + rng.gen_range(-self.volatility..self.volatility))
         .clamp(-1.0, 1.0);
@@ -50,51 +50,23 @@ impl MarketPrice {
 
 #[derive(Debug)]
 pub struct Market {
-    pub market: HashMap<ShipDestination, HashMap<BoxType, MarketPrice>>,
+    pub market: HashMap<BoxType, MarketPrice>,
 }
 
 impl Default for Market {
     fn default() -> Self {
         let mut market = Self {
             market: HashMap::from([
-                (
-                    ShipDestination::NewWorld,
-                    HashMap::from([
-                        (BoxType::MedicalSupplies, 85.0.into()),
-                        (BoxType::Fruit, 35.0.into()),
-                        (BoxType::Iron, 72.0.into()),
-                        (BoxType::Rum, 15.0.into()),
-                    ]),
-                ),
-                (
-                    ShipDestination::Pirates,
-                    HashMap::from([
-                        (BoxType::MedicalSupplies, 85.0.into()),
-                        (BoxType::Fruit, 35.0.into()),
-                        (BoxType::Iron, 72.0.into()),
-                        (BoxType::Rum, 15.0.into()),
-                    ]),
-                ),
-                (
-                    ShipDestination::Eastern,
-                    HashMap::from([
-                        (BoxType::MedicalSupplies, 85.0.into()),
-                        (BoxType::Fruit, 35.0.into()),
-                        (BoxType::Iron, 72.0.into()),
-                        (BoxType::Rum, 15.0.into()),
-                    ]),
-                ),
+                (BoxType::MedicalSupplies, 85.0.into()),
+                (BoxType::Fruit, 35.0.into()),
+                (BoxType::Iron, 72.0.into()),
+                (BoxType::Rum, 15.0.into()),
             ]),
         };
 
         // Ensure that our tutorial sale doesn't result in a loss
         // (unless a player is too slow I guess)
-        let mut starting_item = market
-            .market
-            .get_mut(&ShipDestination::NewWorld)
-            .unwrap()
-            .get_mut(&BoxType::Fruit)
-            .unwrap();
+        let mut starting_item = market.market.get_mut(&BoxType::Fruit).unwrap();
         starting_item.current_price = starting_item.starting_price;
         starting_item.price_acceleration = 0.0;
 

@@ -14,9 +14,7 @@ pub fn market_movement(time: Res<Time>, mut market: ResMut<Market>, mut next_upd
 
     let mut rng = thread_rng();
 
-    for (_, region) in market.market.iter_mut() {
-        for (_, price) in region.iter_mut() {
-            price.update(&mut rng)
-        }
+    for (_, price) in market.market.iter_mut() {
+        price.update(&mut rng)
     }
 }

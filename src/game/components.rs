@@ -25,15 +25,15 @@ impl Display for ShipDestination {
     }
 }
 
-impl ShipDestination {
-    pub fn get_image(&self, textures: &TextureAssets) -> Handle<Image> {
-        match self {
-            ShipDestination::NewWorld => textures.flag_new_world.clone(),
-            ShipDestination::Pirates => textures.flag_pirates.clone(),
-            ShipDestination::Eastern => textures.flag_eastern.clone(),
-        }
-    }
-}
+// impl ShipDestination {
+//     pub fn get_image(&self, textures: &TextureAssets) -> Handle<Image> {
+//         match self {
+//             ShipDestination::NewWorld => textures.flag_new_world.clone(),
+//             ShipDestination::Pirates => textures.flag_pirates.clone(),
+//             ShipDestination::Eastern => textures.flag_eastern.clone(),
+//         }
+//     }
+// }
 
 /// used for randomg selection of destinations, see notes on [BOX_TYPES] below.
 /// Keep up to date with ShipDestination above.
@@ -82,7 +82,7 @@ pub struct ShipArriving(pub usize);
 pub struct ShipDemandItemMarker(pub BoxType);
 
 #[derive(Component)]
-pub struct MarketPriceIndicator(pub ShipDestination, pub BoxType);
+pub struct MarketPriceIndicator(pub BoxType);
 
 #[derive(Component)]
 pub struct MarketPriceDirectionIndicator;

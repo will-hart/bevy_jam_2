@@ -18,12 +18,7 @@ pub fn update_market_price_ui(
     mut icons: Query<&mut UiImage, With<MarketPriceDirectionIndicator>>,
 ) {
     for (indicator, children) in indicators.iter() {
-        let market_val = market
-            .market
-            .get(&indicator.0)
-            .unwrap()
-            .get(&indicator.1)
-            .unwrap();
+        let market_val = market.market.get(&indicator.0).unwrap();
 
         for child in children.iter() {
             if let Ok(mut t) = texts.get_mut(*child) {

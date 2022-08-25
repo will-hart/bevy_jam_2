@@ -30,13 +30,7 @@ pub fn score_update(
                     let (_, hold) = ships.get(*child).expect("Should have a ship hold");
 
                     for box_type in hold.crates.iter() {
-                        let box_score = market
-                            .market
-                            .get(&hold.destination)
-                            .unwrap()
-                            .get(box_type)
-                            .unwrap()
-                            .current_price;
+                        let box_score = market.market.get(box_type).unwrap().current_price;
                         info!(
                             "Sold crate of {:?} to {} for {}",
                             box_type, hold.destination, box_score
