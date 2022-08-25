@@ -9,7 +9,7 @@ use crate::{
             SpawnShipRequest, TopUiBar, TutorialMarker, Wave, BOX_TYPES, DESTINATIONS,
         },
         custom_sprite::CustomSpriteMaterial,
-        rng::RandomEvent,
+        rng::RandomSpawnTimer,
         spawners::request::spawn_ship_request_icon,
         AnimationState,
     },
@@ -39,7 +39,7 @@ pub fn ship_queuing_system(
     // tutorial_level: Res<CurrentTutorialLevel>, TODO: Queue ships based on the tutorial level
     time: Res<Time>,
     textures: Res<TextureAssets>,
-    mut event_test: Local<RandomEvent>,
+    mut event_test: Local<RandomSpawnTimer>,
     mut next_test: Local<f64>,
     spawn_requests: Query<&SpawnShipRequest>,
     top_bar_query: Query<Entity, With<TopUiBar>>,
@@ -56,7 +56,7 @@ pub fn ship_queuing_system(
     *next_test = elapsed + 1.0;
 
     let mut rng = thread_rng();
-    if event_test.test(&mut rng) {
+    if event_test.tick(&mut rng, elapsed) {
         info!("Spawning a ship request");
 
         let top_bar = top_bar_query.single();
