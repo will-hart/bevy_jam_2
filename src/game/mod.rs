@@ -16,6 +16,7 @@ pub use animation::{Animation, AnimationState};
 pub use ui::OnCoinsReceived;
 
 use bevy::prelude::*;
+use heron::prelude::*;
 use iyes_loopless::prelude::AppLooplessStateExt;
 
 use crate::{
@@ -48,6 +49,8 @@ impl Plugin for GamePlugin {
     fn build(&self, app: &mut App) {
         info!("Mounting GamePlugin");
         app.add_plugin(CustomSpritePlugin)
+            .add_plugin(PhysicsPlugin::default()) // Add the plugin
+            .insert_resource(Gravity::from(Vec3::new(0.0, -500.0, 0.0)))
             .add_plugin(AnimationPlugin)
             .add_plugin(ActionPlugin)
             .add_plugin(DayNightCyclePlugin)

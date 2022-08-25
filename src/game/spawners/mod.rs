@@ -1,4 +1,5 @@
 use bevy::prelude::*;
+use heron::PhysicsLayer;
 use iyes_loopless::prelude::IntoConditionalSystem;
 
 use crate::GameState;
@@ -8,6 +9,17 @@ pub mod request;
 mod ship;
 mod torch;
 pub use torch::spawn_torch;
+mod physics_crate;
+pub use physics_crate::spawn_physics_crate;
+
+// Define your physics layers
+#[derive(PhysicsLayer)]
+pub enum GamePhysicsLayer {
+    Ship,
+    Crate,
+    // Warehouse,
+    // Factory,
+}
 
 pub struct SpawningPlugin;
 

@@ -58,13 +58,6 @@ pub struct ShipHold {
     pub demands: Vec<BoxType>,
 }
 
-impl ShipHold {
-    pub fn accept_crate(&mut self, crate_type: BoxType) {
-        // TODO: update demands
-        self.crates.push(crate_type);
-    }
-}
-
 #[derive(Component)]
 pub struct ShipDemandItemMarker(pub BoxType);
 
@@ -116,6 +109,11 @@ impl BoxType {
             BoxType::Rum => textures.box_type_rum.clone(),
         }
     }
+}
+
+#[derive(Component)]
+pub struct PhysicsCrate {
+    pub box_type: BoxType,
 }
 
 #[derive(Component)]

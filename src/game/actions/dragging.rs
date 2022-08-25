@@ -7,7 +7,7 @@ use crate::{
 };
 
 pub struct DraggingBox {
-    pub cart_entity: Option<Entity>,
+    pub box_entity: Option<Entity>,
     pub box_type: Option<BoxType>,
     pub is_front_slot: bool,
 }
@@ -51,7 +51,6 @@ pub fn start_dragging(
             continue;
         }
 
-        dragging.cart_entity = Some(event.cart_entity);
         dragging.is_front_slot = event.is_front_slot;
 
         // hide the box that's being dragged
@@ -64,16 +63,19 @@ pub fn start_dragging(
         }
 
         // spawn a box based on the box type and attach it to the mouse
-        commands
-            .spawn_bundle(SpriteSheetBundle {
-                texture_atlas: texture_assets.crates.clone(),
-                sprite: TextureAtlasSprite {
-                    index: dragging.box_type.unwrap() as usize,
+        dragging.box_entity = Some(
+            commands
+                .spawn_bundle(SpriteSheetBundle {
+                    texture_atlas: texture_assets.crates.clone(),
+                    sprite: TextureAtlasSprite {
+                        index: dragging.box_type.unwrap() as usize,
+                        ..Default::default()
+                    },
                     ..Default::default()
-                },
-                ..Default::default()
-            })
-            .insert(FollowMouse);
+                })
+                .insert(FollowMouse)
+                .id(),
+        );
     }
 }
 

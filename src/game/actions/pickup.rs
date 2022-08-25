@@ -10,14 +10,14 @@ use crate::{
 use super::{
     dragging::{DraggingBox, OnStartDragging},
     dropping::OnDropCrate,
-    CART_MAX_Y, CART_MIN_Y, SHIP_MAX_Y, SHIP_MIN_Y,
+    CART_MAX_Y, CART_MIN_Y,
 };
 
 pub fn click_to_pickup(
     mouse_pos: Res<MousePosition>,
     dragging: Res<DraggingBox>,
     mut start_events: EventWriter<OnStartDragging>,
-    mut stop_events: EventWriter<OnDropCrate>,
+    mut drop_events: EventWriter<OnDropCrate>,
     action_state_query: Query<&ActionState<PlayerActions>>,
     mut carts: Query<(Entity, &Transform), With<Cart>>,
 ) {
@@ -54,11 +54,7 @@ pub fn click_to_pickup(
                 is_front_slot: zone == 0,
             });
         }
-    } else if dragging.cart_entity.is_some() && action_state.just_released(PlayerActions::Click) {
-        if y > SHIP_MIN_Y && y < SHIP_MAX_Y {
-            todo!("Todo - dropping the crate and spawning a physics entity, the colliders will determine where the crate lands");
-        }
-
-        stop_events.send(OnDropCrate { ship: None });
+    } else if dragging.box_entity.is_some() && action_state.just_released(PlayerActions::Click) {
+        drop_events.send(OnDropCrate);
     }
 }

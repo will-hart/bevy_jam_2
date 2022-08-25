@@ -1,4 +1,5 @@
 use bevy::{prelude::*, sprite::MaterialMesh2dBundle};
+use heron::{CollisionLayers, CollisionShape, RigidBody};
 use rand::{seq::SliceRandom, thread_rng, Rng};
 
 use crate::{
@@ -16,15 +17,19 @@ use crate::{
     GRID_SIZE, WIDTH,
 };
 
+use super::GamePhysicsLayer;
+
 pub const SHIP_SAILING_POSITION_Y: f32 = -12.0 * GRID_SIZE;
 pub const SHIP_SPAWN_OFFSCREEN_POSITION: Vec3 =
     Vec3::new(-0.7 * WIDTH, SHIP_SAILING_POSITION_Y, 8.0);
 
 pub const MAX_SPAWN_REQUESTS: usize = 5;
 
-pub const SHIP_SPEED: f32 = 60.0;
+pub const SHIP_SPEED: f32 = 40.0;
 
-pub const SHIP_EXPIRY_DURATION: f64 = 10.0;
+pub const SHIP_EXPIRY_DURATION: f64 = 15.0;
+
+pub const SHIP_WIDTH: f32 = 288.0;
 
 /// Periodically queues up a RequestShip component and button in the ship bar
 /// When the timer gets to 0, the ship spawns and sails across the screen.
@@ -134,6 +139,16 @@ pub fn spawn_ship(
             material: materials.add(textures.waves.clone().into()),
             ..Default::default()
         })
+        .insert_bundle((
+            CollisionShape::Cuboid {
+                half_extends: Vec3::new(SHIP_WIDTH / 2.2, 10.0, 30.0),
+                border_radius: None,
+            },
+            RigidBody::Sensor,
+            CollisionLayers::none()
+                .with_group(GamePhysicsLayer::Ship)
+                .with_mask(GamePhysicsLayer::Crate),
+        ))
         .insert(AnimateWithSpeed {
             speed: SHIP_SPEED,
             target: vec![Vec3::new(
