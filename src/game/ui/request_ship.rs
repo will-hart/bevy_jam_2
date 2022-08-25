@@ -3,7 +3,7 @@ use bevy::prelude::*;
 use crate::{
     game::{
         actions::{ShipSlotType, ShipSlots},
-        components::{RequestShip, TutorialMarker},
+        components::{CountDownTimer, RequestShip, TutorialMarker},
         custom_sprite::CustomSpriteMaterial,
         spawners::spawn_ship,
     },
@@ -22,19 +22,17 @@ pub struct OnRequestShipSpawn {
 #[allow(clippy::too_many_arguments)]
 pub fn ship_request_expiry_system(
     mut commands: Commands,
-    time: Res<Time>,
     tutorial: Res<CurrentTutorialLevel>,
-    requests: Query<(Entity, &mut RequestShip)>,
+    requests: Query<(&CountDownTimer, &Parent)>,
 ) {
     if tutorial.0 < 3 {
         return;
     }
 
-    let time_now = time.seconds_since_startup() as f32;
-
-    for (button_ent, request) in requests.iter() {
-        if time_now > request.expiry {
-            commands.entity(button_ent).despawn_recursive();
+    for (timer, parent) in requests.iter() {
+        if timer.0.just_finished() {
+            info!("Expiring a ship spawn request");
+            commands.entity(parent.get()).despawn_recursive();
         }
     }
 }
