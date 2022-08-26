@@ -4,6 +4,7 @@ use iyes_loopless::prelude::IntoConditionalSystem;
 use crate::{GameState, GRID_SIZE};
 
 use self::{
+    detect_crate_drop_on_target::OnCrateSplashedInWater,
     dragging::{DraggingBox, OnStartDragging},
     dropping::OnDropCrate,
 };
@@ -29,6 +30,7 @@ impl Plugin for ActionPlugin {
         })
         .add_event::<OnStartDragging>()
         .add_event::<OnDropCrate>()
+        .add_event::<OnCrateSplashedInWater>()
         .add_system(pickup::click_to_pickup.run_in_state(GameState::Playing))
         .add_system(dragging::start_dragging.run_in_state(GameState::Playing))
         .add_system(dragging::mouse_follower.run_in_state(GameState::Playing))

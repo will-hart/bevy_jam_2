@@ -3,19 +3,23 @@ use heron::Collisions;
 
 use crate::{
     game::{
-        components::{FactoryInput, PhysicsCrate, ShipHold, Wave},
+        components::{FactoryInput, PhysicsCrate, ShipHold, SplashCatcher, Wave},
         factory::OnDropInFactoryInput,
     },
     HEIGHT, WIDTH,
 };
 
+pub struct OnCrateSplashedInWater(pub Vec2);
+
 /// Handles collisions between physics crates and ships
 pub fn detect_crate_drop_on_ship(
     mut commands: Commands,
     mut factory_event: EventWriter<OnDropInFactoryInput>,
+    mut splash_event: EventWriter<OnCrateSplashedInWater>,
     box_collisions: Query<(Entity, &Collisions, &PhysicsCrate)>,
     ship_entities: Query<&Children, With<Wave>>,
     factory_inputs: Query<&FactoryInput>,
+    splashers: Query<&Transform, With<SplashCatcher>>,
     mut ship_holds: Query<&mut ShipHold>,
 ) {
     for (crate_entity, crate_collisions, physics_crate) in box_collisions.iter() {
@@ -28,6 +32,13 @@ pub fn detect_crate_drop_on_ship(
                 factory_event.send(OnDropInFactoryInput {
                     box_type: physics_crate.box_type,
                 });
+                commands.entity(crate_entity).despawn_recursive();
+                continue;
+            }
+
+            if let Ok(tx) = splashers.get(collision) {
+                info!("Crate splashed down!");
+                splash_event.send(OnCrateSplashedInWater(tx.translation.truncate()));
                 commands.entity(crate_entity).despawn_recursive();
                 continue;
             }

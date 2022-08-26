@@ -157,3 +157,6 @@ pub struct FactoryInputsDisplayItem(pub usize);
 
 #[derive(Component)]
 pub struct CountdownTimerSprite;
+
+#[derive(Component)]
+pub struct SplashCatcher;

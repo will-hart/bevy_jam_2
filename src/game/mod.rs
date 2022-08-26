@@ -22,7 +22,7 @@ use iyes_loopless::prelude::AppLooplessStateExt;
 use crate::{
     game::{
         actions::ActionPlugin,
-        components::FactoryInput,
+        components::{FactoryInput, SplashCatcher},
         custom_sprite::CustomSpritePlugin,
         day_night_cycle::DayNightCyclePlugin,
         factory::FactoryPlugin,
@@ -30,7 +30,7 @@ use crate::{
         ui::UiPlugin,
     },
     loader::{AnimationAssets, TextureAssets},
-    GameState, GRID_SIZE, WIDTH,
+    GameState, GRID_SIZE, HEIGHT, WIDTH,
 };
 
 #[cfg(feature = "debug_system")]
@@ -137,4 +137,41 @@ fn setup_world(
             ..default()
         })
         .insert(FactoryInput);
+
+    /* FACTORY OUTPUT */
+    commands
+        .spawn_bundle((
+            RigidBody::Static,
+            CollisionShape::Cuboid {
+                half_extends: Vec3::new(60.0, 10.0, GRID_SIZE / 2.0),
+                border_radius: None,
+            },
+            CollisionLayers::none()
+                .with_group(GamePhysicsLayer::Ship)
+                .with_mask(GamePhysicsLayer::Crate),
+        ))
+        .insert_bundle(SpriteBundle::default())
+        .insert_bundle(TransformBundle {
+            local: Transform::from_xyz(5.0 * GRID_SIZE, 0.0, 0.0),
+            ..default()
+        });
+
+    /* SPLASH SECTION */
+    commands
+        .spawn_bundle((
+            RigidBody::Sensor,
+            CollisionShape::Cuboid {
+                half_extends: Vec3::new(WIDTH / 2.0, 10.0, GRID_SIZE / 2.0),
+                border_radius: None,
+            },
+            CollisionLayers::none()
+                .with_group(GamePhysicsLayer::Ship)
+                .with_mask(GamePhysicsLayer::Crate),
+        ))
+        .insert_bundle(SpriteBundle::default())
+        .insert_bundle(TransformBundle {
+            local: Transform::from_xyz(0.0, -HEIGHT / 2.0 + GRID_SIZE, 0.0),
+            ..default()
+        })
+        .insert(SplashCatcher);
 }
