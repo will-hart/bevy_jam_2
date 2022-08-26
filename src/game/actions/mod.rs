@@ -4,12 +4,12 @@ use iyes_loopless::prelude::IntoConditionalSystem;
 use crate::{GameState, GRID_SIZE};
 
 use self::{
-    detect_crate_drop_on_target::OnCrateSplashedInWater,
     dragging::{DraggingBox, OnStartDragging},
     dropping::OnDropCrate,
 };
 
 mod detect_crate_drop_on_target;
+pub use detect_crate_drop_on_target::OnCrateSplashedInWater;
 mod dragging;
 mod dropping;
 mod pickup;

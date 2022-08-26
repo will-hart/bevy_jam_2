@@ -5,6 +5,8 @@ use bevy::{
 };
 
 mod animate_entity;
+mod effects;
+mod splashes;
 pub use animate_entity::OnShipArrivedAtDestination;
 mod ship_bob;
 mod waves;
@@ -29,7 +31,9 @@ impl Plugin for AnimationPlugin {
                     .label(SystemLabels::ShipAnimationAndDespawn),
             )
             .add_system(ship_bob::ship_bob.run_not_in_state(GameState::Loading))
-            .add_system(waves::scroll_wave_texture.run_not_in_state(GameState::Loading));
+            .add_system(waves::scroll_wave_texture.run_not_in_state(GameState::Loading))
+            .add_system(effects::despawn_visual_effects.run_not_in_state(GameState::Loading))
+            .add_system(splashes::splash_when_hitting_water.run_not_in_state(GameState::Loading));
     }
 }
 

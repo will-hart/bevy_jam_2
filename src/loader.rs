@@ -140,6 +140,10 @@ pub struct TextureAssets {
         collection(typed)
     )]
     pub countdown: Vec<Handle<Image>>,
+
+    #[asset(texture_atlas(tile_size_x = 32., tile_size_y = 32., columns = 6, rows = 1))]
+    #[asset(path = "textures/splashes.png")]
+    pub splashes: Handle<TextureAtlas>,
 }
 
 /// Contains animation assets loaded from file using a custom animation loader
@@ -162,4 +166,7 @@ pub struct AnimationAssets {
 
     #[asset(path = "animations/ship_idle.animation.yml")]
     pub ship_idle: Handle<Animation>,
+
+    #[asset(path = "animations/splashes.animation.yml")]
+    pub splashes: Handle<Animation>,
 }

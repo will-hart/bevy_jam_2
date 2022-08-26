@@ -16,13 +16,13 @@ pub fn detect_crate_drop_on_ship(
     mut commands: Commands,
     mut factory_event: EventWriter<OnDropInFactoryInput>,
     mut splash_event: EventWriter<OnCrateSplashedInWater>,
-    box_collisions: Query<(Entity, &Collisions, &PhysicsCrate)>,
+    box_collisions: Query<(Entity, &Collisions, &PhysicsCrate, &Transform)>,
     ship_entities: Query<&Children, With<Wave>>,
     factory_inputs: Query<&FactoryInput>,
-    splashers: Query<&Transform, With<SplashCatcher>>,
+    splashers: Query<&SplashCatcher>,
     mut ship_holds: Query<&mut ShipHold>,
 ) {
-    for (crate_entity, crate_collisions, physics_crate) in box_collisions.iter() {
+    for (crate_entity, crate_collisions, physics_crate, crate_tx) in box_collisions.iter() {
         for collision in crate_collisions.entities() {
             if let Ok(_) = factory_inputs.get(collision) {
                 info!(
@@ -36,9 +36,9 @@ pub fn detect_crate_drop_on_ship(
                 continue;
             }
 
-            if let Ok(tx) = splashers.get(collision) {
+            if let Ok(_) = splashers.get(collision) {
                 info!("Crate splashed down!");
-                splash_event.send(OnCrateSplashedInWater(tx.translation.truncate()));
+                splash_event.send(OnCrateSplashedInWater(crate_tx.translation.truncate()));
                 commands.entity(crate_entity).despawn_recursive();
                 continue;
             }

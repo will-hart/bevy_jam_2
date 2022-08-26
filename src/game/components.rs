@@ -163,3 +163,7 @@ pub struct CountdownTimerSprite;
 
 #[derive(Component)]
 pub struct SplashCatcher;
+
+/// A visual effect with a despawn time
+#[derive(Component)]
+pub struct VisualEffect(pub f32);
