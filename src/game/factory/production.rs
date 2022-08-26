@@ -16,9 +16,10 @@ use super::{
     OnDropInFactoryInput,
 };
 
-pub const FACTORY_OUTPUT_LOCATION: Vec3 = Vec3::ZERO;
+pub const FACTORY_OUTPUT_LOCATION: Vec3 = Vec3::new(0.0, 5.0 * GRID_SIZE, 0.0);
+pub const FACTORY_OUTPUT_INITIAL_VELOCITY: Vec2 = Vec2::new(-200.0, 100.0);
 pub const FACTORY_OUTPUT_INDICATOR_LOCATION: Vec3 =
-    Vec3::new(1.0 * GRID_SIZE, 1.0 * GRID_SIZE, 4.0);
+    Vec3::new(-0.5 * GRID_SIZE, 3.0 * GRID_SIZE, 6.0);
 
 #[derive(Default, Debug)]
 pub struct Factory {
@@ -60,20 +61,21 @@ pub fn add_item_to_factory(
             return;
         }
 
-        let bt = if let Some(bt) = recipes.get_output(&factory.inputs) {
+        if let Some(bt) = recipes.get_output(&factory.inputs) {
             info!(
                 "Factory receive two inputs {:?} and {:?} which has a recipe of {:?}",
                 factory.inputs[0], factory.inputs[1], bt
             );
 
-            bt
+            factory.output_queue.push(bt);
         } else {
-            info!("No recipe available yet, factory contains {:?}", factory);
-            return;
+            info!(
+                "No recipe available, factory contains {:?}. Resetting",
+                factory
+            );
         };
 
         factory.reset();
-        factory.output_queue.push(bt);
     }
 }
 
@@ -117,7 +119,12 @@ pub fn finish_factory_production(
                 .id();
 
             // turn it into a physics box
-            spawn_physics_crate(&mut commands, sprite, built, Vec2::ZERO);
+            spawn_physics_crate(
+                &mut commands,
+                sprite,
+                built,
+                FACTORY_OUTPUT_INITIAL_VELOCITY,
+            );
         }
     }
 }
