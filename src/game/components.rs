@@ -148,3 +148,6 @@ pub struct CountDownTimer(pub Timer);
 
 #[derive(Component)]
 pub struct FactoryInput;
+
+#[derive(Component)]
+pub struct FactoryProductionIndicator;

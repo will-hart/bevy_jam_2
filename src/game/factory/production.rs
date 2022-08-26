@@ -1,16 +1,30 @@
-use std::time::Duration;
-
 use bevy::prelude::*;
 
-use crate::game::components::{BoxType, CountDownTimer};
+use crate::{
+    game::{
+        components::{BoxType, CountDownTimer, FactoryProductionIndicator},
+        factory::utils::new_timer,
+        spawners::spawn_physics_crate,
+    },
+    loader::TextureAssets,
+    GRID_SIZE,
+};
 
-use super::{events::OnFactoryProduced, recipes::Recipes, OnDropInFactoryInput};
+use super::{
+    events::{OnFactoryFinishProducing, OnFactoryStartProducing},
+    recipes::Recipes,
+    OnDropInFactoryInput,
+};
+
+pub const FACTORY_OUTPUT_LOCATION: Vec3 = Vec3::ZERO;
+pub const FACTORY_OUTPUT_INDICATOR_LOCATION: Vec3 =
+    Vec3::new(1.0 * GRID_SIZE, 1.0 * GRID_SIZE, 4.0);
 
 #[derive(Default, Debug)]
 pub struct Factory {
     pub inputs: [Option<BoxType>; 2],
-    output_queue: Vec<BoxType>,
-    timer: Option<CountDownTimer>,
+    pub output_queue: Vec<BoxType>,
+    pub is_producing: bool,
 }
 
 impl Factory {
@@ -22,85 +36,15 @@ impl Factory {
         }
     }
 
-    /// Update the timers and return a box type if something has been produced
-    pub fn update(&mut self, delta: Duration) -> Option<BoxType> {
-        if self.timer.is_none() {
-            return None;
-        }
-
-        let timer = self.timer.as_mut().unwrap();
-        timer.0.tick(delta);
-
-        if !timer.0.just_finished() {
-            return None;
-        }
-
-        let built = self.output_queue.remove(0);
-        info!("Finished production of {:?}", built);
-
-        if self.output_queue.is_empty() {
-            self.timer = None;
-        } else {
-            info!("Production of {:?} started", self.output_queue[0]);
-            self.timer = self.new_timer();
-        }
-
-        Some(built)
-    }
-
-    /// Checks if there are enough items in there to start production
-    pub fn check_production_inputs_and_start_building(&mut self, recipes: &Recipes) {
-        if !self.is_complete() {
-            return;
-        }
-
-        let bt = if let Some(bt) = recipes.get_output(&self.inputs) {
-            bt
-        } else {
-            info!("No recipe available yet, factory contains {:?}", self);
-            self.reset();
-            return;
-        };
-
-        info!(
-            "Factory receive two inputs {:?} and {:?} which has a recipe of {:?}",
-            self.inputs[0], self.inputs[1], bt
-        );
-
-        self.output_queue.push(bt);
-
-        if self.timer.is_none() {
-            info!("Started production of {:?}", bt);
-            self.timer = self.new_timer();
-        } else {
-            info!("Queued {:?}", bt);
-        }
-
-        self.reset();
-    }
-
-    fn new_timer(&self) -> Option<CountDownTimer> {
-        Some(CountDownTimer(Timer::new(
-            Duration::from_secs_f32(5.0),
-            false,
-        )))
-    }
-
-    fn reset(&mut self) {
+    /// Reset the factory, setting all its inputs to 0
+    pub fn reset(&mut self) {
         self.inputs[0] = None;
         self.inputs[1] = None;
     }
 
-    fn is_complete(&self) -> bool {
+    // Does the factory have a completed recipe
+    pub fn has_completed_recipe(&self) -> bool {
         self.inputs[0].is_some() && self.inputs[1].is_some()
-    }
-
-    /// Gets the current output being produced
-    pub fn get_current_output(&self) -> Option<BoxType> {
-        match self.output_queue.get(0) {
-            Some(bt) => Some(*bt),
-            None => None,
-        }
     }
 }
 
@@ -111,19 +55,93 @@ pub fn add_item_to_factory(
 ) {
     for drop_event in drop_events.iter() {
         factory.drop(drop_event.box_type);
-        factory.check_production_inputs_and_start_building(&recipes);
+
+        if !factory.has_completed_recipe() {
+            return;
+        }
+
+        let bt = if let Some(bt) = recipes.get_output(&factory.inputs) {
+            info!(
+                "Factory receive two inputs {:?} and {:?} which has a recipe of {:?}",
+                factory.inputs[0], factory.inputs[1], bt
+            );
+
+            bt
+        } else {
+            info!("No recipe available yet, factory contains {:?}", factory);
+            return;
+        };
+
+        factory.reset();
+        factory.output_queue.push(bt);
     }
 }
 
-pub fn update_factory(
-    time: Res<Time>,
+pub fn start_factory_production(
     mut factory: ResMut<Factory>,
-    mut produced_events: EventWriter<OnFactoryProduced>,
+    mut start_production_events: EventWriter<OnFactoryStartProducing>,
 ) {
-    match factory.update(time.delta()) {
-        Some(produced) => {
-            produced_events.send(OnFactoryProduced { box_type: produced });
+    if factory.output_queue.is_empty() || factory.is_producing {
+        return;
+    }
+
+    info!("Started production of {:?}", factory.output_queue[0]);
+    start_production_events.send(OnFactoryStartProducing {
+        box_type: factory.output_queue[0],
+    });
+    factory.is_producing = true;
+}
+
+pub fn finish_factory_production(
+    mut commands: Commands,
+    textures: Res<TextureAssets>,
+    mut factory: ResMut<Factory>,
+    mut produced_events: EventWriter<OnFactoryFinishProducing>,
+    production_items: Query<(Entity, &CountDownTimer), With<FactoryProductionIndicator>>,
+) {
+    for (entity, timer) in production_items.iter() {
+        if timer.0.just_finished() {
+            let built = factory.output_queue.remove(0);
+            produced_events.send(OnFactoryFinishProducing { box_type: built });
+            factory.is_producing = false;
+            info!("Finished production of {:?}", built);
+
+            // spawn a sprite
+            commands.entity(entity).despawn_recursive();
+            let sprite = commands
+                .spawn_bundle(SpriteBundle {
+                    texture: built.get_image(&textures).into(),
+                    transform: Transform::from_translation(FACTORY_OUTPUT_LOCATION),
+                    ..default()
+                })
+                .id();
+
+            // turn it into a physics box
+            spawn_physics_crate(&mut commands, sprite, built, Vec2::ZERO);
         }
-        _ => {}
+    }
+}
+
+pub fn handle_production_started(
+    mut commands: Commands,
+    textures: Res<TextureAssets>,
+    mut started_events: EventReader<OnFactoryStartProducing>,
+) {
+    for evt in started_events.iter() {
+        commands
+            .spawn_bundle(SpriteBundle {
+                texture: textures.countdown[9].clone().into(),
+                transform: Transform::from_translation(FACTORY_OUTPUT_INDICATOR_LOCATION),
+                ..default()
+            })
+            .insert(new_timer())
+            .insert(FactoryProductionIndicator)
+            .with_children(|children| {
+                children.spawn_bundle(SpriteBundle {
+                    texture: evt.box_type.get_image(&textures),
+                    transform: Transform::from_translation(Vec3::new(GRID_SIZE, 0.0, 0.0)),
+                    ..default()
+                });
+            });
     }
 }

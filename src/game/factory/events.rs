@@ -5,7 +5,11 @@ pub struct OnDropInFactoryInput {
     pub box_type: BoxType,
 }
 
-pub struct OnFactoryProduced {
+pub struct OnFactoryStartProducing {
+    pub box_type: BoxType,
+}
+
+pub struct OnFactoryFinishProducing {
     pub box_type: BoxType,
 }
 

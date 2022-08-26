@@ -1,6 +1,7 @@
 mod events;
 mod production;
 pub mod recipes;
+mod utils;
 pub use events::OnDropInFactoryInput;
 
 use bevy::prelude::*;
@@ -19,7 +20,8 @@ impl Plugin for FactoryPlugin {
         app.insert_resource(Recipes::default())
             .insert_resource(production::Factory::default())
             .add_event::<events::OnDropInFactoryInput>()
-            .add_event::<events::OnFactoryProduced>()
+            .add_event::<events::OnFactoryStartProducing>()
+            .add_event::<events::OnFactoryFinishProducing>()
             .add_system(events::handle_drop_factory_input.run_in_state(GameState::Playing))
             .add_system(
                 production::add_item_to_factory
@@ -27,9 +29,19 @@ impl Plugin for FactoryPlugin {
                     .before(SystemLabels::FactoryProduction),
             )
             .add_system(
-                production::update_factory
+                production::finish_factory_production
                     .run_in_state(GameState::Playing)
                     .label(SystemLabels::FactoryProduction),
+            )
+            .add_system(
+                production::start_factory_production
+                    .run_in_state(GameState::Playing)
+                    .after(SystemLabels::FactoryProduction),
+            )
+            .add_system(
+                production::handle_production_started
+                    .run_in_state(GameState::Playing)
+                    .after(SystemLabels::FactoryProduction),
             );
     }
 }
