@@ -153,4 +153,7 @@ pub struct FactoryInput;
 pub struct FactoryProductionIndicator;
 
 #[derive(Component)]
+pub struct FactoryInputsDisplayItem(pub usize);
+
+#[derive(Component)]
 pub struct CountdownTimerSprite;

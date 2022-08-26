@@ -84,10 +84,11 @@ Ship Game:
       ✔ from warehouse @done(22-08-26 08:45)
     ✔ Recipes that can be dropped in the factory @done(22-08-26 18:15)
     ✔ Production queue + timers from the factory @done(22-08-26 20:20)
-    ☐ Convert factory into components + systems
-    ☐ Show factory production progress
-    ☐ Available recipes displayed in UI
+    ✔ Convert factory into components + systems @done(22-08-26 23:54)
+    ✔ Show factory production progress @done(22-08-26 23:54)
+    ✔ Show items queued in the factory @done(22-08-27 00:05)
     ☐ Add some more recipes
+    ☐ Available recipes displayed in UI
     ☐ Carts only spawn raw materials
     ☐ Ships request outputs from factory
       ☐ Ships also request some raw materials
@@ -112,6 +113,7 @@ Super Nice to Haves:
     ✔ If you miss the ship the crate falls in the water and is lost @done(22-08-26 00:19)
   ✘ A warehouse on the shore with very limited capacity that you can use to stockpile interesting items @cancelled(22-08-26 00:22)
   ✘ Smuggling :D @cancelled(22-08-26 00:22)
+  ☐ Crates splashing when they miss everything
   ☐ Better music
   ☐ Nice art
   ☐ Weather effects

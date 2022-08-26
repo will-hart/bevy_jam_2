@@ -1,4 +1,5 @@
 mod countdown_timer;
+mod factory;
 mod game_ui_bar;
 mod score;
 pub use score::OnCoinsReceived;
@@ -28,10 +29,12 @@ impl Plugin for UiPlugin {
             // .add_plugin(TutorialPlugin)
             .add_plugin(CountDownTimerPlugin)
             .add_enter_system(GameState::Playing, game_ui_bar::spawn_ship_respawn_bar)
+            .add_enter_system(GameState::Playing, factory::spawn_factory_ui)
             .add_system(
                 score::score_display
                     .run_in_state(GameState::Playing)
                     .label(SystemLabels::ScoreDisplay),
-            );
+            )
+            .add_system(factory::update_factory_input_ui.run_in_state(GameState::Playing));
     }
 }

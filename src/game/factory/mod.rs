@@ -1,5 +1,6 @@
 mod events;
 mod production;
+pub use production::Factory;
 pub mod recipes;
 mod utils;
 pub use events::OnDropInFactoryInput;

@@ -28,7 +28,7 @@ pub fn spawn_physics_crate(
                 .with_masks(&[GamePhysicsLayer::Ship, GamePhysicsLayer::Crate]),
         )
         .insert(PhysicMaterial {
-            friction: 1.0,
+            friction: 0.2,
             density: 1.0,
             ..Default::default()
         })
