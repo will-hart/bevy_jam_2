@@ -122,6 +122,12 @@ pub struct TextureAssets {
     #[asset(path = "textures/ship.png")]
     pub ship: Handle<TextureAtlas>,
 
+    #[asset(path = "textures/arrow.png")]
+    pub arrow: Handle<Image>,
+
+    #[asset(path = "textures/plus.png")]
+    pub plus: Handle<Image>,
+
     // can't do spritesheets in UI so need to load individual countdown images :(
     // also, folders aren't supported in web builds :facepalm:
     #[asset(

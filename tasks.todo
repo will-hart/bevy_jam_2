@@ -88,17 +88,20 @@ Ship Game:
     ✔ Show factory production progress @done(22-08-26 23:54)
     ✔ Show items queued in the factory @done(22-08-27 00:05)
     ✔ Add some more recipes @done(22-08-27 00:55)
-    ☐ Spawn rates of ships slower
-    ☐ Available recipes displayed in UI
-    ☐ Carts only spawn raw materials
-    ☐ Ships request outputs from factory
-      ☐ Ships also request some raw materials
+    ✔ Spawn rates of ships slower @done(22-08-27 08:17)
+    ✔ Available recipes displayed in UI @done(22-08-27 08:34)
+    ☐ Current production queue displayed in UI
+    ☐ Carts don't automatically spawn
+    ✔ Carts only spawn raw materials @done(22-08-27 08:17)
+    ✔ Ships request outputs from factory @done(22-08-27 08:17)
+      ✔ Ships also request some raw materials @done(22-08-27 08:17)
     ☐ Get points for dropping the right produced resource
     ☐ Lose points for dropping incorrect resource
     ☐ Lose points for missing resources
-    ☐ Cart spawns get faster as time goes on
-    ☐ Carts move faster as time goes on
+    ✘ Cart spawns get faster as time goes on @cancelled(22-08-27 08:17)
+    ✘ Carts move faster as time goes on @cancelled(22-08-27 08:17)
     ☐ maximum number of carts at once
+    ☐ Ships spawn faster as time goes on
 
   Sound effects:
     ☐ Morning

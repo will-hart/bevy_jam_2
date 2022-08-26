@@ -32,7 +32,7 @@ impl Hash for RecipeInputs {
     }
 }
 
-pub struct Recipes(HashMap<RecipeInputs, BoxType>);
+pub struct Recipes(pub HashMap<RecipeInputs, BoxType>);
 
 impl Recipes {
     pub fn get_output(&self, inputs: &[Option<BoxType>; 2]) -> Option<BoxType> {
