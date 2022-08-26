@@ -6,7 +6,7 @@ use crate::{
     game::{
         components::{
             AnimateWithSpeed, CountDownTimer, Ship, ShipDemandItemMarker, ShipHold,
-            SpawnShipRequest, TopUiBar, TutorialMarker, Wave, BOX_TYPES, DESTINATIONS,
+            SpawnShipRequest, TopUiBar, TutorialMarker, Wave, BOX_DEMANDS,
         },
         custom_sprite::CustomSpriteMaterial,
         rng::RandomSpawnTimer,
@@ -62,15 +62,14 @@ pub fn ship_queuing_system(
         let top_bar = top_bar_query.single();
 
         let mut demands = vec![];
-        for _ in 0..rng.gen_range(1..=4) {
-            demands.push(*BOX_TYPES.choose(&mut rng).unwrap());
+        for _ in 0..rng.gen_range(1..=3) {
+            demands.push(*BOX_DEMANDS.choose(&mut rng).unwrap());
         }
 
         commands.entity(top_bar).with_children(|layout| {
             spawn_ship_request_icon(
                 layout,
                 &textures,
-                *DESTINATIONS.choose(&mut rng).unwrap(),
                 demands,
                 (time.seconds_since_startup() + SHIP_EXPIRY_DURATION) as f32,
             );
@@ -160,7 +159,6 @@ pub fn spawn_ship(
         .insert(Wave)
         .with_children(|child_commands| {
             let ship_hold = ShipHold {
-                destination: request.destination.unwrap(),
                 crates: vec![],
                 demands: request.demands.clone(),
             };

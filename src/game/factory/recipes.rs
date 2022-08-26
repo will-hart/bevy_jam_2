@@ -54,16 +54,21 @@ impl Default for Recipes {
         let mut hm = HashMap::new();
 
         hm.insert(
-            RecipeInputs(BoxType::Cotton, BoxType::Rum),
-            BoxType::MedicalSupplies,
+            RecipeInputs(BoxType::Glassware, BoxType::Wheat),
+            BoxType::Beer,
         );
-
         hm.insert(
-            RecipeInputs(BoxType::Fruit, BoxType::Fruit),
-            BoxType::MedicalSupplies,
+            RecipeInputs(BoxType::Glassware, BoxType::Grapes),
+            BoxType::Wine,
         );
-
-        hm.insert(RecipeInputs(BoxType::Wheat, BoxType::Wheat), BoxType::Bread);
+        hm.insert(
+            RecipeInputs(BoxType::Glassware, BoxType::Apples),
+            BoxType::Cider,
+        );
+        hm.insert(
+            RecipeInputs(BoxType::Glassware, BoxType::Honey),
+            BoxType::Mead,
+        );
 
         Self(hm)
     }

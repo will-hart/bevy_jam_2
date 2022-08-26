@@ -61,14 +61,6 @@ pub struct TextureAssets {
     #[asset(path = "textures/horse_and_cart.png")]
     pub horse_and_cart: Handle<TextureAtlas>,
 
-    #[asset(texture_atlas(tile_size_x = 32., tile_size_y = 32., columns = 4, rows = 1))]
-    #[asset(path = "textures/crates.png")]
-    pub crates: Handle<TextureAtlas>,
-
-    #[asset(texture_atlas(tile_size_x = 160., tile_size_y = 64., columns = 2, rows = 4))]
-    #[asset(path = "textures/cart_boxes.png")]
-    pub cart_boxes: Handle<TextureAtlas>,
-
     #[asset(texture_atlas(tile_size_x = 64., tile_size_y = 64., columns = 2, rows = 1))]
     #[asset(path = "textures/sun.png")]
     pub sun: Handle<TextureAtlas>,
@@ -91,26 +83,40 @@ pub struct TextureAssets {
     #[asset(path = "textures/down.png")]
     pub down: Handle<Image>,
 
-    #[asset(path = "textures/box_type_medical.png")]
-    pub box_type_medical: Handle<Image>,
+    #[asset(texture_atlas(tile_size_x = 32., tile_size_y = 32., columns = 9, rows = 1))]
+    #[asset(path = "textures/crates.png")]
+    pub crates: Handle<TextureAtlas>,
 
-    #[asset(path = "textures/box_type_fruit.png")]
-    pub box_type_fruit: Handle<Image>,
+    #[asset(texture_atlas(tile_size_x = 160., tile_size_y = 64., columns = 2, rows = 5))]
+    #[asset(path = "textures/cart_boxes.png")]
+    pub cart_boxes: Handle<TextureAtlas>,
 
-    #[asset(path = "textures/box_type_iron.png")]
-    pub box_type_iron: Handle<Image>,
+    #[asset(path = "textures/box_type_glassware.png")]
+    pub box_type_glassware: Handle<Image>,
 
-    #[asset(path = "textures/box_type_rum.png")]
-    pub box_type_rum: Handle<Image>,
+    #[asset(path = "textures/box_type_apples.png")]
+    pub box_type_apples: Handle<Image>,
 
-    #[asset(path = "textures/flag_new_world.png")]
-    pub flag_new_world: Handle<Image>,
+    #[asset(path = "textures/box_type_grapes.png")]
+    pub box_type_grapes: Handle<Image>,
 
-    #[asset(path = "textures/flag_pirates.png")]
-    pub flag_pirates: Handle<Image>,
+    #[asset(path = "textures/box_type_honey.png")]
+    pub box_type_honey: Handle<Image>,
 
-    #[asset(path = "textures/flag_eastern.png")]
-    pub flag_eastern: Handle<Image>,
+    #[asset(path = "textures/box_type_wheat.png")]
+    pub box_type_wheat: Handle<Image>,
+
+    #[asset(path = "textures/box_type_cider.png")]
+    pub box_type_cider: Handle<Image>,
+
+    #[asset(path = "textures/box_type_mead.png")]
+    pub box_type_mead: Handle<Image>,
+
+    #[asset(path = "textures/box_type_beer.png")]
+    pub box_type_beer: Handle<Image>,
+
+    #[asset(path = "textures/box_type_wine.png")]
+    pub box_type_wine: Handle<Image>,
 
     #[asset(texture_atlas(tile_size_x = 288., tile_size_y = 224., columns = 4, rows = 1))]
     #[asset(path = "textures/ship.png")]

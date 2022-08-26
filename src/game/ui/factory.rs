@@ -9,7 +9,7 @@ use crate::{
 pub fn spawn_factory_ui(mut commands: Commands, textures: Res<TextureAssets>) {
     commands
         .spawn_bundle(SpriteBundle {
-            texture: textures.box_type_fruit.clone(),
+            texture: textures.box_type_glassware.clone(),
             transform: Transform::from_xyz(-1.5 * GRID_SIZE, GRID_SIZE, 3.0)
                 .with_scale(Vec3::splat(0.75)),
             ..default()

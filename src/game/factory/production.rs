@@ -102,7 +102,7 @@ pub fn finish_factory_production(
     production_items: Query<(Entity, &CountDownTimer), With<FactoryProductionIndicator>>,
 ) {
     for (entity, timer) in production_items.iter() {
-        if timer.0.just_finished() {
+        if timer.0.finished() {
             let built = factory.output_queue.remove(0);
             produced_events.send(OnFactoryFinishProducing { box_type: built });
             factory.is_producing = false;
