@@ -14,14 +14,7 @@ pub fn handle_drop(
     mut on_drop_events: EventReader<OnDropCrate>,
     mut dragging: ResMut<DraggingBox>,
 ) {
-    let mut done = false;
     for _ in on_drop_events.iter() {
-        if done {
-            warn!("Repeat drop event being ignored");
-            continue;
-        }
-        done = true;
-
         // spawn a physics box and hope it lands on something
         spawn_physics_crate(
             &mut commands,
