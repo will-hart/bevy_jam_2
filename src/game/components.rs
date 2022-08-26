@@ -79,6 +79,9 @@ pub enum BoxType {
     Fruit = 1,
     Iron = 2,
     Rum = 3,
+    Cotton = 4,
+    Wheat = 5,
+    Bread = 6,
 }
 
 // Because we can't loop or rand::choose over all enum values, we need
@@ -98,6 +101,9 @@ impl BoxType {
             BoxType::Fruit => textures.box_type_fruit.clone(),
             BoxType::Iron => textures.box_type_iron.clone(),
             BoxType::Rum => textures.box_type_rum.clone(),
+            BoxType::Cotton => textures.box_type_rum.clone(),
+            BoxType::Wheat => textures.box_type_rum.clone(),
+            BoxType::Bread => textures.box_type_rum.clone(),
         }
     }
 }
