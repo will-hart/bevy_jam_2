@@ -61,8 +61,6 @@ pub fn click_to_pickup(
             return;
         }
 
-        print!(".");
-
         // go through the physics boxes and see if we should pick one up
         // this test is a bit simpler because we can just check x/y bounds
         for (box_ent, box_tx) in boxes.iter() {
@@ -72,7 +70,6 @@ pub fn click_to_pickup(
             let in_y = ((box_tx.translation.y - GRID_SIZE / 2.0)
                 ..(box_tx.translation.y + GRID_SIZE / 2.0))
                 .contains(&y);
-            println!("{} - {}", in_x, in_y);
 
             if in_x && in_y {
                 info!(

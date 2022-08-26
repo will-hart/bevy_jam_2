@@ -10,6 +10,8 @@ use crate::GameState;
 
 use self::recipes::Recipes;
 
+use super::SystemLabels;
+
 pub struct FactoryPlugin;
 
 impl Plugin for FactoryPlugin {
@@ -17,7 +19,17 @@ impl Plugin for FactoryPlugin {
         app.insert_resource(Recipes::default())
             .insert_resource(production::Factory::default())
             .add_event::<events::OnDropInFactoryInput>()
+            .add_event::<events::OnFactoryProduced>()
             .add_system(events::handle_drop_factory_input.run_in_state(GameState::Playing))
-            .add_system(production::add_item_to_factory.run_in_state(GameState::Playing));
+            .add_system(
+                production::add_item_to_factory
+                    .run_in_state(GameState::Playing)
+                    .before(SystemLabels::FactoryProduction),
+            )
+            .add_system(
+                production::update_factory
+                    .run_in_state(GameState::Playing)
+                    .label(SystemLabels::FactoryProduction),
+            );
     }
 }

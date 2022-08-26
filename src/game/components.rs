@@ -143,7 +143,7 @@ pub struct SpawnShipRequest {
 #[derive(Component)]
 pub struct TutorialMarker(pub u8);
 
-#[derive(Component)]
+#[derive(Component, Default, Debug)]
 pub struct CountDownTimer(pub Timer);
 
 #[derive(Component)]

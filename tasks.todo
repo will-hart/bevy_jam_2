@@ -83,7 +83,9 @@ Ship Game:
       ✔ from carts @done(22-08-26 08:45)
       ✔ from warehouse @done(22-08-26 08:45)
     ✔ Recipes that can be dropped in the factory @done(22-08-26 18:15)
-    ☐ Production queue + timers from the factory
+    ✔ Production queue + timers from the factory @done(22-08-26 20:20)
+    ☐ Convert factory into components + systems
+    ☐ Show factory production progress
     ☐ Available recipes displayed in UI
     ☐ Add some more recipes
     ☐ Carts only spawn raw materials

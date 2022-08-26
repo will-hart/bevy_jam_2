@@ -42,6 +42,7 @@ use animation::AnimationPlugin;
 pub enum SystemLabels {
     ShipAnimationAndDespawn,
     ScoreDisplay,
+    FactoryProduction,
 }
 
 pub struct GamePlugin;
