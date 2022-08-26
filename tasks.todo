@@ -88,7 +88,7 @@ Ship Game:
     ✔ Show factory production progress @done(22-08-26 23:54)
     ✔ Show items queued in the factory @done(22-08-27 00:05)
     ✔ Add some more recipes @done(22-08-27 00:55)
-    ☐ Spawn rates of ships slower,
+    ☐ Spawn rates of ships slower
     ☐ Available recipes displayed in UI
     ☐ Carts only spawn raw materials
     ☐ Ships request outputs from factory

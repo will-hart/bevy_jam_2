@@ -21,7 +21,7 @@ impl RandomSpawnTimer {
 impl Default for RandomSpawnTimer {
     fn default() -> Self {
         Self {
-            spawn_range: 7.5..15.0,
+            spawn_range: 15.0..20.0,
             next_spawn: 5.0,
         }
     }
