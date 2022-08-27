@@ -23,7 +23,7 @@ pub fn detect_crate_drop_on_ship(
     ship_entities: Query<&Children, With<Wave>>,
     factory_inputs: Query<&FactoryInput>,
     splashers: Query<&SplashCatcher>,
-    mut ship_holds: Query<(&mut ShipHold, &GlobalTransform)>,
+    mut ship_holds: Query<(Entity, &mut ShipHold, &GlobalTransform)>,
 ) {
     for (crate_entity, crate_collisions, physics_crate, crate_tx) in box_collisions.iter() {
         for collision in crate_collisions.entities() {
@@ -50,7 +50,7 @@ pub fn detect_crate_drop_on_ship(
                 Ok(children) => {
                     // add the crate to the ship hold and despawn the physics crate
                     for child in children.iter() {
-                        if let Ok((mut ship_hold, tx)) = ship_holds.get_mut(*child) {
+                        if let Ok((ship_entity, mut ship_hold, tx)) = ship_holds.get_mut(*child) {
                             info!("Crate {:?} dropped on ship {:?}!", crate_entity, ship_hold);
 
                             let mut all_demands = ship_hold.demands.clone();
@@ -63,6 +63,7 @@ pub fn detect_crate_drop_on_ship(
                                 }
                             }
                             drop_on_ship_event.send(OnDropCrateOnShip {
+                                ship_entity,
                                 box_type: physics_crate.box_type,
                                 location: tx.translation(),
                                 was_demanded: all_demands.contains(&physics_crate.box_type),

@@ -14,6 +14,7 @@ pub struct OnDropCrate;
 
 /// Event triggered when a crate is dropped on a ship
 pub struct OnDropCrateOnShip {
+    pub ship_entity: Entity,
     pub box_type: BoxType,
     pub location: Vec3,
 
