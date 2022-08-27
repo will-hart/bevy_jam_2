@@ -1,3 +1,4 @@
+mod button_interaction;
 mod countdown_timer;
 mod factory;
 mod game_ui_bar;
@@ -37,6 +38,7 @@ impl Plugin for UiPlugin {
                     .run_in_state(GameState::Playing)
                     .label(SystemLabels::ScoreDisplay),
             )
+            .add_system(button_interaction::button_interaction.run_not_in_state(GameState::Loading))
             .add_system(
                 score::score_update
                     .run_in_state(GameState::Playing)

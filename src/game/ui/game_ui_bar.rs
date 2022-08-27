@@ -1,8 +1,8 @@
-use bevy::prelude::*;
+use bevy::{prelude::*, ui::FocusPolicy};
 
 use crate::{
     game::{
-        components::{ProductionQueueUi, ScoreUi, TopUiBar},
+        components::{BoxType, CartQueueUi, CartQueueUiItem, ProductionQueueUi, ScoreUi, TopUiBar},
         factory::recipes::Recipes,
     },
     loader::{FontAssets, TextureAssets},
@@ -112,6 +112,7 @@ pub fn spawn_game_ui(
                                 .insert(ProductionQueueUi);
                         });
 
+                    // score
                     bar_layout
                         .spawn_bundle(NodeBundle {
                             style: Style {
@@ -148,13 +149,87 @@ pub fn spawn_game_ui(
                         });
                 });
 
+            // Cart Spawn Bar
+            layout
+                .spawn_bundle(NodeBundle {
+                    color: Color::rgba(0.15, 0.15, 0.15, 0.35).into(),
+                    style: Style {
+                        size: Size::new(Val::Percent(100.0), Val::Px(42.0)),
+                        padding: UiRect::all(Val::Px(5.0)),
+                        ..default()
+                    },
+                    ..default()
+                })
+                .with_children(|cart_spawn_bar| {
+                    cart_spawn_bar
+                        .spawn_bundle(NodeBundle {
+                            color: Color::NONE.into(),
+                            style: Style {
+                                size: Size::new(
+                                    Val::Px(1024.0 - 5.0 * 24.0 - 100.0),
+                                    Val::Px(32.0),
+                                ),
+                                ..default()
+                            },
+                            ..default()
+                        })
+                        .insert(CartQueueUi);
+
+                    cart_spawn_bar
+                        .spawn_bundle(NodeBundle {
+                            color: Color::NONE.into(),
+                            style: Style {
+                                size: Size::new(Val::Px(100.0 + 5.0 * 24.0), Val::Px(32.0)),
+                                justify_content: JustifyContent::Center,
+                                align_items: AlignItems::Center,
+                                ..default()
+                            },
+                            ..default()
+                        })
+                        .with_children(|spawn_button_layout| {
+                            spawn_button_layout.spawn_bundle(TextBundle {
+                                text: Text::from_section("REQUEST:  ", small_text_style.clone()),
+                                ..default()
+                            });
+
+                            for item in [
+                                BoxType::Glassware,
+                                BoxType::Apples,
+                                BoxType::Grapes,
+                                BoxType::Honey,
+                                BoxType::Wheat,
+                            ]
+                            .iter()
+                            {
+                                spawn_button_layout
+                                    .spawn_bundle(ButtonBundle {
+                                        color: Color::NONE.into(),
+                                        ..Default::default()
+                                    })
+                                    .insert(CartQueueUiItem(*item))
+                                    .with_children(|button| {
+                                        button.spawn_bundle(ImageBundle {
+                                            image: item.get_image(&textures).into(),
+                                            focus_policy: FocusPolicy::Pass,
+                                            style: Style {
+                                                size: Size::new(Val::Px(24.0), Val::Px(24.0)),
+                                                ..default()
+                                            },
+                                            ..default()
+                                        });
+                                    });
+                            }
+                        });
+                });
+
             // recipes
+            let recipe_scale = Vec3::splat(0.75);
             layout
                 .spawn_bundle(NodeBundle {
                     style: Style {
                         size: Size::new(
-                            Val::Px(5.0 * GRID_SIZE),
-                            Val::Px(GRID_SIZE + recipes.0.len() as f32 * GRID_SIZE),
+                            Val::Px(5.0 * recipe_scale.x * GRID_SIZE),
+                            Val::Px((1 + recipes.0.len()) as f32 * recipe_scale.y * GRID_SIZE),
                         ),
                         margin: UiRect::all(Val::Px(10.0)),
                         justify_content: JustifyContent::Center,
@@ -186,13 +261,14 @@ pub fn spawn_game_ui(
                         });
 
                     // draw recipes
-                    let recipe_scale = Vec3::splat(0.95);
-
                     for (inputs, outputs) in recipes.0.iter() {
                         recipe_table
                             .spawn_bundle(NodeBundle {
                                 style: Style {
-                                    size: Size::new(Val::Percent(100.), Val::Px(GRID_SIZE)),
+                                    size: Size::new(
+                                        Val::Percent(100.),
+                                        Val::Px(recipe_scale.y * GRID_SIZE),
+                                    ),
                                     ..default()
                                 },
                                 color: Color::NONE.into(),
@@ -201,31 +277,61 @@ pub fn spawn_game_ui(
                             .with_children(|recipe_row| {
                                 recipe_row.spawn_bundle(ImageBundle {
                                     image: inputs.0.get_image(&textures).into(),
-                                    transform: Transform::from_scale(recipe_scale),
+                                    style: Style {
+                                        size: Size::new(
+                                            Val::Px(recipe_scale.x * GRID_SIZE),
+                                            Val::Px(recipe_scale.y * GRID_SIZE),
+                                        ),
+                                        ..default()
+                                    },
                                     ..default()
                                 });
 
                                 recipe_row.spawn_bundle(ImageBundle {
                                     image: textures.plus.clone().into(),
-                                    transform: Transform::from_scale(recipe_scale),
+                                    style: Style {
+                                        size: Size::new(
+                                            Val::Px(recipe_scale.x * GRID_SIZE),
+                                            Val::Px(recipe_scale.y * GRID_SIZE),
+                                        ),
+                                        ..default()
+                                    },
                                     ..default()
                                 });
 
                                 recipe_row.spawn_bundle(ImageBundle {
                                     image: inputs.1.get_image(&textures).into(),
-                                    transform: Transform::from_scale(recipe_scale),
+                                    style: Style {
+                                        size: Size::new(
+                                            Val::Px(recipe_scale.x * GRID_SIZE),
+                                            Val::Px(recipe_scale.y * GRID_SIZE),
+                                        ),
+                                        ..default()
+                                    },
                                     ..default()
                                 });
 
                                 recipe_row.spawn_bundle(ImageBundle {
                                     image: textures.arrow.clone().into(),
-                                    transform: Transform::from_scale(recipe_scale),
+                                    style: Style {
+                                        size: Size::new(
+                                            Val::Px(recipe_scale.x * GRID_SIZE),
+                                            Val::Px(recipe_scale.y * GRID_SIZE),
+                                        ),
+                                        ..default()
+                                    },
                                     ..default()
                                 });
 
                                 recipe_row.spawn_bundle(ImageBundle {
                                     image: outputs.get_image(&textures).into(),
-                                    transform: Transform::from_scale(recipe_scale),
+                                    style: Style {
+                                        size: Size::new(
+                                            Val::Px(recipe_scale.x * GRID_SIZE),
+                                            Val::Px(recipe_scale.y * GRID_SIZE),
+                                        ),
+                                        ..default()
+                                    },
                                     ..default()
                                 });
                             });

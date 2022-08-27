@@ -162,3 +162,9 @@ pub struct SplashCatcher;
 /// A visual effect with a despawn time
 #[derive(Component)]
 pub struct VisualEffect(pub f32);
+
+#[derive(Component)]
+pub struct CartQueueUi;
+
+#[derive(Component)]
+pub struct CartQueueUiItem(pub BoxType);

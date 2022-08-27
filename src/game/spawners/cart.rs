@@ -22,28 +22,7 @@ pub struct CartSpawningState {
 impl Default for CartSpawningState {
     fn default() -> Self {
         Self {
-            items: vec![
-                BoxType::Glassware,
-                BoxType::Glassware,
-                BoxType::Apples,
-                BoxType::Apples,
-                BoxType::Grapes,
-                BoxType::Grapes,
-                BoxType::Honey,
-                BoxType::Honey,
-                BoxType::Wheat,
-                BoxType::Wheat,
-                BoxType::Glassware,
-                BoxType::Glassware,
-                BoxType::Apples,
-                BoxType::Apples,
-                BoxType::Grapes,
-                BoxType::Grapes,
-                BoxType::Honey,
-                BoxType::Honey,
-                BoxType::Wheat,
-                BoxType::Wheat,
-            ],
+            items: vec![],
             active_carts: 0,
             max_carts: 5,
         }
