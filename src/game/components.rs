@@ -36,6 +36,20 @@ pub struct ShipHold {
     pub demands: Vec<BoxType>,
 }
 
+impl ShipHold {
+    pub fn get_unmet_demands(&self) -> Vec<BoxType> {
+        let mut unmet_demands = self.demands.clone();
+        for filled_crate in self.crates.iter() {
+            // remove all crates that have already been filled
+            if let Some(idx) = unmet_demands.iter().position(|item| *item == *filled_crate) {
+                unmet_demands.remove(idx);
+            }
+        }
+
+        unmet_demands
+    }
+}
+
 #[derive(Component)]
 pub struct ShipDemandItemMarker(pub BoxType);
 

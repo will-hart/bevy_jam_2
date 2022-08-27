@@ -53,20 +53,12 @@ pub fn detect_crate_drop_on_ship(
                         if let Ok((ship_entity, mut ship_hold, tx)) = ship_holds.get_mut(*child) {
                             info!("Crate {:?} dropped on ship {:?}!", crate_entity, ship_hold);
 
-                            let mut all_demands = ship_hold.demands.clone();
-                            for filled_crate in ship_hold.crates.iter() {
-                                // remove all crates that have already been filled
-                                if let Some(idx) =
-                                    all_demands.iter().position(|item| *item == *filled_crate)
-                                {
-                                    all_demands.remove(idx);
-                                }
-                            }
+                            let unmet_demands = ship_hold.get_unmet_demands();
                             drop_on_ship_event.send(OnDropCrateOnShip {
                                 ship_entity,
                                 box_type: physics_crate.box_type,
                                 location: tx.translation(),
-                                was_demanded: all_demands.contains(&physics_crate.box_type),
+                                was_demanded: unmet_demands.contains(&physics_crate.box_type),
                             });
 
                             ship_hold.crates.push(physics_crate.box_type);

@@ -98,7 +98,7 @@ Ship Game:
     ✔ Get points for dropping the right produced resource @done(22-08-27 11:56)
     ✔ Lose points for dropping incorrect resource @done(22-08-27 11:56)
     ✔ Remove dropped items from ship UI @done(22-08-27 12:13)
-    ☐ Lose points for missing resources
+    ✔ Lose points for missing resources @done(22-08-27 15:09)
     ✘ Cart spawns get faster as time goes on @cancelled(22-08-27 08:17)
     ✘ Carts move faster as time goes on @cancelled(22-08-27 08:17)
     ✔ maximum number of carts at once @done(22-08-27 12:51)
@@ -107,7 +107,7 @@ Ship Game:
     ✔ Ui for queued carts @done(22-08-27 14:25)
     ✔ Why don't grape sprites display after exiting the factory?!?!!?!?!?!?! @done(22-08-27 14:46)
       I just created a duplicate I'm so confused
-    ☐ Failure conditions
+    ✔ Failure conditions @done(22-08-27 15:09)
     ☐ Tutorial
 
   Sound effects:
@@ -128,6 +128,10 @@ Super Nice to Haves:
   ☐ Better music
   ☐ Nice art
   ☐ Weather effects
+  ☐ Menu
+  ☐ Proper game over screen
+  ☐ Return to menu on game over
+  ☐ Try again button from main menu + properly clear out + reset game state
   ✘ Make departure animation less overlappy with waves @cancelled(22-08-26 00:20)
   ✘ if your ship has no more volume the crate bounces off @cancelled(22-08-23 00:11)
   ✘ Money ticking down in chunks, with world text "damage" indicators when money is spent @cancelled(22-08-23 00:11)

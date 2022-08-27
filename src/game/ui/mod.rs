@@ -27,7 +27,7 @@ pub struct UiPlugin;
 
 impl Plugin for UiPlugin {
     fn build(&self, app: &mut App) {
-        app.insert_resource(Score(0.0))
+        app.insert_resource(Score(100.0))
             .add_event::<OnCoinsReceived>()
             .add_event::<OnShipScore>()
             // .add_plugin(TutorialPlugin)
@@ -42,6 +42,11 @@ impl Plugin for UiPlugin {
             .add_system(button_interaction::button_interaction.run_not_in_state(GameState::Loading))
             .add_system(
                 score::score_update
+                    .run_in_state(GameState::Playing)
+                    .before(SystemLabels::ScoreDisplay),
+            )
+            .add_system(
+                score::despawn_ships_and_penalise
                     .run_in_state(GameState::Playing)
                     .before(SystemLabels::ScoreDisplay),
             )
