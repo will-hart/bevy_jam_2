@@ -100,7 +100,7 @@ impl BoxType {
             BoxType::Honey => textures.box_type_honey.clone(),
             BoxType::Wheat => textures.box_type_wheat.clone(),
             BoxType::Cider => textures.box_type_cider.clone(),
-            BoxType::Wine => textures.box_type_wine.clone(),
+            BoxType::Wine => textures.box_type_wine2.clone(),
             BoxType::Mead => textures.box_type_mead.clone(),
             BoxType::Beer => textures.box_type_beer.clone(),
         }
