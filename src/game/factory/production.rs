@@ -11,7 +11,7 @@ use crate::{
 };
 
 use super::{
-    events::{OnFactoryFinishProducing, OnFactoryStartProducing},
+    events::{OnFactoryFinishProducing, OnFactoryQueueItem, OnFactoryStartProducing},
     recipes::Recipes,
     OnDropInFactoryInput,
 };
@@ -53,6 +53,7 @@ pub fn add_item_to_factory(
     recipes: Res<Recipes>,
     mut factory: ResMut<Factory>,
     mut drop_events: EventReader<OnDropInFactoryInput>,
+    mut queue_events: EventWriter<OnFactoryQueueItem>,
 ) {
     for drop_event in drop_events.iter() {
         factory.drop(drop_event.box_type);
@@ -68,6 +69,7 @@ pub fn add_item_to_factory(
             );
 
             factory.output_queue.push(bt);
+            queue_events.send(OnFactoryQueueItem { box_type: bt });
         } else {
             info!(
                 "No recipe available, factory contains {:?}. Resetting",

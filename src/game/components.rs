@@ -24,6 +24,12 @@ impl Ship {
 #[derive(Component)]
 pub struct TopUiBar;
 
+#[derive(Component)]
+pub struct ProductionQueueUi;
+
+#[derive(Component)]
+pub struct ProductionQueueUiItem(pub BoxType);
+
 #[derive(Component, Clone, Debug)]
 pub struct ShipHold {
     pub crates: Vec<BoxType>,

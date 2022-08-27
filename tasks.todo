@@ -90,7 +90,7 @@ Ship Game:
     ✔ Add some more recipes @done(22-08-27 00:55)
     ✔ Spawn rates of ships slower @done(22-08-27 08:17)
     ✔ Available recipes displayed in UI @done(22-08-27 08:34)
-    ☐ Current production queue displayed in UI
+    ✔ Current production queue displayed in UI @done(22-08-27 10:12)
     ☐ Carts don't automatically spawn
     ✔ Carts only spawn raw materials @done(22-08-27 08:17)
     ✔ Ships request outputs from factory @done(22-08-27 08:17)
@@ -102,6 +102,7 @@ Ship Game:
     ✘ Carts move faster as time goes on @cancelled(22-08-27 08:17)
     ☐ maximum number of carts at once
     ☐ Ships spawn faster as time goes on
+    ☐ Why don't grape sprites display after exiting the factory?!?!!?!?!?!?!
 
   Sound effects:
     ☐ Morning

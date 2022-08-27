@@ -1,4 +1,4 @@
-mod events;
+pub mod events;
 mod production;
 pub use production::Factory;
 pub mod recipes;
@@ -23,6 +23,7 @@ impl Plugin for FactoryPlugin {
             .add_event::<events::OnDropInFactoryInput>()
             .add_event::<events::OnFactoryStartProducing>()
             .add_event::<events::OnFactoryFinishProducing>()
+            .add_event::<events::OnFactoryQueueItem>()
             .add_system(events::handle_drop_factory_input.run_in_state(GameState::Playing))
             .add_system(
                 production::add_item_to_factory

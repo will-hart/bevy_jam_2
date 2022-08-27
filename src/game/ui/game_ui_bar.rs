@@ -2,14 +2,14 @@ use bevy::prelude::*;
 
 use crate::{
     game::{
-        components::{ScoreUi, TopUiBar},
+        components::{ProductionQueueUi, ScoreUi, TopUiBar},
         factory::recipes::Recipes,
     },
     loader::{FontAssets, TextureAssets},
     GRID_SIZE,
 };
 
-pub fn spawn_ship_respawn_bar(
+pub fn spawn_game_ui(
     mut commands: Commands,
     fonts: Res<FontAssets>,
     textures: Res<TextureAssets>,
@@ -52,7 +52,7 @@ pub fn spawn_ship_respawn_bar(
                     bar_layout
                         .spawn_bundle(NodeBundle {
                             style: Style {
-                                size: Size::new(Val::Percent(80.0), Val::Px(48.0)),
+                                size: Size::new(Val::Percent(50.0), Val::Px(48.0)),
                                 align_items: AlignItems::Center,
                                 ..default()
                             },
@@ -62,6 +62,54 @@ pub fn spawn_ship_respawn_bar(
                         .insert(TopUiBar)
                         .with_children(|_respawn_bar_layout| {
                             // TODO: first tutorial message
+                        });
+
+                    bar_layout
+                        .spawn_bundle(NodeBundle {
+                            style: Style {
+                                size: Size::new(Val::Percent(30.0), Val::Px(48.0)),
+                                align_items: AlignItems::Center,
+                                justify_content: JustifyContent::Center,
+                                ..default()
+                            },
+                            color: Color::NONE.into(),
+                            ..default()
+                        })
+                        .with_children(|production_queue_layout| {
+                            production_queue_layout
+                                .spawn_bundle(NodeBundle {
+                                    style: Style {
+                                        size: Size::new(Val::Percent(30.0), Val::Px(48.0)),
+                                        flex_direction: FlexDirection::Row,
+                                        justify_content: JustifyContent::FlexStart,
+                                        align_items: AlignItems::Center,
+                                        ..default()
+                                    },
+                                    color: Color::NONE.into(),
+                                    ..default()
+                                })
+                                .with_children(|p| {
+                                    p.spawn_bundle(TextBundle {
+                                        text: Text::from_section(
+                                            "Production:  ",
+                                            small_text_style.clone(),
+                                        ),
+                                        ..default()
+                                    });
+                                });
+
+                            production_queue_layout
+                                .spawn_bundle(NodeBundle {
+                                    style: Style {
+                                        size: Size::new(Val::Percent(70.0), Val::Px(48.0)),
+                                        justify_content: JustifyContent::FlexStart,
+                                        align_items: AlignItems::Center,
+                                        ..default()
+                                    },
+                                    color: Color::NONE.into(),
+                                    ..default()
+                                })
+                                .insert(ProductionQueueUi);
                         });
 
                     bar_layout
