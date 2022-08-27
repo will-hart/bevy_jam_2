@@ -176,7 +176,7 @@ pub fn spawn_game_ui(
                         })
                         .with_children(|spawn_button_layout| {
                             spawn_button_layout.spawn_bundle(TextBundle {
-                                text: Text::from_section("REQUEST:  ", small_text_style.clone()),
+                                text: Text::from_section("Request:  ", small_text_style.clone()),
                                 ..default()
                             });
 

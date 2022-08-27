@@ -27,7 +27,7 @@ pub const MAX_SPAWN_REQUESTS: usize = 5;
 
 pub const SHIP_SPEED: f32 = 40.0;
 
-pub const SHIP_EXPIRY_DURATION: f64 = 15.0;
+pub const SPAWN_SPEED_UP_RATE_PER_SECOND: f64 = 0.05;
 
 pub const SHIP_WIDTH: f32 = 288.0;
 
@@ -55,9 +55,18 @@ pub fn ship_queuing_system(
 
     *next_test = elapsed + 1.0;
 
+    // speed up ship spawns,
+    let new_min = (event_test.spawn_range.start - SPAWN_SPEED_UP_RATE_PER_SECOND).max(8.0); // reduce by 0.05 / second (every 20 seconds reduce gap by 1s), up to 8s
+    let new_max =
+        (new_min + (event_test.spawn_range.end - event_test.spawn_range.start) - 0.01).max(9.0);
+    event_test.spawn_range = new_min..new_max;
+
     let mut rng = thread_rng();
     if event_test.tick(&mut rng, elapsed) {
-        info!("Spawning a ship request");
+        info!(
+            "Spawning a ship request, next spawn range is {:?}s",
+            event_test.spawn_range
+        );
 
         let top_bar = top_bar_query.single();
 
@@ -71,7 +80,7 @@ pub fn ship_queuing_system(
                 layout,
                 &textures,
                 demands,
-                (time.seconds_since_startup() + SHIP_EXPIRY_DURATION) as f32,
+                (time.seconds_since_startup() + event_test.spawn_range.start) as f32,
             );
         });
     }
