@@ -8,6 +8,7 @@ use crate::game::{
 pub struct OnShipArrivedAtDestination(pub Entity);
 
 /// moves waves and other things across the screen
+#[allow(clippy::type_complexity)]
 pub fn animate_entity(
     mut commands: Commands,
     time: Res<Time>,

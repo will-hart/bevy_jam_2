@@ -28,7 +28,7 @@ impl Plugin for MenuPlugin {
 fn spawn_menu(mut commands: Commands, textures: Res<TextureAssets>) {
     commands
         .spawn_bundle(SpriteBundle {
-            texture: textures.menu.clone().into(),
+            texture: textures.menu.clone(),
             ..default()
         })
         .insert(MenuItem);
@@ -47,7 +47,7 @@ fn start_playing(mut commands: Commands) {
 fn spawn_game_over(mut commands: Commands, textures: Res<TextureAssets>) {
     commands
         .spawn_bundle(SpriteBundle {
-            texture: textures.game_over.clone().into(),
+            texture: textures.game_over.clone(),
             ..default()
         })
         .insert(MenuItem);

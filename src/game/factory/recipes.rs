@@ -36,16 +36,8 @@ pub struct Recipes(pub HashMap<RecipeInputs, BoxType>);
 
 impl Recipes {
     pub fn get_output(&self, inputs: &[Option<BoxType>; 2]) -> Option<BoxType> {
-        let recipe_input = if let Some(ri) = RecipeInputs::from_inputs(inputs) {
-            ri
-        } else {
-            return None;
-        };
-
-        match self.0.get(&recipe_input) {
-            Some(&r) => Some(r),
-            None => None,
-        }
+        let recipe_input = RecipeInputs::from_inputs(inputs)?;
+        self.0.get(&recipe_input).copied()
     }
 }
 

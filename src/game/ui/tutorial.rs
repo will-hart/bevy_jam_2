@@ -83,7 +83,7 @@ fn spawn_tutorial(
 fn spawn_tutorial_image(commands: &mut Commands, texture: Handle<Image>) {
     commands
         .spawn_bundle(SpriteBundle {
-            texture: texture.into(),
+            texture,
             transform: Transform::from_xyz(0.0, 0.0, 30.0),
             ..default()
         })

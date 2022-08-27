@@ -6,6 +6,7 @@ pub const NORMAL_BUTTON: Color = Color::NONE;
 pub const HOVERED_BUTTON: Color = Color::rgba(0.15, 0.15, 0.15, 0.25);
 pub const PRESSED_BUTTON: Color = Color::rgba(0.15, 0.15, 0.15, 0.75);
 
+#[allow(clippy::type_complexity)]
 pub fn button_interaction(
     mut cart_queue: ResMut<CartSpawningState>,
     mut interaction_query: Query<

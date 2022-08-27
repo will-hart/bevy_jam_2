@@ -19,6 +19,7 @@ fn update_countdown_timers(time: Res<Time>, mut timers: Query<&mut CountDownTime
     }
 }
 
+#[allow(clippy::type_complexity)]
 fn update_countdown_animations(
     textures: Res<TextureAssets>,
     mut timers: Query<(
@@ -40,7 +41,7 @@ fn update_countdown_animations(
         }
 
         match image {
-            Some(mut img) => *img = textures.countdown[idx].clone().into(),
+            Some(mut img) => *img = textures.countdown[idx].clone(),
             None => {}
         }
     }
