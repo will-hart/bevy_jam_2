@@ -131,6 +131,27 @@ pub struct TextureAssets {
     #[asset(path = "textures/plus.png")]
     pub plus: Handle<Image>,
 
+    #[asset(path = "textures/tutorial_1.png")]
+    pub tutorial_1: Handle<Image>,
+
+    #[asset(path = "textures/tutorial_2.png")]
+    pub tutorial_2: Handle<Image>,
+
+    #[asset(path = "textures/tutorial_3.png")]
+    pub tutorial_3: Handle<Image>,
+
+    #[asset(path = "textures/tutorial_4.png")]
+    pub tutorial_4: Handle<Image>,
+
+    #[asset(path = "textures/tutorial_6.png")]
+    pub tutorial_6: Handle<Image>,
+
+    #[asset(path = "textures/tutorial_7.png")]
+    pub tutorial_7: Handle<Image>,
+
+    #[asset(path = "textures/tutorial_8.png")]
+    pub tutorial_8: Handle<Image>,
+
     // can't do spritesheets in UI so need to load individual countdown images :(
     // also, folders aren't supported in web builds :facepalm:
     #[asset(

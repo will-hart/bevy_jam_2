@@ -29,5 +29,5 @@ opt-level = 3
 opt-level = 1
 
 [features]
-default = ["heron/debug-2d"]
+default = []
 debug_system = ["bevy_prototype_debug_lines", "heron/debug-2d"]

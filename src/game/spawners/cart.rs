@@ -10,6 +10,8 @@ use crate::{
     GRID_SIZE, WIDTH,
 };
 
+pub struct OnCartSpawned;
+
 pub const CART_SPAWN_DELAY: f32 = 5.0;
 pub const CART_Z_POS: f32 = 0.4;
 
@@ -91,6 +93,7 @@ pub fn cart_spawning_system(
     textures: Res<TextureAssets>,
     animations: Res<AnimationAssets>,
     mut spawning_state: ResMut<CartSpawningState>,
+    mut cart_spawn_events: EventWriter<OnCartSpawned>,
     mut last_spawn: Local<f32>,
 ) {
     // only spawn if we have capacity + both items are filled
@@ -115,6 +118,7 @@ pub fn cart_spawning_system(
         Vec3::new(WIDTH / 2.0 + GRID_SIZE * 5.0, -GRID_SIZE * 1.5, CART_Z_POS),
         [cart_items[0], cart_items[1]], // TODO: spawn these based on the tutorial
     );
+    cart_spawn_events.send(OnCartSpawned);
 
     *last_spawn = elapsed;
     spawning_state.active_carts += 1;

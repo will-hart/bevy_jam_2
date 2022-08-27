@@ -5,12 +5,13 @@ use rand::{seq::SliceRandom, thread_rng, Rng};
 use crate::{
     game::{
         components::{
-            AnimateWithSpeed, CountDownTimer, Ship, ShipDemandItemMarker, ShipHold,
+            AnimateWithSpeed, BoxType, CountDownTimer, Ship, ShipDemandItemMarker, ShipHold,
             SpawnShipRequest, TopUiBar, TutorialMarker, Wave, BOX_DEMANDS,
         },
         custom_sprite::CustomSpriteMaterial,
         rng::RandomSpawnTimer,
         spawners::request::spawn_ship_request_icon,
+        ui::tutorial::CurrentTutorialLevel,
         AnimationState,
     },
     loader::{AnimationAssets, FontAssets, TextureAssets},
@@ -36,14 +37,36 @@ pub const SHIP_WIDTH: f32 = 288.0;
 #[allow(clippy::too_many_arguments)]
 pub fn ship_queuing_system(
     mut commands: Commands,
-    // tutorial_level: Res<CurrentTutorialLevel>, TODO: Queue ships based on the tutorial level
     time: Res<Time>,
     textures: Res<TextureAssets>,
+    mut tutorial_level: ResMut<CurrentTutorialLevel>,
     mut event_test: Local<RandomSpawnTimer>,
     mut next_test: Local<f64>,
     spawn_requests: Query<&SpawnShipRequest>,
     top_bar_query: Query<Entity, With<TopUiBar>>,
 ) {
+    if tutorial_level.0 == 5 {
+        info!("Spawning level 5 tutorial ship");
+
+        let top_bar = top_bar_query.single();
+
+        commands.entity(top_bar).with_children(|layout| {
+            spawn_ship_request_icon(
+                layout,
+                &textures,
+                vec![BoxType::Cider],
+                (time.seconds_since_startup() + 8.0) as f32,
+            );
+        });
+
+        tutorial_level.0 = 6;
+        return;
+    }
+
+    if tutorial_level.0 < 9 {
+        return;
+    }
+
     let elapsed = time.seconds_since_startup();
     if elapsed < *next_test {
         return;

@@ -108,7 +108,12 @@ Ship Game:
     ✔ Why don't grape sprites display after exiting the factory?!?!!?!?!?!?! @done(22-08-27 14:46)
       I just created a duplicate I'm so confused
     ✔ Failure conditions @done(22-08-27 15:09)
-    ☐ Tutorial
+    ✔ Tutorial @done(22-08-27 17:15)
+    ☐ Menu
+    ☐ Proper game over screen
+    ☐ Return to menu on game over
+    ☐ Try again button from main menu + properly clear out + reset game state
+  
 
   Sound effects:
     ☐ Morning
@@ -128,10 +133,6 @@ Super Nice to Haves:
   ☐ Better music
   ☐ Nice art
   ☐ Weather effects
-  ☐ Menu
-  ☐ Proper game over screen
-  ☐ Return to menu on game over
-  ☐ Try again button from main menu + properly clear out + reset game state
   ✘ Make departure animation less overlappy with waves @cancelled(22-08-26 00:20)
   ✘ if your ship has no more volume the crate bounces off @cancelled(22-08-23 00:11)
   ✘ Money ticking down in chunks, with world text "damage" indicators when money is spent @cancelled(22-08-23 00:11)

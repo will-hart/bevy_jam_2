@@ -21,6 +21,7 @@ impl Plugin for InputPlugin {
 #[derive(Actionlike, Component, PartialEq, Eq, Clone, Copy, Hash, Debug)]
 pub enum PlayerActions {
     Click,
+    Proceed,
 }
 
 /// Initialises the input manager, linking commands
@@ -28,6 +29,7 @@ fn init_input_manager(mut commands: Commands) {
     let mut input_map = InputMap::default();
 
     input_map.insert(MouseButton::Left, PlayerActions::Click);
+    input_map.insert(KeyCode::Space, PlayerActions::Proceed);
     commands
         .spawn()
         .insert_bundle(InputManagerBundle::<PlayerActions> {

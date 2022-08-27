@@ -6,9 +6,8 @@ mod game_ui_bar;
 mod production_queue;
 mod score;
 mod ship_demand;
+pub mod tutorial;
 pub use score::OnCoinsReceived;
-// TODO: mod tutorial;
-// pub use tutorial::CurrentTutorialLevel;
 
 use bevy::prelude::*;
 use iyes_loopless::prelude::{AppLooplessStateExt, IntoConditionalSystem};
@@ -18,7 +17,7 @@ use crate::GameState;
 use self::{
     countdown_timer::CountDownTimerPlugin,
     score::{OnShipScore, Score},
-    // tutorial::TutorialPlugin,
+    tutorial::TutorialPlugin,
 };
 
 use super::SystemLabels;
@@ -27,10 +26,12 @@ pub struct UiPlugin;
 
 impl Plugin for UiPlugin {
     fn build(&self, app: &mut App) {
-        app.insert_resource(Score(100.0))
+        info!("Mounting UI Plugin");
+
+        app.insert_resource(Score(50.0))
             .add_event::<OnCoinsReceived>()
             .add_event::<OnShipScore>()
-            // .add_plugin(TutorialPlugin)
+            .add_plugin(TutorialPlugin)
             .add_plugin(CountDownTimerPlugin)
             .add_enter_system(GameState::Playing, game_ui_bar::spawn_game_ui)
             .add_enter_system(GameState::Playing, factory::spawn_factory_ui)
