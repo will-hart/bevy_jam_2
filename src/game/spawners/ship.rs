@@ -121,7 +121,7 @@ pub fn ship_spawn_on_timer_expiry(
     requests: Query<(&Parent, &CountDownTimer, &SpawnShipRequest)>,
 ) {
     for (parent_entity, timer, request) in requests.iter() {
-        if timer.0.just_finished() {
+        if timer.0.finished() {
             info!("Launching a ship due to timer");
             spawn_ship(
                 &mut commands,
