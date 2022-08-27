@@ -1,6 +1,9 @@
 use bevy::prelude::*;
 
-use crate::game::components::{AnimateWithSpeed, Wave};
+use crate::game::{
+    components::{AnimateWithSpeed, Cart, Wave},
+    spawners::CartSpawningState,
+};
 
 pub struct OnShipArrivedAtDestination(pub Entity);
 
@@ -8,12 +11,19 @@ pub struct OnShipArrivedAtDestination(pub Entity);
 pub fn animate_entity(
     mut commands: Commands,
     time: Res<Time>,
+    mut cart_spawn_state: ResMut<CartSpawningState>,
     mut arrival_events: EventWriter<OnShipArrivedAtDestination>,
-    mut animated_entities: Query<(Entity, &mut AnimateWithSpeed, &mut Transform, Option<&Wave>)>,
+    mut animated_entities: Query<(
+        Entity,
+        &mut AnimateWithSpeed,
+        &mut Transform,
+        Option<&Wave>,
+        Option<&Cart>,
+    )>,
 ) {
     let dt = time.delta_seconds();
 
-    for (ent, mut anim, mut item, wave) in animated_entities.iter_mut() {
+    for (ent, mut anim, mut item, wave, cart) in animated_entities.iter_mut() {
         let current_waypoint = match anim.target.first() {
             Some(t) => t,
             None => {
@@ -27,10 +37,15 @@ pub fn animate_entity(
             anim.target.remove(0);
 
             if anim.target.is_empty() {
-                info!("Despawning an animated item");
                 if wave.is_some() {
+                    info!("Despawning a ship {:?}", ent);
                     arrival_events.send(OnShipArrivedAtDestination(ent));
+                } else if cart.is_some() {
+                    info!("Despawning a cart {:?}", ent);
+                    cart_spawn_state.active_carts -= 1;
+                    commands.entity(ent).despawn_recursive();
                 } else {
+                    info!("Despawning an animated item {:?}", ent);
                     commands.entity(ent).despawn_recursive();
                 }
             }

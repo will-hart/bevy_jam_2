@@ -1,18 +1,37 @@
 use bevy::prelude::*;
-use rand::{seq::SliceRandom, thread_rng, Rng};
 
 use crate::{
     game::{
-        components::{AnimateWithSpeed, BoxType, Cart, CartCrate, BOX_TYPES},
-        ui::CurrentTutorialLevel,
+        components::{AnimateWithSpeed, BoxType, Cart, CartCrate, WorldEntity},
+        // ui::CurrentTutorialLevel,
         AnimationState,
     },
     loader::{AnimationAssets, TextureAssets},
     GRID_SIZE, WIDTH,
 };
 
+pub struct OnCartSpawned;
+
+pub const CART_SPAWN_DELAY: f32 = 5.0;
 pub const CART_Z_POS: f32 = 0.4;
 
+pub struct CartSpawningState {
+    pub items: Vec<BoxType>,
+    pub active_carts: usize,
+    max_carts: usize,
+}
+
+impl Default for CartSpawningState {
+    fn default() -> Self {
+        Self {
+            items: vec![],
+            active_carts: 0,
+            max_carts: 8,
+        }
+    }
+}
+
+/// Not a system - this is a helper function used to spawn carts
 pub fn spawn_cart(
     commands: &mut Commands,
     textures: &TextureAssets,
@@ -36,6 +55,7 @@ pub fn spawn_cart(
         })
         .insert(animations.cart.clone())
         .insert(AnimationState::default())
+        .insert(WorldEntity)
         .with_children(|parent| {
             parent
                 .spawn_bundle(SpriteSheetBundle {
@@ -69,33 +89,38 @@ pub struct NextSpawnTime(pub u64);
 
 pub fn cart_spawning_system(
     mut commands: Commands,
-    tutorial_level: Res<CurrentTutorialLevel>,
+    // tutorial_level: Res<CurrentTutorialLevel>, // TODO
     time: Res<Time>,
     textures: Res<TextureAssets>,
     animations: Res<AnimationAssets>,
-    mut spawns: Local<NextSpawnTime>,
+    mut spawning_state: ResMut<CartSpawningState>,
+    mut cart_spawn_events: EventWriter<OnCartSpawned>,
+    mut last_spawn: Local<f32>,
 ) {
-    let t = time.time_since_startup().as_secs();
-    if t > spawns.0 {
-        let mut rng = thread_rng();
-
-        // set the next spawn time
-        spawns.0 += rng.gen_range(5..15);
-
-        // spawn a cart
-        spawn_cart(
-            &mut commands,
-            &textures,
-            &animations,
-            Vec3::new(WIDTH / 2.0 + GRID_SIZE * 5.0, -GRID_SIZE * 1.5, CART_Z_POS),
-            if tutorial_level.0 < 3 {
-                [BoxType::Fruit, BoxType::Fruit]
-            } else {
-                [
-                    *BOX_TYPES.choose(&mut rng).unwrap(),
-                    *BOX_TYPES.choose(&mut rng).unwrap(),
-                ]
-            },
-        );
+    // only spawn if we have capacity + both items are filled
+    if spawning_state.active_carts >= spawning_state.max_carts || spawning_state.items.len() < 2 {
+        return;
     }
+
+    let elapsed = time.time_since_startup().as_secs_f32();
+
+    // only spawn if its been 8 seconds since the last spawn
+    if elapsed - *last_spawn < CART_SPAWN_DELAY {
+        return;
+    }
+
+    let cart_items = spawning_state.items.drain(0..2).collect::<Vec<_>>();
+
+    // spawn a cart
+    spawn_cart(
+        &mut commands,
+        &textures,
+        &animations,
+        Vec3::new(WIDTH / 2.0 + GRID_SIZE * 5.0, -GRID_SIZE * 1.5, CART_Z_POS),
+        [cart_items[0], cart_items[1]], // TODO: spawn these based on the tutorial
+    );
+    cart_spawn_events.send(OnCartSpawned);
+
+    *last_spawn = elapsed;
+    spawning_state.active_carts += 1;
 }

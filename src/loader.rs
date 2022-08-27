@@ -15,7 +15,7 @@ impl Plugin for LoadingPlugin {
                 .with_collection::<AudioAssets>()
                 .with_collection::<TextureAssets>()
                 .with_collection::<AnimationAssets>()
-                .continue_to_state(GameState::Playing),
+                .continue_to_state(GameState::Menu),
         );
     }
 }
@@ -61,14 +61,6 @@ pub struct TextureAssets {
     #[asset(path = "textures/horse_and_cart.png")]
     pub horse_and_cart: Handle<TextureAtlas>,
 
-    #[asset(texture_atlas(tile_size_x = 32., tile_size_y = 32., columns = 4, rows = 1))]
-    #[asset(path = "textures/crates.png")]
-    pub crates: Handle<TextureAtlas>,
-
-    #[asset(texture_atlas(tile_size_x = 160., tile_size_y = 64., columns = 2, rows = 4))]
-    #[asset(path = "textures/cart_boxes.png")]
-    pub cart_boxes: Handle<TextureAtlas>,
-
     #[asset(texture_atlas(tile_size_x = 64., tile_size_y = 64., columns = 2, rows = 1))]
     #[asset(path = "textures/sun.png")]
     pub sun: Handle<TextureAtlas>,
@@ -91,30 +83,80 @@ pub struct TextureAssets {
     #[asset(path = "textures/down.png")]
     pub down: Handle<Image>,
 
-    #[asset(path = "textures/box_type_medical.png")]
-    pub box_type_medical: Handle<Image>,
+    #[asset(texture_atlas(tile_size_x = 32., tile_size_y = 32., columns = 9, rows = 1))]
+    #[asset(path = "textures/crates.png")]
+    pub crates: Handle<TextureAtlas>,
 
-    #[asset(path = "textures/box_type_fruit.png")]
-    pub box_type_fruit: Handle<Image>,
+    #[asset(texture_atlas(tile_size_x = 160., tile_size_y = 64., columns = 2, rows = 5))]
+    #[asset(path = "textures/cart_boxes.png")]
+    pub cart_boxes: Handle<TextureAtlas>,
 
-    #[asset(path = "textures/box_type_iron.png")]
-    pub box_type_iron: Handle<Image>,
+    #[asset(path = "textures/box_type_glassware.png")]
+    pub box_type_glassware: Handle<Image>,
 
-    #[asset(path = "textures/box_type_rum.png")]
-    pub box_type_rum: Handle<Image>,
+    #[asset(path = "textures/box_type_apples.png")]
+    pub box_type_apples: Handle<Image>,
 
-    #[asset(path = "textures/flag_new_world.png")]
-    pub flag_new_world: Handle<Image>,
+    #[asset(path = "textures/box_type_grapes.png")]
+    pub box_type_grapes: Handle<Image>,
 
-    #[asset(path = "textures/flag_pirates.png")]
-    pub flag_pirates: Handle<Image>,
+    #[asset(path = "textures/box_type_honey.png")]
+    pub box_type_honey: Handle<Image>,
 
-    #[asset(path = "textures/flag_eastern.png")]
-    pub flag_eastern: Handle<Image>,
+    #[asset(path = "textures/box_type_wheat.png")]
+    pub box_type_wheat: Handle<Image>,
+
+    #[asset(path = "textures/box_type_cider.png")]
+    pub box_type_cider: Handle<Image>,
+
+    #[asset(path = "textures/box_type_mead.png")]
+    pub box_type_mead: Handle<Image>,
+
+    #[asset(path = "textures/box_type_beer.png")]
+    pub box_type_beer: Handle<Image>,
+
+    #[asset(path = "textures/box_type_wine.png")]
+    pub box_type_wine: Handle<Image>,
+
+    #[asset(path = "textures/box_type_wine2.png")]
+    pub box_type_wine2: Handle<Image>,
 
     #[asset(texture_atlas(tile_size_x = 288., tile_size_y = 224., columns = 4, rows = 1))]
     #[asset(path = "textures/ship.png")]
     pub ship: Handle<TextureAtlas>,
+
+    #[asset(path = "textures/arrow.png")]
+    pub arrow: Handle<Image>,
+
+    #[asset(path = "textures/plus.png")]
+    pub plus: Handle<Image>,
+
+    #[asset(path = "textures/tutorial_1.png")]
+    pub tutorial_1: Handle<Image>,
+
+    #[asset(path = "textures/tutorial_2.png")]
+    pub tutorial_2: Handle<Image>,
+
+    #[asset(path = "textures/tutorial_3.png")]
+    pub tutorial_3: Handle<Image>,
+
+    #[asset(path = "textures/tutorial_4.png")]
+    pub tutorial_4: Handle<Image>,
+
+    #[asset(path = "textures/tutorial_6.png")]
+    pub tutorial_6: Handle<Image>,
+
+    #[asset(path = "textures/tutorial_7.png")]
+    pub tutorial_7: Handle<Image>,
+
+    #[asset(path = "textures/tutorial_8.png")]
+    pub tutorial_8: Handle<Image>,
+
+    #[asset(path = "textures/menu.png")]
+    pub menu: Handle<Image>,
+
+    #[asset(path = "textures/game_over.png")]
+    pub game_over: Handle<Image>,
 
     // can't do spritesheets in UI so need to load individual countdown images :(
     // also, folders aren't supported in web builds :facepalm:
@@ -134,6 +176,10 @@ pub struct TextureAssets {
         collection(typed)
     )]
     pub countdown: Vec<Handle<Image>>,
+
+    #[asset(texture_atlas(tile_size_x = 32., tile_size_y = 32., columns = 6, rows = 1))]
+    #[asset(path = "textures/splashes.png")]
+    pub splashes: Handle<TextureAtlas>,
 }
 
 /// Contains animation assets loaded from file using a custom animation loader
@@ -156,4 +202,7 @@ pub struct AnimationAssets {
 
     #[asset(path = "animations/ship_idle.animation.yml")]
     pub ship_idle: Handle<Animation>,
+
+    #[asset(path = "animations/splashes.animation.yml")]
+    pub splashes: Handle<Animation>,
 }

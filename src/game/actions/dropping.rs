@@ -1,138 +1,44 @@
 use bevy::prelude::*;
 
-use crate::game::components::{
-    BoxType, Cart, CartCrate, FollowMouse, Ship, ShipDemandItemMarker, ShipHold,
+use crate::{
+    game::{components::BoxType, spawners::spawn_physics_crate},
+    input::MousePosition,
 };
 
 use super::dragging::DraggingBox;
 
-#[derive(Clone, Copy, Debug)]
-pub enum ShipSlotType {
-    Empty,
-    Arriving(Entity),
-    Occupied(Entity),
+pub const CRATE_DROP_VELOCITY_FACTOR: f32 = 1.5;
+
+/// Event triggered when a crate is released
+pub struct OnDropCrate;
+
+/// Event triggered when a crate is dropped on a ship
+pub struct OnDropCrateOnShip {
+    pub ship_entity: Entity,
+    pub box_type: BoxType,
+    pub location: Vec3,
+
+    /// Is the crate in the ship's demands
+    pub was_demanded: bool,
 }
 
-impl Default for ShipSlotType {
-    fn default() -> Self {
-        ShipSlotType::Empty
-    }
-}
-
-#[derive(Default, Debug)]
-pub struct ShipSlots {
-    pub slots: [ShipSlotType; 3],
-}
-
-pub struct OnDropCrate {
-    pub ship: Option<Entity>,
-}
-
-pub struct OnCrateDroppedOnShip(pub Entity, pub BoxType);
-
-#[allow(clippy::too_many_arguments)]
 pub fn handle_drop(
     mut commands: Commands,
+    mouse_position: Res<MousePosition>,
     mut on_drop_events: EventReader<OnDropCrate>,
-    mut on_drop_on_ship_events: EventWriter<OnCrateDroppedOnShip>,
     mut dragging: ResMut<DraggingBox>,
-    followers: Query<Entity, With<FollowMouse>>,
-    mut carts: Query<(&mut Cart, &Children)>,
-    mut child_crates: Query<(&mut Visibility, &CartCrate)>,
-    mut ships: Query<&mut ShipHold>,
 ) {
-    let mut done = false;
-    for evt in on_drop_events.iter() {
-        if done {
-            warn!("Repeat drop event being ignored");
-            continue;
-        }
+    for _ in on_drop_events.iter() {
+        // spawn a physics box and hope it lands on something
+        spawn_physics_crate(
+            &mut commands,
+            dragging.box_entity.unwrap(),
+            dragging.box_type.unwrap(),
+            mouse_position.velocity * CRATE_DROP_VELOCITY_FACTOR,
+        );
 
-        // despawn followers
-        done = true;
-        for follower in followers.iter() {
-            commands.entity(follower).despawn();
-        }
-
-        // redo the cart
-        let (mut cart, children) = match carts.get_mut(dragging.cart_entity.unwrap()) {
-            Ok(cv) => cv,
-            Err(_) => {
-                warn!("Can't find card in stop_dragging, aborting");
-                return;
-            }
-        };
-
-        // set the cart crate to visible again, or add it to the ship if it was dropped on a ship
-        let dropped_on_ship = match evt.ship {
-            Some(ship_ent) => {
-                let mut ship_hold = ships
-                    .get_mut(ship_ent)
-                    .expect("Should be able to find ship");
-                ship_hold.accept_crate(dragging.box_type.unwrap());
-                on_drop_on_ship_events
-                    .send(OnCrateDroppedOnShip(ship_ent, dragging.box_type.unwrap()));
-
-                true
-            }
-            None => {
-                // "drop back" on the cart
-                for child in children.iter() {
-                    let (mut vis, child_crate) =
-                        child_crates.get_mut(*child).expect("should have children");
-                    if child_crate.is_front_slot == dragging.is_front_slot {
-                        vis.is_visible = true;
-                    }
-                }
-
-                false
-            }
-        };
-
-        // reset the dragging resources
-        if dragging.is_front_slot {
-            cart.front = if dropped_on_ship {
-                None
-            } else {
-                dragging.box_type
-            };
-        } else {
-            cart.back = if dropped_on_ship {
-                None
-            } else {
-                dragging.box_type
-            };
-        }
-
+        // reset the dragging state
         dragging.box_type = None;
-        dragging.cart_entity = None;
-    }
-}
-
-pub fn handle_drop_side_effects(
-    mut commands: Commands,
-    mut on_drop_on_ship_events: EventReader<OnCrateDroppedOnShip>,
-    ships: Query<&Children, With<Ship>>,
-    markers: Query<(Entity, &ShipDemandItemMarker)>,
-) {
-    for evt in on_drop_on_ship_events.iter() {
-        let ship_ent = evt.0;
-        let box_type = evt.1;
-
-        let children = match ships.get(ship_ent) {
-            Ok(c) => c,
-            _ => {
-                return;
-            }
-        };
-
-        for child in children.iter().rev() {
-            if let Ok((marker, demand_item)) = markers.get(*child) {
-                if demand_item.0 == box_type {
-                    commands.entity(marker).despawn();
-                    break;
-                }
-            }
-        }
+        dragging.box_entity = None;
     }
 }

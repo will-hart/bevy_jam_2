@@ -21,15 +21,27 @@ fn update_countdown_timers(time: Res<Time>, mut timers: Query<&mut CountDownTime
 
 fn update_countdown_animations(
     textures: Res<TextureAssets>,
-    mut timers: Query<(&mut UiImage, &CountDownTimer)>,
+    mut timers: Query<(
+        Option<&mut UiImage>,
+        Option<&mut Handle<Image>>,
+        &CountDownTimer,
+    )>,
 ) {
     let num_textures = textures.countdown.len() as f32;
-    for (mut image, timer) in timers.iter_mut() {
+    for (ui_image, image, timer) in timers.iter_mut() {
         let remaining_proportion = (1.0
             - timer.0.elapsed().as_secs_f32() / timer.0.duration().as_secs_f32())
         .clamp(0.0, 0.999);
-
         let idx = (remaining_proportion * num_textures).floor() as usize;
-        *image = textures.countdown[idx].clone().into();
+
+        match ui_image {
+            Some(mut img) => *img = textures.countdown[idx].clone().into(),
+            None => {}
+        }
+
+        match image {
+            Some(mut img) => *img = textures.countdown[idx].clone().into(),
+            None => {}
+        }
     }
 }

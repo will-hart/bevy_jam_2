@@ -1,7 +1,10 @@
 use bevy::prelude::*;
 
 use crate::{
-    game::{components::Torch, AnimationState},
+    game::{
+        components::{Torch, WorldEntity},
+        AnimationState,
+    },
     loader::{AnimationAssets, TextureAssets},
 };
 
@@ -29,5 +32,6 @@ pub fn spawn_torch(
         })
         .insert(animations.torch_off.clone())
         .insert(AnimationState::default())
-        .insert(Torch);
+        .insert(Torch)
+        .insert(WorldEntity);
 }
