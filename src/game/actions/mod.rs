@@ -12,6 +12,7 @@ mod detect_crate_drop_on_target;
 pub use detect_crate_drop_on_target::OnCrateSplashedInWater;
 mod dragging;
 mod dropping;
+pub use dropping::OnDropCrateOnShip;
 mod pickup;
 
 // Numbers that are the range cart boxes can fall into
@@ -30,6 +31,7 @@ impl Plugin for ActionPlugin {
         })
         .add_event::<OnStartDragging>()
         .add_event::<OnDropCrate>()
+        .add_event::<OnDropCrateOnShip>()
         .add_event::<OnCrateSplashedInWater>()
         .add_system(pickup::click_to_pickup.run_in_state(GameState::Playing))
         .add_system(dragging::start_dragging.run_in_state(GameState::Playing))

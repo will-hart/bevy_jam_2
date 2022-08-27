@@ -36,6 +36,11 @@ impl Plugin for UiPlugin {
                     .run_in_state(GameState::Playing)
                     .label(SystemLabels::ScoreDisplay),
             )
+            .add_system(
+                score::score_update
+                    .run_in_state(GameState::Playing)
+                    .before(SystemLabels::ScoreDisplay),
+            )
             .add_system(production_queue::update_production_queue.run_in_state(GameState::Playing))
             .add_system(factory::update_factory_input_ui.run_in_state(GameState::Playing));
     }

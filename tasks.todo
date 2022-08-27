@@ -95,8 +95,8 @@ Ship Game:
     ✔ Carts only spawn raw materials @done(22-08-27 08:17)
     ✔ Ships request outputs from factory @done(22-08-27 08:17)
       ✔ Ships also request some raw materials @done(22-08-27 08:17)
-    ☐ Get points for dropping the right produced resource
-    ☐ Lose points for dropping incorrect resource
+    ✔ Get points for dropping the right produced resource @done(22-08-27 11:56)
+    ✔ Lose points for dropping incorrect resource @done(22-08-27 11:56)
     ☐ Lose points for missing resources
     ✘ Cart spawns get faster as time goes on @cancelled(22-08-27 08:17)
     ✘ Carts move faster as time goes on @cancelled(22-08-27 08:17)
