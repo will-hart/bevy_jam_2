@@ -26,7 +26,7 @@ impl Default for CartSpawningState {
         Self {
             items: vec![],
             active_carts: 0,
-            max_carts: 5,
+            max_carts: 8,
         }
     }
 }
