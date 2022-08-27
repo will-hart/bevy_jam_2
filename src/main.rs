@@ -19,8 +19,9 @@ pub const GRID_SIZE: f32 = 32.;
 #[derive(Clone, Copy, Debug, Eq, PartialEq, Hash)]
 pub enum GameState {
     Loading,
-    // Menu, // TODO: when we have a menu later
+    Menu,
     Playing,
+    GameOver,
 }
 
 fn main() {

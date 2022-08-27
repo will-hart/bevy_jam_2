@@ -1,5 +1,5 @@
 use bevy::prelude::*;
-use iyes_loopless::prelude::IntoConditionalSystem;
+use iyes_loopless::prelude::{AppLooplessStateExt, IntoConditionalSystem};
 use rand::{Rng, SeedableRng};
 use rand_chacha::ChaCha8Rng;
 
@@ -9,7 +9,7 @@ use crate::{
 };
 
 use super::{
-    components::{Star, Sun, Torch},
+    components::{Star, Sun, Torch, WorldEntity},
     Animation,
 };
 
@@ -58,11 +58,12 @@ impl Plugin for DayNightCyclePlugin {
         app.insert_resource(SkyColourCycles::default())
             .insert_resource(TimeOfDay { time_of_day: 5.8 })
             .add_event::<OnSunEvent>()
-            .add_system(day_night_cycle.run_not_in_state(GameState::Loading))
-            .add_system(torch_visibility.run_not_in_state(GameState::Loading))
-            .add_system(star_and_sun_spawner.run_not_in_state(GameState::Loading))
-            .add_system(sun_movement.run_not_in_state(GameState::Loading))
-            .add_system(star_movement.run_not_in_state(GameState::Loading));
+            .add_system(day_night_cycle.run_in_state(GameState::Playing))
+            .add_system(torch_visibility.run_in_state(GameState::Playing))
+            .add_system(star_and_sun_spawner.run_in_state(GameState::Playing))
+            .add_system(sun_movement.run_in_state(GameState::Playing))
+            .add_system(star_movement.run_in_state(GameState::Playing))
+            .add_enter_system(GameState::Playing, reset_day_night_cycle);
     }
 }
 
@@ -86,6 +87,10 @@ impl Default for SkyColourCycles {
 
 struct TimeOfDay {
     pub time_of_day: f32,
+}
+
+fn reset_day_night_cycle(mut cycle: ResMut<TimeOfDay>) {
+    cycle.time_of_day = 5.8;
 }
 
 fn day_night_cycle(
@@ -172,7 +177,8 @@ fn star_and_sun_spawner(
                             transform: Transform::from_xyz(get_sun_x(0.0), get_sun_y(0.0), -0.01),
                             ..Default::default()
                         })
-                        .insert(Sun);
+                        .insert(Sun)
+                        .insert(WorldEntity);
                 }
             }
             false => {
@@ -199,7 +205,8 @@ fn star_and_sun_spawner(
                             },
                             ..Default::default()
                         })
-                        .insert(Star);
+                        .insert(Star)
+                        .insert(WorldEntity);
                 }
             }
         }

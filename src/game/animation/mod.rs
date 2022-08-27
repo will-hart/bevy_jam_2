@@ -5,7 +5,9 @@ use bevy::{
 };
 
 mod animate_entity;
-pub use animate_entity::ShipArrivedAtDestination;
+mod effects;
+mod splashes;
+pub use animate_entity::OnShipArrivedAtDestination;
 mod ship_bob;
 mod waves;
 use iyes_loopless::prelude::IntoConditionalSystem;
@@ -20,7 +22,7 @@ impl Plugin for AnimationPlugin {
     fn build(&self, app: &mut App) {
         info!("Mounting AnimationPlugin");
         app.add_asset::<Animation>()
-            .add_event::<ShipArrivedAtDestination>()
+            .add_event::<OnShipArrivedAtDestination>()
             .init_asset_loader::<BenimationLoader>()
             .add_system(update_animation_frames)
             .add_system(
@@ -29,7 +31,9 @@ impl Plugin for AnimationPlugin {
                     .label(SystemLabels::ShipAnimationAndDespawn),
             )
             .add_system(ship_bob::ship_bob.run_not_in_state(GameState::Loading))
-            .add_system(waves::scroll_wave_texture.run_not_in_state(GameState::Loading));
+            .add_system(waves::scroll_wave_texture.run_not_in_state(GameState::Loading))
+            .add_system(effects::despawn_visual_effects.run_not_in_state(GameState::Loading))
+            .add_system(splashes::splash_when_hitting_water.run_not_in_state(GameState::Loading));
     }
 }
 

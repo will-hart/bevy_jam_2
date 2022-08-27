@@ -35,10 +35,8 @@ Ship Game:
     Cart spawning:
       ✔ Random time between @done(22-08-21 22:23)
       ✔ random resources @done(22-08-21 22:23)
-      ☐ Carts pause for a bit, then get angry and depart - the player's score is penalised for carts they can't ship for
-      ☐ Cart spawns get faster as time goes on
-      ☐ Carts move faster as time goes on
-      ☐ maximum number of carts at once
+      ✘ Carts pause for a bit, then get angry and depart - the player's score is penalised for carts they can't ship for @cancelled(22-08-26 00:20)
+
     ✔ player score @done(22-08-21 14:10)
     ✔ display player score @done(22-08-21 14:10)
     ✔ Display market prices @done(22-08-22 21:39)
@@ -46,24 +44,24 @@ Ship Game:
     ✔ Market prices move over time @done(22-08-22 22:46)
     ✔ When ship desawned player gets the value from the market at that time @done(22-08-22 07:49)
     ✘ Lost ship (overweight) mechanic @cancelled(22-08-22 23:24)
-    ☐ Refactor market to single global price
+    ✔ Refactor market to single global price @done(22-08-26 00:20)
   
   Ship system:
     ✘ ship delivery timer (off screen / unavailable) @cancelled(22-08-21 22:45)
     ✔ Ship arrival queue @done(22-08-23 08:47)
     ✔ Randomly add ships to arrival queue @done(22-08-23 20:16)
-    ☐ Timers for ship arrivals
-      ☐ Lost score for missed ship arrivals
-      ☐ Ships disappear when the timer expires
+    ✔ Timers for ship arrivals @done(22-08-26 00:20)
+      ✘ Lost score for missed ship arrivals @cancelled(22-08-26 00:20)
+      ✔ Ships disappear when the timer expires @done(22-08-24 21:30)
     ✔ Clicking the timer button spawns the ship @done(22-08-23 08:47)
       ✔ add ship to slot immediately @done(22-08-23 07:57)
     ✔ Can't spawn ships if no slots are free @done(22-08-23 08:47)
     ✘ ship queue off screen @cancelled(22-08-22 23:27)
-    ✔ Random ship demands @done(22-08-23 20:28)
-      ☐ Penalties for incorrectly loaded goods
+      ✔ Random ship demands @done(22-08-23 20:28)
       ✔ Display UI for demands @done(22-08-23 09:07)
       ✔ Update UI as demands are met @done(22-08-23 17:35)
-      ☐ Bonus if all demands met
+      ✘ Penalties for incorrectly loaded goods @cancelled(22-08-26 00:22)
+      ✘ Bonus if all demands met @cancelled(22-08-26 00:22)
     ✔ ship maintenance cost @done(22-08-22 08:20)
     ✔ Remove ship maintenance cost @done(22-08-23 08:54)
     ship docking system:
@@ -75,22 +73,67 @@ Ship Game:
         ✔ furl sails on arrival @done(22-08-23 07:57)
       ✔ Only allow dropping on a ship once it has arrived and the sails are furled @done(22-08-23 08:47)
 
+  Refactor for fun:
+    ✔ Ships spawn when timer expires @done(22-08-26 08:30)
+    ✔ Ships sail right across without docking @done(22-08-26 08:30)
+    ✔ Physics for crates @done(22-08-26 08:30)
+    ✔ Drop crates in a warehouse @done(22-08-26 08:30)
+    ✔ Pick crates up from warehouse @done(22-08-26 08:30)
+    ✔ Drop crates in a factory @done(22-08-26 08:45)
+      ✔ from carts @done(22-08-26 08:45)
+      ✔ from warehouse @done(22-08-26 08:45)
+    ✔ Recipes that can be dropped in the factory @done(22-08-26 18:15)
+    ✔ Production queue + timers from the factory @done(22-08-26 20:20)
+    ✔ Convert factory into components + systems @done(22-08-26 23:54)
+    ✔ Show factory production progress @done(22-08-26 23:54)
+    ✔ Show items queued in the factory @done(22-08-27 00:05)
+    ✔ Add some more recipes @done(22-08-27 00:55)
+    ✔ Spawn rates of ships slower @done(22-08-27 08:17)
+    ✔ Available recipes displayed in UI @done(22-08-27 08:34)
+    ✔ Current production queue displayed in UI @done(22-08-27 10:12)
+    ✔ Carts don't automatically spawn @done(22-08-27 12:51)
+    ✔ Carts only spawn raw materials @done(22-08-27 08:17)
+    ✔ Ships request outputs from factory @done(22-08-27 08:17)
+      ✔ Ships also request some raw materials @done(22-08-27 08:17)
+    ✔ Get points for dropping the right produced resource @done(22-08-27 11:56)
+    ✔ Lose points for dropping incorrect resource @done(22-08-27 11:56)
+    ✔ Remove dropped items from ship UI @done(22-08-27 12:13)
+    ✔ Lose points for missing resources @done(22-08-27 15:09)
+    ✘ Cart spawns get faster as time goes on @cancelled(22-08-27 08:17)
+    ✘ Carts move faster as time goes on @cancelled(22-08-27 08:17)
+    ✔ maximum number of carts at once @done(22-08-27 12:51)
+    ✔ Ships spawn faster as time goes on @done(22-08-27 14:31)
+    ✔ Ui for spawning carts with specific items @done(22-08-27 13:58)
+    ✔ Ui for queued carts @done(22-08-27 14:25)
+    ✔ Why don't grape sprites display after exiting the factory?!?!!?!?!?!?! @done(22-08-27 14:46)
+      I just created a duplicate I'm so confused
+    ✔ Failure conditions @done(22-08-27 15:09)
+    ✔ Tutorial @done(22-08-27 17:15)
+    ✔ Menu @done(22-08-27 17:56)
+    ✔ Proper game over screen @done(22-08-27 17:56)
+    ✘ Return to menu on game over @cancelled(22-08-27 17:56)
+    ✔ Try again button from main menu + properly clear out + reset game state @done(22-08-27 17:56)
+  
+
   Sound effects:
     ☐ Morning
+    ☐ Box drop
     ☐ Cart arriving
-    ☐ Ship triggered
+    ✘ Ship triggered @cancelled(22-08-27 17:56)
     ☐ Ship arriving
-    ☐ Weather
+    ☐ Crates splashing in the water - see OnCrateSplashedInWater event raised by the detect_rate_drop_on_target system
     ✘ Storm noise when a ship is lost @cancelled(22-08-22 23:49)
 
 Super Nice to Haves:
-  ☐ Physics / dropping to crates so you can hover them above the ship and drop them
-    ☐ If you miss the ship the crate falls in the water and is lost
-  ☐ A warehouse on the shore with very limited capacity that you can use to stockpile interesting items
-  ☐ Smuggling :D
+  ✔ Physics / dropping to crates so you can hover them above the ship and drop them @done(22-08-26 00:19)
+    ✔ If you miss the ship the crate falls in the water and is lost @done(22-08-26 00:19)
+  ✘ A warehouse on the shore with very limited capacity that you can use to stockpile interesting items @cancelled(22-08-26 00:22)
+  ✘ Smuggling :D @cancelled(22-08-26 00:22)
+  ✔ Crates splashing when they miss everything @done(22-08-27 00:19)
+  ☐ Better music
   ☐ Nice art
   ☐ Weather effects
-  ☐ Make departure animation less overlappy with waves
+  ✘ Make departure animation less overlappy with waves @cancelled(22-08-26 00:20)
   ✘ if your ship has no more volume the crate bounces off @cancelled(22-08-23 00:11)
   ✘ Money ticking down in chunks, with world text "damage" indicators when money is spent @cancelled(22-08-23 00:11)
   ✘ Maintenance / docking fees @cancelled(22-08-23 00:11)
@@ -98,4 +141,4 @@ Super Nice to Haves:
   ✘ Show the crates on a ship on the screen @cancelled(22-08-23 00:11)
   ✔ In-game tutorial @done(22-08-23 20:28)
   ✘ Style in-game tutorial @cancelled(22-08-23 20:28)
-  ☐ Work out why the game spends 15 seconds on a white screen
+  ✘ Work out why the game spends 15 seconds on a white screen @cancelled(22-08-24 21:29)
