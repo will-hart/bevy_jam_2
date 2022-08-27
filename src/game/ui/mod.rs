@@ -28,7 +28,7 @@ impl Plugin for UiPlugin {
     fn build(&self, app: &mut App) {
         info!("Mounting UI Plugin");
 
-        app.insert_resource(Score(50.0))
+        app.insert_resource(Score(0.0))
             .add_event::<OnCoinsReceived>()
             .add_event::<OnShipScore>()
             .add_plugin(TutorialPlugin)

@@ -56,7 +56,7 @@ pub fn despawn_ships_and_penalise(
         for child in wave_children.iter() {
             if let Ok(hold) = holds.get(*child) {
                 let unmet_demands = hold.get_unmet_demands().len() as f32;
-                score.0 -= unmet_demands * 50.0;
+                score.0 -= unmet_demands * 10.0;
                 break;
             }
         }
