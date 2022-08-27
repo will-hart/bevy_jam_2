@@ -109,18 +109,18 @@ Ship Game:
       I just created a duplicate I'm so confused
     ✔ Failure conditions @done(22-08-27 15:09)
     ✔ Tutorial @done(22-08-27 17:15)
-    ☐ Menu
-    ☐ Proper game over screen
-    ☐ Return to menu on game over
-    ☐ Try again button from main menu + properly clear out + reset game state
+    ✔ Menu @done(22-08-27 17:56)
+    ✔ Proper game over screen @done(22-08-27 17:56)
+    ✘ Return to menu on game over @cancelled(22-08-27 17:56)
+    ✔ Try again button from main menu + properly clear out + reset game state @done(22-08-27 17:56)
   
 
   Sound effects:
     ☐ Morning
+    ☐ Box drop
     ☐ Cart arriving
-    ☐ Ship triggered
+    ✘ Ship triggered @cancelled(22-08-27 17:56)
     ☐ Ship arriving
-    ☐ Weather
     ☐ Crates splashing in the water - see OnCrateSplashedInWater event raised by the detect_rate_drop_on_target system
     ✘ Storm noise when a ship is lost @cancelled(22-08-22 23:49)
 

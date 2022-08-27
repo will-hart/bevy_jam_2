@@ -94,7 +94,7 @@ fn is_tutorial_level<const N: u8>(tutorial: Res<CurrentTutorialLevel>) -> bool {
     tutorial.0 == N
 }
 
-fn was_action_pressed(action_states: Query<&ActionState<PlayerActions>>) -> bool {
+pub fn was_action_pressed(action_states: Query<&ActionState<PlayerActions>>) -> bool {
     let action_state = action_states.single();
     action_state.just_pressed(PlayerActions::Proceed)
 }

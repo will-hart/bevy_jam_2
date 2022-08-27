@@ -6,7 +6,7 @@ use crate::{
     game::{
         components::{
             AnimateWithSpeed, BoxType, CountDownTimer, Ship, ShipDemandItemMarker, ShipHold,
-            SpawnShipRequest, TopUiBar, TutorialMarker, Wave, BOX_DEMANDS,
+            SpawnShipRequest, TopUiBar, TutorialMarker, Wave, WorldEntity, BOX_DEMANDS,
         },
         custom_sprite::CustomSpriteMaterial,
         rng::RandomSpawnTimer,
@@ -180,6 +180,7 @@ pub fn spawn_ship(
                 .with_group(GamePhysicsLayer::Ship)
                 .with_mask(GamePhysicsLayer::Crate),
         ))
+        .insert(WorldEntity)
         .insert(AnimateWithSpeed {
             speed: SHIP_SPEED,
             target: vec![Vec3::new(

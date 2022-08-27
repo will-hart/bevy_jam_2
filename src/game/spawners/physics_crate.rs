@@ -1,5 +1,5 @@
 use crate::{
-    game::components::{BoxType, FollowMouse, PhysicsCrate},
+    game::components::{BoxType, FollowMouse, PhysicsCrate, WorldEntity},
     GRID_SIZE,
 };
 use bevy::prelude::*;
@@ -33,5 +33,6 @@ pub fn spawn_physics_crate(
             ..Default::default()
         })
         .insert(Velocity::from_linear(initial_velocity.extend(0.0)))
-        .insert(Collisions::default());
+        .insert(Collisions::default())
+        .insert(WorldEntity);
 }

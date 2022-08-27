@@ -15,7 +15,7 @@ impl Plugin for LoadingPlugin {
                 .with_collection::<AudioAssets>()
                 .with_collection::<TextureAssets>()
                 .with_collection::<AnimationAssets>()
-                .continue_to_state(GameState::Playing),
+                .continue_to_state(GameState::Menu),
         );
     }
 }
@@ -151,6 +151,12 @@ pub struct TextureAssets {
 
     #[asset(path = "textures/tutorial_8.png")]
     pub tutorial_8: Handle<Image>,
+
+    #[asset(path = "textures/menu.png")]
+    pub menu: Handle<Image>,
+
+    #[asset(path = "textures/game_over.png")]
+    pub game_over: Handle<Image>,
 
     // can't do spritesheets in UI so need to load individual countdown images :(
     // also, folders aren't supported in web builds :facepalm:

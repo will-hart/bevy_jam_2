@@ -22,7 +22,7 @@ use iyes_loopless::prelude::AppLooplessStateExt;
 use crate::{
     game::{
         actions::ActionPlugin,
-        components::{FactoryInput, SplashCatcher},
+        components::{FactoryInput, SplashCatcher, WorldEntity},
         custom_sprite::CustomSpritePlugin,
         day_night_cycle::DayNightCyclePlugin,
         factory::FactoryPlugin,
@@ -37,6 +37,8 @@ use crate::{
 use crate::game::debug::DebugPlugin;
 
 use animation::AnimationPlugin;
+
+use self::{components::TutorialMarker, ui::Score};
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, SystemLabel)]
 pub enum SystemLabels {
@@ -59,7 +61,8 @@ impl Plugin for GamePlugin {
             .add_plugin(UiPlugin)
             .add_plugin(SpawningPlugin)
             .add_plugin(FactoryPlugin)
-            .add_enter_system(GameState::Playing, setup_world);
+            .add_enter_system(GameState::Playing, setup_world)
+            .add_exit_system(GameState::Playing, teardown_world);
 
         #[cfg(feature = "debug_system")]
         {
@@ -76,10 +79,12 @@ fn setup_world(
     info!("Setting up game world");
 
     /* BACKGROUNDS */
-    commands.spawn_bundle(SpriteBundle {
-        texture: textures.background.clone(),
-        ..Default::default()
-    });
+    commands
+        .spawn_bundle(SpriteBundle {
+            texture: textures.background.clone(),
+            ..Default::default()
+        })
+        .insert(WorldEntity);
 
     /* TORCHES */
     [
@@ -117,7 +122,8 @@ fn setup_world(
         .insert_bundle(TransformBundle {
             local: Transform::from_xyz(-0.25 * WIDTH, -1.5 * GRID_SIZE, 0.0),
             ..default()
-        });
+        })
+        .insert(WorldEntity);
 
     /* FACTORY */
     commands
@@ -136,7 +142,8 @@ fn setup_world(
             local: Transform::from_xyz(-1.0, 1.5 * GRID_SIZE, 0.0),
             ..default()
         })
-        .insert(FactoryInput);
+        .insert(FactoryInput)
+        .insert(WorldEntity);
 
     /* FACTORY OUTPUT */
     commands
@@ -154,7 +161,8 @@ fn setup_world(
         .insert_bundle(TransformBundle {
             local: Transform::from_xyz(5.0 * GRID_SIZE, 0.0, 0.0),
             ..default()
-        });
+        })
+        .insert(WorldEntity);
 
     /* SPLASH SECTION */
     commands
@@ -173,5 +181,23 @@ fn setup_world(
             local: Transform::from_xyz(0.0, -HEIGHT / 2.0 + GRID_SIZE, 0.0),
             ..default()
         })
-        .insert(SplashCatcher);
+        .insert(SplashCatcher)
+        .insert(WorldEntity);
+}
+
+fn teardown_world(
+    mut commands: Commands,
+    items: Query<Entity, With<WorldEntity>>,
+    mut score: ResMut<Score>,
+    tutorial_markers: Query<Entity, With<TutorialMarker>>,
+) {
+    for ent in items.iter() {
+        commands.entity(ent).despawn_recursive();
+    }
+
+    for ent in tutorial_markers.iter() {
+        commands.entity(ent).despawn_recursive();
+    }
+
+    score.0 = 0.0;
 }

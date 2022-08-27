@@ -1,7 +1,10 @@
 use bevy::prelude::*;
 
 use crate::{
-    game::{components::FactoryInputsDisplayItem, factory::Factory},
+    game::{
+        components::{FactoryInputsDisplayItem, WorldEntity},
+        factory::Factory,
+    },
     loader::TextureAssets,
     GRID_SIZE,
 };
@@ -14,7 +17,8 @@ pub fn spawn_factory_ui(mut commands: Commands, textures: Res<TextureAssets>) {
                 .with_scale(Vec3::splat(0.75)),
             ..default()
         })
-        .insert(FactoryInputsDisplayItem(0));
+        .insert(FactoryInputsDisplayItem(0))
+        .insert(WorldEntity);
 }
 
 pub fn update_factory_input_ui(

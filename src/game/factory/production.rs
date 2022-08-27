@@ -2,7 +2,7 @@ use bevy::prelude::*;
 
 use crate::{
     game::{
-        components::{BoxType, CountDownTimer, FactoryProductionIndicator},
+        components::{BoxType, CountDownTimer, FactoryProductionIndicator, WorldEntity},
         factory::utils::new_timer,
         spawners::spawn_physics_crate,
     },
@@ -151,6 +151,7 @@ pub fn handle_production_started(
                     transform: Transform::from_translation(Vec3::new(GRID_SIZE, 0.0, 0.0)),
                     ..default()
                 });
-            });
+            })
+            .insert(WorldEntity);
     }
 }

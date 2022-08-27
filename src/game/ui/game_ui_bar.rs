@@ -4,6 +4,7 @@ use crate::{
     game::{
         components::{
             BoxType, CartQueueUi, CartQueueUiButton, ProductionQueueUi, ScoreUi, TopUiBar,
+            WorldEntity,
         },
         factory::recipes::Recipes,
     },
@@ -38,6 +39,7 @@ pub fn spawn_game_ui(
             color: Color::NONE.into(),
             ..default()
         })
+        .insert(WorldEntity)
         .with_children(|layout| {
             // top menu
             layout

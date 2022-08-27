@@ -185,3 +185,9 @@ pub struct CartQueueUiItem;
 
 #[derive(Component)]
 pub struct CartQueueUiButton(pub BoxType);
+
+#[derive(Component)]
+pub struct WorldEntity;
+
+#[derive(Component)]
+pub struct MenuItem;

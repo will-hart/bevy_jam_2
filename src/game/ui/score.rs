@@ -37,7 +37,7 @@ pub fn score_update(
         score.0 += if evt.was_demanded { 10.0 } else { -5.0 };
     }
 
-    if score.0 <= 0.0 {
+    if score.0 < -0.1 {
         warn!("Game over, transitioning to game over state");
         commands.insert_resource(NextState(GameState::GameOver));
     }

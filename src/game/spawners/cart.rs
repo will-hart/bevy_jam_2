@@ -2,7 +2,7 @@ use bevy::prelude::*;
 
 use crate::{
     game::{
-        components::{AnimateWithSpeed, BoxType, Cart, CartCrate},
+        components::{AnimateWithSpeed, BoxType, Cart, CartCrate, WorldEntity},
         // ui::CurrentTutorialLevel,
         AnimationState,
     },
@@ -55,6 +55,7 @@ pub fn spawn_cart(
         })
         .insert(animations.cart.clone())
         .insert(AnimationState::default())
+        .insert(WorldEntity)
         .with_children(|parent| {
             parent
                 .spawn_bundle(SpriteSheetBundle {
