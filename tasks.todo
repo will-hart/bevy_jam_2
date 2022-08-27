@@ -105,7 +105,10 @@ Ship Game:
     ✔ Ships spawn faster as time goes on @done(22-08-27 14:31)
     ✔ Ui for spawning carts with specific items @done(22-08-27 13:58)
     ✔ Ui for queued carts @done(22-08-27 14:25)
-    ☐ Why don't grape sprites display after exiting the factory?!?!!?!?!?!?!
+    ✔ Why don't grape sprites display after exiting the factory?!?!!?!?!?!?! @done(22-08-27 14:46)
+      I just created a duplicate I'm so confused
+    ☐ Failure conditions
+    ☐ Tutorial
 
   Sound effects:
     ☐ Morning
