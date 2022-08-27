@@ -2,7 +2,9 @@ use bevy::{prelude::*, ui::FocusPolicy};
 
 use crate::{
     game::{
-        components::{BoxType, CartQueueUi, CartQueueUiItem, ProductionQueueUi, ScoreUi, TopUiBar},
+        components::{
+            BoxType, CartQueueUi, CartQueueUiButton, ProductionQueueUi, ScoreUi, TopUiBar,
+        },
         factory::recipes::Recipes,
     },
     loader::{FontAssets, TextureAssets},
@@ -165,20 +167,6 @@ pub fn spawn_game_ui(
                         .spawn_bundle(NodeBundle {
                             color: Color::NONE.into(),
                             style: Style {
-                                size: Size::new(
-                                    Val::Px(1024.0 - 5.0 * 24.0 - 100.0),
-                                    Val::Px(32.0),
-                                ),
-                                ..default()
-                            },
-                            ..default()
-                        })
-                        .insert(CartQueueUi);
-
-                    cart_spawn_bar
-                        .spawn_bundle(NodeBundle {
-                            color: Color::NONE.into(),
-                            style: Style {
                                 size: Size::new(Val::Px(100.0 + 5.0 * 24.0), Val::Px(32.0)),
                                 justify_content: JustifyContent::Center,
                                 align_items: AlignItems::Center,
@@ -206,7 +194,7 @@ pub fn spawn_game_ui(
                                         color: Color::NONE.into(),
                                         ..Default::default()
                                     })
-                                    .insert(CartQueueUiItem(*item))
+                                    .insert(CartQueueUiButton(*item))
                                     .with_children(|button| {
                                         button.spawn_bundle(ImageBundle {
                                             image: item.get_image(&textures).into(),
@@ -219,6 +207,31 @@ pub fn spawn_game_ui(
                                         });
                                     });
                             }
+                        });
+
+                    cart_spawn_bar
+                        .spawn_bundle(NodeBundle {
+                            color: Color::NONE.into(),
+                            style: Style {
+                                size: Size::new(
+                                    Val::Px(1024.0 - 5.0 * 24.0 - 100.0),
+                                    Val::Px(32.0),
+                                ),
+                                justify_content: JustifyContent::FlexStart,
+                                align_items: AlignItems::Center,
+                                ..default()
+                            },
+                            ..default()
+                        })
+                        .insert(CartQueueUi)
+                        .with_children(|crate_queue| {
+                            crate_queue.spawn_bundle(TextBundle {
+                                text: Text::from_section(
+                                    "Crate delivery queue: ",
+                                    small_text_style.clone(),
+                                ),
+                                ..default()
+                            });
                         });
                 });
 

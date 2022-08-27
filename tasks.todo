@@ -104,7 +104,7 @@ Ship Game:
     ✔ maximum number of carts at once @done(22-08-27 12:51)
     ☐ Ships spawn faster as time goes on
     ✔ Ui for spawning carts with specific items @done(22-08-27 13:58)
-    ☐ Ui for queued carts
+    ✔ Ui for queued carts @done(22-08-27 14:25)
     ☐ Why don't grape sprites display after exiting the factory?!?!!?!?!?!?!
 
   Sound effects:

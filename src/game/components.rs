@@ -167,4 +167,7 @@ pub struct VisualEffect(pub f32);
 pub struct CartQueueUi;
 
 #[derive(Component)]
-pub struct CartQueueUiItem(pub BoxType);
+pub struct CartQueueUiItem;
+
+#[derive(Component)]
+pub struct CartQueueUiButton(pub BoxType);

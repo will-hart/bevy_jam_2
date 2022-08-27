@@ -1,6 +1,6 @@
 use bevy::prelude::*;
 
-use crate::game::{components::CartQueueUiItem, spawners::CartSpawningState};
+use crate::game::{components::CartQueueUiButton, spawners::CartSpawningState};
 
 pub const NORMAL_BUTTON: Color = Color::NONE;
 pub const HOVERED_BUTTON: Color = Color::rgba(0.15, 0.15, 0.15, 0.25);
@@ -9,7 +9,7 @@ pub const PRESSED_BUTTON: Color = Color::rgba(0.15, 0.15, 0.15, 0.75);
 pub fn button_interaction(
     mut cart_queue: ResMut<CartSpawningState>,
     mut interaction_query: Query<
-        (&Interaction, &mut UiColor, Option<&CartQueueUiItem>),
+        (&Interaction, &mut UiColor, Option<&CartQueueUiButton>),
         (Changed<Interaction>, With<Button>),
     >,
 ) {
