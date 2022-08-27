@@ -13,6 +13,7 @@ pub mod rng;
 mod ui;
 
 pub use animation::{Animation, AnimationState};
+pub use spawners::OnShipSpawned;
 pub use ui::OnCoinsReceived;
 
 use bevy::prelude::*;

@@ -1,8 +1,18 @@
 use bevy::prelude::*;
 use bevy_kira_audio::prelude::*;
-use iyes_loopless::{condition::IntoConditionalSystem, prelude::AppLooplessStateExt};
+use iyes_loopless::{
+    condition::IntoConditionalSystem,
+    prelude::{AppLooplessStateExt, ConditionHelpers},
+};
 
-use crate::{game::OnCoinsReceived, loader::AudioAssets, GameState};
+use crate::{
+    game::{
+        actions::{OnCrateSplashedInWater, OnDropCrateOnShip},
+        OnCoinsReceived, OnShipSpawned,
+    },
+    loader::AudioAssets,
+    GameState,
+};
 
 #[derive(Component, Default, Clone)]
 struct MusicChannel;
@@ -17,35 +27,62 @@ impl Plugin for InternalAudioPlugin {
         app.add_plugin(AudioPlugin)
             .add_audio_channel::<MusicChannel>()
             .add_audio_channel::<EffectsChannel>()
-            .add_system(on_coin_drop.run_not_in_state(GameState::Loading))
+            .add_system(
+                on_coin_drop
+                    .run_in_state(GameState::Playing)
+                    .run_on_event::<OnCoinsReceived>(),
+            )
+            .add_system(
+                on_box_drop
+                    .run_in_state(GameState::Playing)
+                    .run_on_event::<OnDropCrateOnShip>(),
+            )
+            .add_system(
+                on_splash
+                    .run_in_state(GameState::Playing)
+                    .run_on_event::<OnCrateSplashedInWater>(),
+            )
+            .add_system(
+                on_ship_spawn
+                    .run_in_state(GameState::Playing)
+                    .run_on_event::<OnShipSpawned>(),
+            )
             .add_exit_system(GameState::Loading, play_music);
     }
 }
 
 fn play_music(music_channel: Res<AudioChannel<MusicChannel>>, audio_assets: Res<AudioAssets>) {
-    info!("TODO: Starting game music");
     music_channel
         .play(audio_assets.music.clone())
         .with_volume(0.2)
         .looped();
 
     // need better music before I can play it on loop while developing :_))
-    music_channel.pause();
+    // music_channel.pause();
 }
 
 fn on_coin_drop(
-    mut events: EventReader<OnCoinsReceived>,
     effects_channel: Res<AudioChannel<EffectsChannel>>,
     audio_assets: Res<AudioAssets>,
 ) {
-    let mut done = false;
-    for _ in events.iter() {
-        if done {
-            continue;
-        }
+    info!("Playing coin sound");
+    effects_channel.play(audio_assets.coin_drop.clone());
+}
 
-        done = true;
-        info!("Playing dropped box sound");
-        effects_channel.play(audio_assets.coin_drop.clone());
-    }
+fn on_box_drop(effects_channel: Res<AudioChannel<EffectsChannel>>, audio_assets: Res<AudioAssets>) {
+    info!("Playing box sound");
+    effects_channel.play(audio_assets.box_drop.clone());
+}
+
+fn on_splash(effects_channel: Res<AudioChannel<EffectsChannel>>, audio_assets: Res<AudioAssets>) {
+    info!("Playing splash sound");
+    effects_channel.play(audio_assets.splash.clone());
+}
+
+fn on_ship_spawn(
+    effects_channel: Res<AudioChannel<EffectsChannel>>,
+    audio_assets: Res<AudioAssets>,
+) {
+    info!("Playing ship spawn sound");
+    effects_channel.play(audio_assets.ships_bell.clone());
 }

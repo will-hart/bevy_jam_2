@@ -32,6 +32,8 @@ pub const SPAWN_SPEED_UP_RATE_PER_SECOND: f64 = 0.05;
 
 pub const SHIP_WIDTH: f32 = 288.0;
 
+pub struct OnShipSpawned;
+
 /// Periodically queues up a RequestShip component and button in the ship bar
 /// When the timer gets to 0, the ship spawns and sails across the screen.
 #[allow(clippy::too_many_arguments)]
@@ -118,6 +120,7 @@ pub fn ship_spawn_on_timer_expiry(
     fonts: Res<FontAssets>,
     mut meshes: ResMut<Assets<Mesh>>,
     mut materials: ResMut<Assets<CustomSpriteMaterial>>,
+    mut spawn_events: EventWriter<OnShipSpawned>,
     requests: Query<(&Parent, &CountDownTimer, &SpawnShipRequest)>,
 ) {
     for (parent_entity, timer, request) in requests.iter() {
@@ -136,6 +139,7 @@ pub fn ship_spawn_on_timer_expiry(
 
             // despawn the spawn indicator
             commands.entity(parent_entity.get()).despawn_recursive();
+            spawn_events.send(OnShipSpawned);
         }
     }
 }

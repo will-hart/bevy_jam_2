@@ -38,6 +38,12 @@ pub struct AudioAssets {
 
     #[asset(path = "audio/music.ogg")]
     pub music: Handle<bevy_kira_audio::AudioSource>,
+
+    #[asset(path = "audio/ships_bell.ogg")]
+    pub ships_bell: Handle<bevy_kira_audio::AudioSource>,
+
+    #[asset(path = "audio/splash.ogg")]
+    pub splash: Handle<bevy_kira_audio::AudioSource>,
 }
 
 /// Contains texture assets loaded from file
