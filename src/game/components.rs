@@ -68,21 +68,10 @@ pub enum BoxType {
 }
 
 // Because we can't loop or rand::choose over all enum values, we need
-// to define a list of possible enum values here for randomly spawning
+// to define a list of possible enum values here for randomly demanding
 // crates. Make sure to keep this up to date with the enum above.
 //
-// To change the spawn likelihood, just add an item more often :laugh:
-pub const BOX_TYPES: [BoxType; 7] = [
-    BoxType::Glassware,
-    BoxType::Glassware,
-    BoxType::Glassware,
-    BoxType::Apples,
-    BoxType::Grapes,
-    BoxType::Honey,
-    BoxType::Wheat,
-];
-
-/// Similar to BOX_TYPES, this is a list of items that a ship can demand
+// To change the spawn likelihood, just add an item more often :laugh
 pub const BOX_DEMANDS: [BoxType; 16] = [
     BoxType::Apples,
     BoxType::Grapes,

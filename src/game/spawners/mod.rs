@@ -12,6 +12,8 @@ pub use torch::spawn_torch;
 mod physics_crate;
 pub use physics_crate::spawn_physics_crate;
 
+pub use self::cart::CartSpawningState;
+
 // Define your physics layers
 #[derive(PhysicsLayer)]
 pub enum GamePhysicsLayer {
@@ -25,7 +27,8 @@ pub struct SpawningPlugin;
 
 impl Plugin for SpawningPlugin {
     fn build(&self, app: &mut App) {
-        app.add_system(cart::cart_spawning_system.run_in_state(GameState::Playing))
+        app.insert_resource(CartSpawningState::default())
+            .add_system(cart::cart_spawning_system.run_in_state(GameState::Playing))
             .add_system(ship::ship_queuing_system.run_in_state(GameState::Playing))
             .add_system(ship::ship_spawn_on_timer_expiry.run_in_state(GameState::Playing));
     }
