@@ -112,7 +112,7 @@ fn setup_world(
         .spawn_bundle((
             RigidBody::Static,
             CollisionShape::Cuboid {
-                half_extends: Vec3::new(100.0, 10.0, GRID_SIZE / 2.0),
+                half_extends: Vec3::new(103.0, 10.0, GRID_SIZE / 2.0),
                 border_radius: None,
             },
             CollisionLayers::none()
@@ -121,7 +121,7 @@ fn setup_world(
         ))
         .insert_bundle(SpriteBundle::default())
         .insert_bundle(TransformBundle {
-            local: Transform::from_xyz(-0.25 * WIDTH, -1.5 * GRID_SIZE, 0.0),
+            local: Transform::from_xyz(-0.193 * WIDTH, -1.9 * GRID_SIZE, 0.0),
             ..default()
         })
         .insert(WorldEntity);
