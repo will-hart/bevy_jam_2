@@ -194,3 +194,6 @@ pub struct WorldEntity;
 
 #[derive(Component)]
 pub struct MenuItem;
+
+#[derive(Component)]
+pub struct CurrentDateMarker;

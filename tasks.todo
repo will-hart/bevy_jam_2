@@ -133,7 +133,6 @@ Super Nice to Haves:
   ✔ Replace custom shader with sprites - it seems bevy wasm doesn't like my custom material for some reason @done(22-08-28 12:02)
   ✔ Better music @done(22-08-28 12:02)
   ✔ Nice art @done(22-08-28 12:02)
-  ☐ Weather effects
   ✘ Make departure animation less overlappy with waves @cancelled(22-08-26 00:20)
   ✘ if your ship has no more volume the crate bounces off @cancelled(22-08-23 00:11)
   ✘ Money ticking down in chunks, with world text "damage" indicators when money is spent @cancelled(22-08-23 00:11)
@@ -143,3 +142,10 @@ Super Nice to Haves:
   ✔ In-game tutorial @done(22-08-23 20:28)
   ✘ Style in-game tutorial @cancelled(22-08-23 20:28)
   ✘ Work out why the game spends 15 seconds on a white screen @cancelled(22-08-24 21:29)
+  ✘ No ships spawn after game restart when tutorial is complete @cancelled(22-08-28 13:12)
+  ☐ Weather effects
+  ☐ High score via data
+  ✔ Better game balance @done(22-08-28 19:31)
+    ✔ Slower ship spawn growth rate, by maybe 50%? @done(22-08-28 19:31)
+    ✔ Display current date next to score @done(22-08-28 19:31)
+  ☐ sounds for incorrect factory inputs

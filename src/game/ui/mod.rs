@@ -49,6 +49,7 @@ impl Plugin for UiPlugin {
                     .run_in_state(GameState::Playing)
                     .before(SystemLabels::ScoreDisplay),
             )
+            .add_system(score::update_current_date.run_in_state(GameState::Playing))
             .add_system(cart_request::update_cart_request_queue.run_in_state(GameState::Playing))
             .add_system(ship_demand::remove_ship_demands_when_met.run_in_state(GameState::Playing))
             .add_system(production_queue::update_production_queue.run_in_state(GameState::Playing))

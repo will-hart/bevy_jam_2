@@ -3,8 +3,8 @@ use bevy::{prelude::*, ui::FocusPolicy};
 use crate::{
     game::{
         components::{
-            BoxType, CartQueueUi, CartQueueUiButton, ProductionQueueUi, ScoreUi, TopUiBar,
-            WorldEntity,
+            BoxType, CartQueueUi, CartQueueUiButton, CurrentDateMarker, ProductionQueueUi, ScoreUi,
+            TopUiBar, WorldEntity,
         },
         factory::recipes::Recipes,
     },
@@ -135,6 +135,13 @@ pub fn spawn_game_ui(
                             ..default()
                         })
                         .with_children(|score_layout| {
+                            score_layout
+                                .spawn_bundle(TextBundle {
+                                    text: Text::from_section("-", text_style.clone()),
+                                    ..default()
+                                })
+                                .insert(CurrentDateMarker);
+
                             score_layout.spawn_bundle(ImageBundle {
                                 style: Style {
                                     size: Size::new(Val::Px(32.0), Val::Auto),

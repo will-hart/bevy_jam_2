@@ -1,6 +1,7 @@
 use bevy::prelude::*;
+use chrono::{Duration, NaiveDate};
 use iyes_loopless::prelude::{AppLooplessStateExt, IntoConditionalSystem};
-use rand::{Rng, SeedableRng};
+use rand::{thread_rng, Rng, SeedableRng};
 use rand_chacha::ChaCha8Rng;
 
 use crate::{
@@ -18,7 +19,7 @@ const RANDOM_SEED: u64 = 349678046248609346;
 const TORCH_THRESHOLD: f32 = 1.0;
 
 // The amount of world time that elapses per game second
-const TIME_OF_DAY_HOURS_PER_GAME_SECONDS: f32 = 0.35;
+const TIME_OF_DAY_HOURS_PER_GAME_SECONDS: f32 = 0.5;
 
 const NUM_COLOURS: usize = 8;
 const HOURS_PER_COLOUR: f32 = 24.0 / (NUM_COLOURS as f32);
@@ -56,7 +57,10 @@ pub struct DayNightCyclePlugin;
 impl Plugin for DayNightCyclePlugin {
     fn build(&self, app: &mut App) {
         app.insert_resource(SkyColourCycles::default())
-            .insert_resource(TimeOfDay { time_of_day: 5.8 })
+            .insert_resource(TimeOfDay {
+                time_of_day: 5.8,
+                today: NaiveDate::from_ymd(1883, 6, 11),
+            })
             .add_event::<OnSunEvent>()
             .add_system(day_night_cycle.run_in_state(GameState::Playing))
             .add_system(torch_visibility.run_in_state(GameState::Playing))
@@ -85,8 +89,9 @@ impl Default for SkyColourCycles {
     }
 }
 
-struct TimeOfDay {
+pub struct TimeOfDay {
     pub time_of_day: f32,
+    pub today: NaiveDate,
 }
 
 fn reset_day_night_cycle(mut cycle: ResMut<TimeOfDay>) {
@@ -102,6 +107,7 @@ fn day_night_cycle(
 ) {
     let dt = time.delta_seconds();
     let elapsed = dt * TIME_OF_DAY_HOURS_PER_GAME_SECONDS;
+    let mut rng = thread_rng();
 
     let prev_time_of_day = time_of_day.time_of_day;
     time_of_day.time_of_day = (time_of_day.time_of_day + elapsed) % 24.0;
@@ -109,7 +115,10 @@ fn day_night_cycle(
     // check if we've wrapped over midnight
     if prev_time_of_day > 23.0 && time_of_day.time_of_day < 1.0 {
         // true if we've just wrapped day, we need to toggle the colour pattern
-        cycle.is_sunny = !cycle.is_sunny;
+        cycle.is_sunny = rng.gen_bool(0.8);
+
+        // increment the date
+        time_of_day.today += Duration::days(1);
     }
 
     if prev_time_of_day < 18.0 && time_of_day.time_of_day >= 18.0 {
