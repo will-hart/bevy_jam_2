@@ -139,7 +139,7 @@ fn setup_world(
         .with_children(|children| {
             children
                 .spawn_bundle(SpriteSheetBundle {
-                    texture_atlas: textures.factory.clone().into(),
+                    texture_atlas: textures.factory.clone(),
                     transform: Transform::from_xyz(3.0, -10.25, 0.01),
                     ..default()
                 })
