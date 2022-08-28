@@ -4,7 +4,6 @@ pub mod components;
 mod day_night_cycle;
 mod spawners;
 
-mod custom_sprite;
 #[cfg(feature = "debug_system")]
 mod debug;
 
@@ -24,7 +23,6 @@ use crate::{
     game::{
         actions::ActionPlugin,
         components::{FactoryGraphic, FactoryInput, SplashCatcher, WorldEntity},
-        custom_sprite::CustomSpritePlugin,
         day_night_cycle::DayNightCyclePlugin,
         factory::FactoryPlugin,
         spawners::{spawn_torch, GamePhysicsLayer, SpawningPlugin},
@@ -53,8 +51,7 @@ pub struct GamePlugin;
 impl Plugin for GamePlugin {
     fn build(&self, app: &mut App) {
         info!("Mounting GamePlugin");
-        app.add_plugin(CustomSpritePlugin)
-            .add_plugin(PhysicsPlugin::default()) // Add the plugin
+        app.add_plugin(PhysicsPlugin::default()) // Add the plugin
             .insert_resource(Gravity::from(Vec3::new(0.0, -500.0, 0.0)))
             .add_plugin(AnimationPlugin)
             .add_plugin(ActionPlugin)

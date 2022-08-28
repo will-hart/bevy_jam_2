@@ -130,7 +130,7 @@ pub struct TextureAssets {
     #[asset(path = "textures/box_type_wine2.png")]
     pub box_type_wine2: Handle<Image>,
 
-    #[asset(texture_atlas(tile_size_x = 288., tile_size_y = 224., columns = 4, rows = 1))]
+    #[asset(texture_atlas(tile_size_x = 288., tile_size_y = 224., columns = 1, rows = 1))]
     #[asset(path = "textures/ship.png")]
     pub ship: Handle<TextureAtlas>,
 

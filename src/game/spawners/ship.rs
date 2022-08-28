@@ -1,4 +1,4 @@
-use bevy::{prelude::*, sprite::MaterialMesh2dBundle};
+use bevy::prelude::*;
 use heron::{CollisionLayers, CollisionShape, RigidBody};
 use rand::{seq::SliceRandom, thread_rng, Rng};
 
@@ -6,15 +6,14 @@ use crate::{
     game::{
         components::{
             AnimateWithSpeed, BoxType, CountDownTimer, Ship, ShipDemandItemMarker, ShipHold,
-            SpawnShipRequest, TopUiBar, TutorialMarker, Wave, WorldEntity, BOX_DEMANDS,
+            SpawnShipRequest, TopUiBar, Wave, WorldEntity, BOX_DEMANDS,
         },
-        custom_sprite::CustomSpriteMaterial,
         rng::RandomSpawnTimer,
         spawners::request::spawn_ship_request_icon,
         ui::tutorial::CurrentTutorialLevel,
         AnimationState,
     },
-    loader::{AnimationAssets, FontAssets, TextureAssets},
+    loader::{AnimationAssets, TextureAssets},
     GRID_SIZE, WIDTH,
 };
 
@@ -112,30 +111,17 @@ pub fn ship_queuing_system(
 }
 
 /// Launches ships when their timer runs out
-#[allow(clippy::too_many_arguments)]
 pub fn ship_spawn_on_timer_expiry(
     mut commands: Commands,
     textures: Res<TextureAssets>,
     animations: Res<AnimationAssets>,
-    fonts: Res<FontAssets>,
-    mut meshes: ResMut<Assets<Mesh>>,
-    mut materials: ResMut<Assets<CustomSpriteMaterial>>,
     mut spawn_events: EventWriter<OnShipSpawned>,
     requests: Query<(&Parent, &CountDownTimer, &SpawnShipRequest)>,
 ) {
     for (parent_entity, timer, request) in requests.iter() {
         if timer.0.finished() {
             info!("Launching a ship due to timer");
-            spawn_ship(
-                &mut commands,
-                0, // TODO
-                &textures,
-                &animations,
-                &fonts,
-                &mut meshes,
-                &mut materials,
-                request.clone(),
-            );
+            spawn_ship(&mut commands, &textures, &animations, request.clone());
 
             // despawn the spawn indicator
             commands.entity(parent_entity.get()).despawn_recursive();
@@ -144,35 +130,21 @@ pub fn ship_spawn_on_timer_expiry(
     }
 }
 
-/// Spawns a ship in teh game world based on a RequestShip
-#[allow(clippy::too_many_arguments)]
+/// Spawns a ship in the game world based on a RequestShip
 pub fn spawn_ship(
     commands: &mut Commands,
-    tutorial_level: u8,
     textures: &TextureAssets,
     animations: &AnimationAssets,
-    fonts: &FontAssets,
-    meshes: &mut Assets<Mesh>,
-    materials: &mut Assets<CustomSpriteMaterial>,
     request: SpawnShipRequest,
 ) -> Entity {
     let mut rng = thread_rng();
     let mut entity: Option<Entity> = None;
 
-    let text_style = TextStyle {
-        font: fonts.default_font.clone(),
-        font_size: 12.0,
-        color: Color::WHITE,
-    };
-
     commands
-        .spawn_bundle(MaterialMesh2dBundle {
-            mesh: meshes
-                .add(Mesh::from(shape::Quad::new(Vec2::new(288.0, 64.0))))
-                .into(),
+        .spawn_bundle(SpriteBundle {
+            texture: textures.waves.clone(),
             transform: Transform::from_translation(SHIP_SPAWN_OFFSCREEN_POSITION),
-            material: materials.add(textures.waves.clone().into()),
-            ..Default::default()
+            ..default()
         })
         .insert_bundle((
             CollisionShape::Cuboid {
@@ -224,19 +196,6 @@ pub fn spawn_ship(
                                     ..default()
                                 })
                                 .insert(ShipDemandItemMarker(*demand));
-                        }
-
-                        if tutorial_level == 1 {
-                            ship_child_commands
-                                .spawn_bundle(Text2dBundle {
-                                    text: Text::from_section(
-                                        "^^^ Drag these crates on to the ship",
-                                        text_style,
-                                    ),
-                                    transform: Transform::from_xyz(-130., -140., 2.0),
-                                    ..default()
-                                })
-                                .insert(TutorialMarker(1));
                         }
                     })
                     .id(),
