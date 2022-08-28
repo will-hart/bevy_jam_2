@@ -12,6 +12,7 @@ pub mod rng;
 mod ui;
 
 pub use animation::{Animation, AnimationState};
+pub use day_night_cycle::{OnRainEnd, OnRainStart};
 pub use spawners::OnShipSpawned;
 pub use ui::OnCoinsReceived;
 
@@ -51,7 +52,9 @@ pub struct GamePlugin;
 impl Plugin for GamePlugin {
     fn build(&self, app: &mut App) {
         info!("Mounting GamePlugin");
-        app.add_plugin(PhysicsPlugin::default()) // Add the plugin
+        app.add_event::<OnRainStart>()
+            .add_event::<OnRainEnd>()
+            .add_plugin(PhysicsPlugin::default()) // Add the plugin
             .insert_resource(Gravity::from(Vec3::new(0.0, -500.0, 0.0)))
             .add_plugin(AnimationPlugin)
             .add_plugin(ActionPlugin)

@@ -143,10 +143,12 @@ Super Nice to Haves:
   ✘ Style in-game tutorial @cancelled(22-08-23 20:28)
   ✘ Work out why the game spends 15 seconds on a white screen @cancelled(22-08-24 21:29)
   ✘ No ships spawn after game restart when tutorial is complete @cancelled(22-08-28 13:12)
-  ☐ Weather effects
   ✘ High score via data @cancelled(22-08-29 08:06)
   ✔ Better game balance @done(22-08-28 19:31)
-    ✔ Slower ship spawn growth rate, by maybe 50%? @done(22-08-28 19:31)
-    ✔ Display current date next to score @done(22-08-28 19:31)
-  ☐ sounds for incorrect factory inputs
+  ✔ Slower ship spawn growth rate, by maybe 50%? @done(22-08-28 19:31)
+  ✔ Display current date next to score @done(22-08-28 19:31)
   ✔ Menu sounds that aren't music @done(22-08-29 09:20)
+  ✔ Weather effects @done(22-08-29 09:51)
+  ☐ queing production items doesn't correctly show the producing state
+  ☐ sounds for correct factory inputs
+  ☐ sounds for incorrect factory inputs

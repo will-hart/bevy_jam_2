@@ -42,6 +42,9 @@ pub struct AudioAssets {
     #[asset(path = "audio/wind.ogg")]
     pub wind: Handle<bevy_kira_audio::AudioSource>,
 
+    #[asset(path = "audio/rain.ogg")]
+    pub rain: Handle<bevy_kira_audio::AudioSource>,
+
     #[asset(path = "audio/ships_bell.ogg")]
     pub ships_bell: Handle<bevy_kira_audio::AudioSource>,
 
@@ -165,6 +168,9 @@ pub struct TextureAssets {
 
     #[asset(path = "textures/game_over.png")]
     pub game_over: Handle<Image>,
+
+    #[asset(path = "textures/rain_drop.png")]
+    pub rain_drop: Handle<Image>,
 
     // can't do spritesheets in UI so need to load individual countdown images :(
     // also, folders aren't supported in web builds :facepalm:

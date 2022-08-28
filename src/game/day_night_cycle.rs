@@ -14,6 +14,10 @@ use super::{
     Animation,
 };
 
+pub struct OnRainStart;
+
+pub struct OnRainEnd;
+
 const RANDOM_SEED: u64 = 349678046248609346;
 
 const TORCH_THRESHOLD: f32 = 1.0;
@@ -29,11 +33,13 @@ const SUN_DOWN: f32 = 19.0;
 
 const STAR_SPEED: f32 = -2.3;
 
+const CHANCE_OF_SUN: f64 = 0.8;
+
 // Note for smooth lerping, these palettes should start and end on the same colour as each other
 const SUNNY_COLOR_CYCLE: [Vec3; NUM_COLOURS] = [
     /*  0am */ Vec3::new(0.1, 0.1, 0.2),
     /*  3am */ Vec3::new(0.15, 0.15, 0.25),
-    /*  6am */ Vec3::new(0.3, 0.2, 0.4),
+    /*  6am */ Vec3::new(0.35, 0.3, 0.55),
     /*  9am */ Vec3::new(0.4, 0.5, 0.7),
     /* 12pm */ Vec3::new(0.4, 0.8, 0.9),
     /*  3pm */ Vec3::new(0.3, 0.7, 0.8),
@@ -114,6 +120,8 @@ fn day_night_cycle(
     mut clear_colour: ResMut<ClearColor>,
     mut time_of_day: ResMut<TimeOfDay>,
     mut sun_events: EventWriter<OnSunEvent>,
+    mut rain_start_events: EventWriter<OnRainStart>,
+    mut rain_stop_events: EventWriter<OnRainEnd>,
 ) {
     let dt = time.delta_seconds();
     let elapsed = dt * TIME_OF_DAY_HOURS_PER_GAME_SECONDS;
@@ -125,7 +133,7 @@ fn day_night_cycle(
     // check if we've wrapped over midnight
     if prev_time_of_day > 23.0 && time_of_day.time_of_day < 1.0 {
         // true if we've just wrapped day, we need to toggle the colour pattern
-        cycle.is_sunny = rng.gen_bool(0.8);
+        cycle.is_sunny = rng.gen_bool(CHANCE_OF_SUN);
 
         // increment the date
         time_of_day.today += Duration::days(1);
@@ -133,10 +141,14 @@ fn day_night_cycle(
 
     if prev_time_of_day < 18.0 && time_of_day.time_of_day >= 18.0 {
         sun_events.send(OnSunEvent(false));
+        rain_stop_events.send(OnRainEnd);
     }
 
     if prev_time_of_day < 6.0 && time_of_day.time_of_day >= 6.0 {
         sun_events.send(OnSunEvent(true));
+        if !cycle.is_sunny {
+            rain_start_events.send(OnRainStart);
+        }
     }
 
     let from_idx = (time_of_day.time_of_day / HOURS_PER_COLOUR).floor() as usize;

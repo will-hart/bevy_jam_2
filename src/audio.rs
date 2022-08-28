@@ -8,7 +8,7 @@ use iyes_loopless::{
 use crate::{
     game::{
         actions::{OnCrateSplashedInWater, OnDropCrateOnShip},
-        OnCoinsReceived, OnShipSpawned,
+        OnCoinsReceived, OnRainEnd, OnRainStart, OnShipSpawned,
     },
     loader::AudioAssets,
     GameState,
@@ -50,6 +50,16 @@ impl Plugin for InternalAudioPlugin {
                     .run_in_state(GameState::Playing)
                     .run_on_event::<OnShipSpawned>(),
             )
+            .add_system(
+                on_rain_start
+                    .run_in_state(GameState::Playing)
+                    .run_on_event::<OnRainStart>(),
+            )
+            .add_system(
+                on_rain_stop
+                    .run_in_state(GameState::Playing)
+                    .run_on_event::<OnRainEnd>(),
+            )
             .add_enter_system(GameState::Menu, play_wind)
             .add_enter_system(GameState::Playing, play_music)
             .add_exit_system(GameState::Playing, stop_all_music);
@@ -70,8 +80,12 @@ fn play_wind(music_channel: Res<AudioChannel<MusicChannel>>, audio_assets: Res<A
         .looped();
 }
 
-fn stop_all_music(music_channel: Res<AudioChannel<MusicChannel>>) {
+fn stop_all_music(
+    music_channel: Res<AudioChannel<MusicChannel>>,
+    rain_channel: Res<AudioChannel<RainChannel>>,
+) {
     music_channel.stop();
+    rain_channel.stop();
 }
 
 fn on_coin_drop(
@@ -98,4 +112,14 @@ fn on_ship_spawn(
 ) {
     info!("Playing ship spawn sound");
     effects_channel.play(audio_assets.ships_bell.clone());
+}
+
+fn on_rain_start(rain_channel: Res<AudioChannel<RainChannel>>, audio_assets: Res<AudioAssets>) {
+    info!("Playing rain sound");
+    rain_channel.play(audio_assets.rain.clone());
+}
+
+fn on_rain_stop(rain_channel: Res<AudioChannel<RainChannel>>) {
+    info!("Stopping rain sound");
+    rain_channel.stop();
 }

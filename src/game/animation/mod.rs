@@ -11,7 +11,10 @@ pub use animate_entity::OnShipArrivedAtDestination;
 mod ship_bob;
 use iyes_loopless::prelude::IntoConditionalSystem;
 
-use crate::{game::SystemLabels, GameState};
+use crate::{
+    game::{OnRainStart, SystemLabels},
+    GameState,
+};
 
 pub struct AnimationPlugin;
 
@@ -31,7 +34,8 @@ impl Plugin for AnimationPlugin {
             )
             .add_system(ship_bob::ship_bob.run_not_in_state(GameState::Loading))
             .add_system(effects::despawn_visual_effects.run_not_in_state(GameState::Loading))
-            .add_system(splashes::splash_when_hitting_water.run_not_in_state(GameState::Loading));
+            .add_system(splashes::splash_when_hitting_water.run_not_in_state(GameState::Loading))
+            .add_system(effects::spawn_rain_effects.run_on_event::<OnRainStart>());
     }
 }
 
