@@ -52,6 +52,16 @@ const STORMY_COLOR_CYCLE: [Vec3; NUM_COLOURS] = [
     /*  9pm */ Vec3::new(0.18, 0.18, 0.25),
 ];
 
+pub const START_DATE_YMD: [u32; 3] = [1883, 6, 11];
+
+pub fn get_start_date() -> NaiveDate {
+    NaiveDate::from_ymd(
+        START_DATE_YMD[0] as i32,
+        START_DATE_YMD[1],
+        START_DATE_YMD[2],
+    )
+}
+
 pub struct DayNightCyclePlugin;
 
 impl Plugin for DayNightCyclePlugin {
@@ -59,7 +69,7 @@ impl Plugin for DayNightCyclePlugin {
         app.insert_resource(SkyColourCycles::default())
             .insert_resource(TimeOfDay {
                 time_of_day: 5.8,
-                today: NaiveDate::from_ymd(1883, 6, 11),
+                today: get_start_date(),
             })
             .add_event::<OnSunEvent>()
             .add_system(day_night_cycle.run_in_state(GameState::Playing))
