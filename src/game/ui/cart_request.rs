@@ -23,6 +23,7 @@ pub fn update_cart_request_queue(
     let parent = parent_query.single();
 
     // loop through all the items and updated/add/delete accordingly
+    #[allow(clippy::needless_range_loop)] // I think this is required because of the spawn part
     for idx in 0..(num_ui_items.max(num_queue_items)) {
         // create
         if idx >= num_ui_items {

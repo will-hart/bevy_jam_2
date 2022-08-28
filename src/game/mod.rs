@@ -4,7 +4,6 @@ pub mod components;
 mod day_night_cycle;
 mod spawners;
 
-mod custom_sprite;
 #[cfg(feature = "debug_system")]
 mod debug;
 
@@ -13,6 +12,7 @@ pub mod rng;
 mod ui;
 
 pub use animation::{Animation, AnimationState};
+pub use spawners::OnShipSpawned;
 pub use ui::OnCoinsReceived;
 
 use bevy::prelude::*;
@@ -22,8 +22,7 @@ use iyes_loopless::prelude::AppLooplessStateExt;
 use crate::{
     game::{
         actions::ActionPlugin,
-        components::{FactoryInput, SplashCatcher, WorldEntity},
-        custom_sprite::CustomSpritePlugin,
+        components::{FactoryGraphic, FactoryInput, SplashCatcher, WorldEntity},
         day_night_cycle::DayNightCyclePlugin,
         factory::FactoryPlugin,
         spawners::{spawn_torch, GamePhysicsLayer, SpawningPlugin},
@@ -52,8 +51,7 @@ pub struct GamePlugin;
 impl Plugin for GamePlugin {
     fn build(&self, app: &mut App) {
         info!("Mounting GamePlugin");
-        app.add_plugin(CustomSpritePlugin)
-            .add_plugin(PhysicsPlugin::default()) // Add the plugin
+        app.add_plugin(PhysicsPlugin::default()) // Add the plugin
             .insert_resource(Gravity::from(Vec3::new(0.0, -500.0, 0.0)))
             .add_plugin(AnimationPlugin)
             .add_plugin(ActionPlugin)
@@ -87,26 +85,70 @@ fn setup_world(
         .insert(WorldEntity);
 
     /* TORCHES */
-    [
-        -GRID_SIZE * 9.25,
-        GRID_SIZE * 3.25,
-        6.5 * GRID_SIZE,
-        8.5 * GRID_SIZE,
-    ]
-    .iter()
-    .enumerate()
-    .for_each(|(i, x)| {
-        spawn_torch(
-            &mut commands,
-            &textures,
-            &animations,
-            Vec3::new(*x, 0., 0.1),
-            i == 0,
-            i > 1,
-        );
-    });
+    [-GRID_SIZE * 10.65, -GRID_SIZE * 2.7, 9.25 * GRID_SIZE]
+        .iter()
+        .enumerate()
+        .for_each(|(i, x)| {
+            spawn_torch(
+                &mut commands,
+                &textures,
+                &animations,
+                Vec3::new(*x, 0.5 * GRID_SIZE, 0.1),
+                i == 0,
+            );
+        });
 
     /* WAREHOUSE */
+    commands
+        .spawn_bundle((
+            RigidBody::Static,
+            CollisionShape::Cuboid {
+                half_extends: Vec3::new(103.0, 26.0, GRID_SIZE / 2.0),
+                border_radius: None,
+            },
+            CollisionLayers::none()
+                .with_group(GamePhysicsLayer::Ship)
+                .with_mask(GamePhysicsLayer::Crate),
+        ))
+        .insert_bundle(SpriteBundle::default())
+        .insert_bundle(TransformBundle {
+            local: Transform::from_xyz(-0.193 * WIDTH, -1.75 * GRID_SIZE, 0.0),
+            ..default()
+        })
+        .insert(WorldEntity);
+
+    /* FACTORY */
+    commands
+        .spawn_bundle((
+            RigidBody::Sensor,
+            CollisionShape::Cuboid {
+                half_extends: Vec3::new(65.0, 10.0, GRID_SIZE / 2.0),
+                border_radius: None,
+            },
+            CollisionLayers::none()
+                .with_group(GamePhysicsLayer::Ship)
+                .with_mask(GamePhysicsLayer::Crate),
+        ))
+        .insert_bundle(SpriteBundle::default())
+        .insert_bundle(TransformBundle {
+            local: Transform::from_xyz(1.0, 1.25 * GRID_SIZE, 0.0),
+            ..default()
+        })
+        .insert(FactoryInput)
+        .insert(WorldEntity)
+        .with_children(|children| {
+            children
+                .spawn_bundle(SpriteSheetBundle {
+                    texture_atlas: textures.factory.clone().into(),
+                    transform: Transform::from_xyz(3.0, -10.25, 0.01),
+                    ..default()
+                })
+                .insert(animations.factory_tutorial.clone())
+                .insert(AnimationState::default())
+                .insert(FactoryGraphic);
+        });
+
+    /* FACTORY OUTPUT */
     commands
         .spawn_bundle((
             RigidBody::Static,
@@ -120,46 +162,7 @@ fn setup_world(
         ))
         .insert_bundle(SpriteBundle::default())
         .insert_bundle(TransformBundle {
-            local: Transform::from_xyz(-0.25 * WIDTH, -1.5 * GRID_SIZE, 0.0),
-            ..default()
-        })
-        .insert(WorldEntity);
-
-    /* FACTORY */
-    commands
-        .spawn_bundle((
-            RigidBody::Sensor,
-            CollisionShape::Cuboid {
-                half_extends: Vec3::new(60.0, 10.0, GRID_SIZE / 2.0),
-                border_radius: None,
-            },
-            CollisionLayers::none()
-                .with_group(GamePhysicsLayer::Ship)
-                .with_mask(GamePhysicsLayer::Crate),
-        ))
-        .insert_bundle(SpriteBundle::default())
-        .insert_bundle(TransformBundle {
-            local: Transform::from_xyz(-1.0, 1.5 * GRID_SIZE, 0.0),
-            ..default()
-        })
-        .insert(FactoryInput)
-        .insert(WorldEntity);
-
-    /* FACTORY OUTPUT */
-    commands
-        .spawn_bundle((
-            RigidBody::Static,
-            CollisionShape::Cuboid {
-                half_extends: Vec3::new(60.0, 10.0, GRID_SIZE / 2.0),
-                border_radius: None,
-            },
-            CollisionLayers::none()
-                .with_group(GamePhysicsLayer::Ship)
-                .with_mask(GamePhysicsLayer::Crate),
-        ))
-        .insert_bundle(SpriteBundle::default())
-        .insert_bundle(TransformBundle {
-            local: Transform::from_xyz(5.0 * GRID_SIZE, 0.0, 0.0),
+            local: Transform::from_xyz(5.9 * GRID_SIZE, -0.8 * GRID_SIZE, 0.0),
             ..default()
         })
         .insert(WorldEntity);

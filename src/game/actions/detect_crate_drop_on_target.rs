@@ -14,6 +14,7 @@ use super::dropping::OnDropCrateOnShip;
 pub struct OnCrateSplashedInWater(pub Vec2);
 
 /// Handles collisions between physics crates and ships
+#[allow(clippy::too_many_arguments)]
 pub fn detect_crate_drop_on_ship(
     mut commands: Commands,
     mut factory_event: EventWriter<OnDropInFactoryInput>,
@@ -27,7 +28,7 @@ pub fn detect_crate_drop_on_ship(
 ) {
     for (crate_entity, crate_collisions, physics_crate, crate_tx) in box_collisions.iter() {
         for collision in crate_collisions.entities() {
-            if let Ok(_) = factory_inputs.get(collision) {
+            if factory_inputs.get(collision).is_ok() {
                 info!(
                     "Dropped {:?} in factory input, raising event and despawning",
                     physics_crate.box_type
@@ -39,35 +40,32 @@ pub fn detect_crate_drop_on_ship(
                 continue;
             }
 
-            if let Ok(_) = splashers.get(collision) {
+            if splashers.get(collision).is_ok() {
                 info!("Crate splashed down!");
                 splash_event.send(OnCrateSplashedInWater(crate_tx.translation.truncate()));
                 commands.entity(crate_entity).despawn_recursive();
                 continue;
             }
 
-            match ship_entities.get(collision) {
-                Ok(children) => {
-                    // add the crate to the ship hold and despawn the physics crate
-                    for child in children.iter() {
-                        if let Ok((ship_entity, mut ship_hold, tx)) = ship_holds.get_mut(*child) {
-                            info!("Crate {:?} dropped on ship {:?}!", crate_entity, ship_hold);
+            if let Ok(children) = ship_entities.get(collision) {
+                // add the crate to the ship hold and despawn the physics crate
+                for child in children.iter() {
+                    if let Ok((ship_entity, mut ship_hold, tx)) = ship_holds.get_mut(*child) {
+                        info!("Crate {:?} dropped on ship {:?}!", crate_entity, ship_hold);
 
-                            let unmet_demands = ship_hold.get_unmet_demands();
-                            drop_on_ship_event.send(OnDropCrateOnShip {
-                                ship_entity,
-                                box_type: physics_crate.box_type,
-                                location: tx.translation(),
-                                was_demanded: unmet_demands.contains(&physics_crate.box_type),
-                            });
+                        let unmet_demands = ship_hold.get_unmet_demands();
+                        drop_on_ship_event.send(OnDropCrateOnShip {
+                            ship_entity,
+                            box_type: physics_crate.box_type,
+                            location: tx.translation(),
+                            was_demanded: unmet_demands.contains(&physics_crate.box_type),
+                        });
 
-                            ship_hold.crates.push(physics_crate.box_type);
+                        ship_hold.crates.push(physics_crate.box_type);
 
-                            commands.entity(crate_entity).despawn_recursive();
-                        }
+                        commands.entity(crate_entity).despawn_recursive();
                     }
                 }
-                _ => {}
             }
         }
     }

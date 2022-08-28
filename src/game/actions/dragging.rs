@@ -55,10 +55,11 @@ pub fn start_dragging(
 
                 // hide the box that's being dragged
                 for child in children.iter() {
-                    let (mut vis, child_crate) =
-                        child_crates.get_mut(*child).expect("should have children");
-                    if child_crate.is_front_slot == event.is_front_slot {
-                        vis.is_visible = false;
+                    // not all children are cart crates
+                    if let Ok((mut vis, child_crate)) = child_crates.get_mut(*child) {
+                        if child_crate.is_front_slot == event.is_front_slot {
+                            vis.is_visible = false;
+                        }
                     }
                 }
             }

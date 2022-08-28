@@ -38,18 +38,20 @@ pub struct AudioAssets {
 
     #[asset(path = "audio/music.ogg")]
     pub music: Handle<bevy_kira_audio::AudioSource>,
+
+    #[asset(path = "audio/ships_bell.ogg")]
+    pub ships_bell: Handle<bevy_kira_audio::AudioSource>,
+
+    #[asset(path = "audio/splash.ogg")]
+    pub splash: Handle<bevy_kira_audio::AudioSource>,
 }
 
 /// Contains texture assets loaded from file
 #[derive(AssetCollection)]
 pub struct TextureAssets {
-    #[asset(texture_atlas(tile_size_x = 32., tile_size_y = 64., columns = 5, rows = 1))]
+    #[asset(texture_atlas(tile_size_x = 96., tile_size_y = 96., columns = 5, rows = 1))]
     #[asset(path = "textures/torch.png")]
     pub torch: Handle<TextureAtlas>,
-
-    #[asset(texture_atlas(tile_size_x = 32., tile_size_y = 64., columns = 5, rows = 1))]
-    #[asset(path = "textures/torch_upright.png")]
-    pub torch_upright: Handle<TextureAtlas>,
 
     #[asset(path = "textures/icon.png")]
     pub bevy_icon: Handle<Image>,
@@ -61,7 +63,10 @@ pub struct TextureAssets {
     #[asset(path = "textures/horse_and_cart.png")]
     pub horse_and_cart: Handle<TextureAtlas>,
 
-    #[asset(texture_atlas(tile_size_x = 64., tile_size_y = 64., columns = 2, rows = 1))]
+    #[asset(path = "textures/cart_shadow.png")]
+    pub cart_shadow: Handle<Image>,
+
+    #[asset(texture_atlas(tile_size_x = 64., tile_size_y = 64., columns = 1, rows = 1))]
     #[asset(path = "textures/sun.png")]
     pub sun: Handle<TextureAtlas>,
 
@@ -121,7 +126,7 @@ pub struct TextureAssets {
     #[asset(path = "textures/box_type_wine2.png")]
     pub box_type_wine2: Handle<Image>,
 
-    #[asset(texture_atlas(tile_size_x = 288., tile_size_y = 224., columns = 4, rows = 1))]
+    #[asset(texture_atlas(tile_size_x = 288., tile_size_y = 224., columns = 1, rows = 1))]
     #[asset(path = "textures/ship.png")]
     pub ship: Handle<TextureAtlas>,
 
@@ -180,6 +185,10 @@ pub struct TextureAssets {
     #[asset(texture_atlas(tile_size_x = 32., tile_size_y = 32., columns = 6, rows = 1))]
     #[asset(path = "textures/splashes.png")]
     pub splashes: Handle<TextureAtlas>,
+
+    #[asset(texture_atlas(tile_size_x = 160., tile_size_y = 192., columns = 8, rows = 1))]
+    #[asset(path = "textures/factory.png")]
+    pub factory: Handle<TextureAtlas>,
 }
 
 /// Contains animation assets loaded from file using a custom animation loader
@@ -194,15 +203,18 @@ pub struct AnimationAssets {
     #[asset(path = "animations/cart.animation.yml")]
     pub cart: Handle<Animation>,
 
-    #[asset(path = "animations/ship_unfurl.animation.yml")]
-    pub ship_unfurl: Handle<Animation>,
-
-    #[asset(path = "animations/ship_furl.animation.yml")]
-    pub ship_furl: Handle<Animation>,
-
     #[asset(path = "animations/ship_idle.animation.yml")]
     pub ship_idle: Handle<Animation>,
 
     #[asset(path = "animations/splashes.animation.yml")]
     pub splashes: Handle<Animation>,
+
+    #[asset(path = "animations/factory_on.animation.yml")]
+    pub factory_on: Handle<Animation>,
+
+    #[asset(path = "animations/factory_off.animation.yml")]
+    pub factory_off: Handle<Animation>,
+
+    #[asset(path = "animations/factory_tutorial.animation.yml")]
+    pub factory_tutorial: Handle<Animation>,
 }

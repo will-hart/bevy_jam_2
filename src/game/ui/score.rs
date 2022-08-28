@@ -32,9 +32,15 @@ pub fn score_update(
     mut commands: Commands,
     mut score: ResMut<Score>,
     mut drop_on_ship_event: EventReader<OnDropCrateOnShip>,
+    mut on_coin_drop: EventWriter<OnCoinsReceived>,
 ) {
     for evt in drop_on_ship_event.iter() {
-        score.0 += if evt.was_demanded { 10.0 } else { -5.0 };
+        let amt = if evt.was_demanded { 10.0 } else { -5.0 };
+        score.0 += amt;
+
+        if amt > 0.0 {
+            on_coin_drop.send(OnCoinsReceived);
+        }
     }
 
     if score.0 < -0.1 {

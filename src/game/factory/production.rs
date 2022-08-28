@@ -114,7 +114,7 @@ pub fn finish_factory_production(
             commands.entity(entity).despawn_recursive();
             let sprite = commands
                 .spawn_bundle(SpriteBundle {
-                    texture: built.get_image(&textures).into(),
+                    texture: built.get_image(&textures),
                     transform: Transform::from_translation(FACTORY_OUTPUT_LOCATION),
                     ..default()
                 })
@@ -139,7 +139,7 @@ pub fn handle_production_started(
     for evt in started_events.iter() {
         commands
             .spawn_bundle(SpriteBundle {
-                texture: textures.countdown[9].clone().into(),
+                texture: textures.countdown[9].clone(),
                 transform: Transform::from_translation(FACTORY_OUTPUT_INDICATOR_LOCATION),
                 ..default()
             })

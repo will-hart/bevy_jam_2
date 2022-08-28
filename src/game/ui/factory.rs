@@ -36,9 +36,6 @@ pub fn update_factory_input_ui(
             continue;
         }
 
-        *image = factory.inputs[factory_info.0]
-            .unwrap()
-            .get_image(&textures)
-            .into();
+        *image = factory.inputs[factory_info.0].unwrap().get_image(&textures);
     }
 }
