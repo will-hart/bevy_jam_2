@@ -85,24 +85,18 @@ fn setup_world(
         .insert(WorldEntity);
 
     /* TORCHES */
-    [
-        -GRID_SIZE * 9.25,
-        GRID_SIZE * 3.25,
-        6.5 * GRID_SIZE,
-        8.5 * GRID_SIZE,
-    ]
-    .iter()
-    .enumerate()
-    .for_each(|(i, x)| {
-        spawn_torch(
-            &mut commands,
-            &textures,
-            &animations,
-            Vec3::new(*x, 0., 0.1),
-            i == 0,
-            i > 1,
-        );
-    });
+    [-GRID_SIZE * 10.65, -GRID_SIZE * 2.7, 9.25 * GRID_SIZE]
+        .iter()
+        .enumerate()
+        .for_each(|(i, x)| {
+            spawn_torch(
+                &mut commands,
+                &textures,
+                &animations,
+                Vec3::new(*x, 0.5 * GRID_SIZE, 0.1),
+                i == 0,
+            );
+        });
 
     /* WAREHOUSE */
     commands

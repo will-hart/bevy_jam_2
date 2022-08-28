@@ -148,7 +148,7 @@ pub fn spawn_ship(
         })
         .insert_bundle((
             CollisionShape::Cuboid {
-                half_extends: Vec3::new(SHIP_WIDTH / 2.2, 10.0, 30.0),
+                half_extends: Vec3::new(SHIP_WIDTH / 2.2, 18.0, 30.0),
                 border_radius: None,
             },
             RigidBody::Sensor,

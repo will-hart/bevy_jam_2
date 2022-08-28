@@ -49,13 +49,9 @@ pub struct AudioAssets {
 /// Contains texture assets loaded from file
 #[derive(AssetCollection)]
 pub struct TextureAssets {
-    #[asset(texture_atlas(tile_size_x = 32., tile_size_y = 64., columns = 5, rows = 1))]
+    #[asset(texture_atlas(tile_size_x = 96., tile_size_y = 96., columns = 5, rows = 1))]
     #[asset(path = "textures/torch.png")]
     pub torch: Handle<TextureAtlas>,
-
-    #[asset(texture_atlas(tile_size_x = 32., tile_size_y = 64., columns = 5, rows = 1))]
-    #[asset(path = "textures/torch_upright.png")]
-    pub torch_upright: Handle<TextureAtlas>,
 
     #[asset(path = "textures/icon.png")]
     pub bevy_icon: Handle<Image>,
