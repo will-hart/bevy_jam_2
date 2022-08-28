@@ -39,6 +39,9 @@ pub struct AudioAssets {
     #[asset(path = "audio/music.ogg")]
     pub music: Handle<bevy_kira_audio::AudioSource>,
 
+    #[asset(path = "audio/wind.ogg")]
+    pub wind: Handle<bevy_kira_audio::AudioSource>,
+
     #[asset(path = "audio/ships_bell.ogg")]
     pub ships_bell: Handle<bevy_kira_audio::AudioSource>,
 

@@ -18,6 +18,8 @@ use crate::{
 struct MusicChannel;
 #[derive(Component, Default, Clone)]
 struct EffectsChannel;
+#[derive(Component, Default, Clone)]
+struct RainChannel;
 
 pub struct InternalAudioPlugin;
 
@@ -26,6 +28,7 @@ impl Plugin for InternalAudioPlugin {
     fn build(&self, app: &mut App) {
         app.add_plugin(AudioPlugin)
             .add_audio_channel::<MusicChannel>()
+            .add_audio_channel::<RainChannel>()
             .add_audio_channel::<EffectsChannel>()
             .add_system(
                 on_coin_drop
@@ -47,7 +50,9 @@ impl Plugin for InternalAudioPlugin {
                     .run_in_state(GameState::Playing)
                     .run_on_event::<OnShipSpawned>(),
             )
-            .add_exit_system(GameState::Loading, play_music);
+            .add_enter_system(GameState::Menu, play_wind)
+            .add_enter_system(GameState::Playing, play_music)
+            .add_exit_system(GameState::Playing, stop_all_music);
     }
 }
 
@@ -56,8 +61,17 @@ fn play_music(music_channel: Res<AudioChannel<MusicChannel>>, audio_assets: Res<
         .play(audio_assets.music.clone())
         .with_volume(0.15)
         .looped();
+}
 
-    // music_channel.pause();
+fn play_wind(music_channel: Res<AudioChannel<MusicChannel>>, audio_assets: Res<AudioAssets>) {
+    music_channel
+        .play(audio_assets.wind.clone())
+        .with_volume(0.15)
+        .looped();
+}
+
+fn stop_all_music(music_channel: Res<AudioChannel<MusicChannel>>) {
+    music_channel.stop();
 }
 
 fn on_coin_drop(
