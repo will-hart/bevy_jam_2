@@ -37,7 +37,7 @@ pub fn show_factory_on_animation(
     mut items: Query<&mut Handle<Animation>, With<FactoryGraphic>>,
 ) {
     for mut item in items.iter_mut() {
-        *item = animations.factory_on.clone().into();
+        *item = animations.factory_on.clone();
     }
 }
 
@@ -46,6 +46,6 @@ pub fn show_factory_off_animation(
     mut items: Query<&mut Handle<Animation>, With<FactoryGraphic>>,
 ) {
     for mut item in items.iter_mut() {
-        *item = animations.factory_off.clone().into();
+        *item = animations.factory_off.clone();
     }
 }
