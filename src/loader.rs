@@ -23,7 +23,7 @@ impl Plugin for LoadingPlugin {
 /// Contains font assets loaded from file
 #[derive(AssetCollection)]
 pub struct FontAssets {
-    #[asset(path = "fonts/FiraSans-Bold.ttf")]
+    #[asset(path = "fonts/JosefinSans-SemiBold.ttf")]
     pub default_font: Handle<Font>,
 }
 
