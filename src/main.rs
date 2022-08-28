@@ -32,7 +32,7 @@ fn main() {
         .insert_resource(WindowDescriptor {
             width: 1024.,
             height: 768.,
-            title: "Bevy Jam 2".to_string(),
+            title: "The Company".to_string(),
             canvas: Some("#bevy".to_owned()),
             resizable: false,
             ..Default::default()

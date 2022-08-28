@@ -130,9 +130,9 @@ Super Nice to Haves:
   ✘ A warehouse on the shore with very limited capacity that you can use to stockpile interesting items @cancelled(22-08-26 00:22)
   ✘ Smuggling :D @cancelled(22-08-26 00:22)
   ✔ Crates splashing when they miss everything @done(22-08-27 00:19)
-  ☐ Replace custom shader with sprites - it seems bevy wasm doesn't like my custom material for some reason
-  ☐ Better music
-  ☐ Nice art
+  ✔ Replace custom shader with sprites - it seems bevy wasm doesn't like my custom material for some reason @done(22-08-28 12:02)
+  ✔ Better music @done(22-08-28 12:02)
+  ✔ Nice art @done(22-08-28 12:02)
   ☐ Weather effects
   ✘ Make departure animation less overlappy with waves @cancelled(22-08-26 00:20)
   ✘ if your ship has no more volume the crate bounces off @cancelled(22-08-23 00:11)

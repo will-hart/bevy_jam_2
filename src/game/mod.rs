@@ -149,7 +149,7 @@ fn setup_world(
                     transform: Transform::from_xyz(3.0, -10.25, 0.01),
                     ..default()
                 })
-                .insert(animations.factory_off.clone())
+                .insert(animations.factory_tutorial.clone())
                 .insert(AnimationState::default())
                 .insert(FactoryGraphic);
         });

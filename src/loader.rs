@@ -190,7 +190,7 @@ pub struct TextureAssets {
     #[asset(path = "textures/splashes.png")]
     pub splashes: Handle<TextureAtlas>,
 
-    #[asset(texture_atlas(tile_size_x = 160., tile_size_y = 192., columns = 7, rows = 1))]
+    #[asset(texture_atlas(tile_size_x = 160., tile_size_y = 192., columns = 8, rows = 1))]
     #[asset(path = "textures/factory.png")]
     pub factory: Handle<TextureAtlas>,
 }
@@ -218,4 +218,7 @@ pub struct AnimationAssets {
 
     #[asset(path = "animations/factory_off.animation.yml")]
     pub factory_off: Handle<Animation>,
+
+    #[asset(path = "animations/factory_tutorial.animation.yml")]
+    pub factory_tutorial: Handle<Animation>,
 }
