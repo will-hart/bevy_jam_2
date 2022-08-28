@@ -81,6 +81,12 @@ pub fn spawn_cart(
                 .insert(CartCrate {
                     is_front_slot: false,
                 });
+
+            parent.spawn_bundle(SpriteBundle {
+                texture: textures.cart_shadow.clone(),
+                transform: Transform::from_xyz(0.0, -GRID_SIZE, -0.1),
+                ..default()
+            });
         });
 }
 

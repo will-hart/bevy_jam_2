@@ -208,7 +208,7 @@ pub fn spawn_ship(
                         ..Default::default()
                     })
                     .insert(Ship::new(&mut rng))
-                    .insert(animations.ship_unfurl.clone())
+                    .insert(animations.ship_idle.clone())
                     .insert(AnimationState::default())
                     .insert(ship_hold.clone())
                     .with_children(|ship_child_commands| {

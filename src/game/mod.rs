@@ -23,7 +23,7 @@ use iyes_loopless::prelude::AppLooplessStateExt;
 use crate::{
     game::{
         actions::ActionPlugin,
-        components::{FactoryInput, SplashCatcher, WorldEntity},
+        components::{FactoryGraphic, FactoryInput, SplashCatcher, WorldEntity},
         custom_sprite::CustomSpritePlugin,
         day_night_cycle::DayNightCyclePlugin,
         factory::FactoryPlugin,
@@ -112,7 +112,7 @@ fn setup_world(
         .spawn_bundle((
             RigidBody::Static,
             CollisionShape::Cuboid {
-                half_extends: Vec3::new(103.0, 10.0, GRID_SIZE / 2.0),
+                half_extends: Vec3::new(103.0, 26.0, GRID_SIZE / 2.0),
                 border_radius: None,
             },
             CollisionLayers::none()
@@ -121,7 +121,7 @@ fn setup_world(
         ))
         .insert_bundle(SpriteBundle::default())
         .insert_bundle(TransformBundle {
-            local: Transform::from_xyz(-0.193 * WIDTH, -1.9 * GRID_SIZE, 0.0),
+            local: Transform::from_xyz(-0.193 * WIDTH, -1.75 * GRID_SIZE, 0.0),
             ..default()
         })
         .insert(WorldEntity);
@@ -131,7 +131,7 @@ fn setup_world(
         .spawn_bundle((
             RigidBody::Sensor,
             CollisionShape::Cuboid {
-                half_extends: Vec3::new(60.0, 10.0, GRID_SIZE / 2.0),
+                half_extends: Vec3::new(65.0, 10.0, GRID_SIZE / 2.0),
                 border_radius: None,
             },
             CollisionLayers::none()
@@ -140,18 +140,29 @@ fn setup_world(
         ))
         .insert_bundle(SpriteBundle::default())
         .insert_bundle(TransformBundle {
-            local: Transform::from_xyz(-1.0, 1.5 * GRID_SIZE, 0.0),
+            local: Transform::from_xyz(1.0, 1.25 * GRID_SIZE, 0.0),
             ..default()
         })
         .insert(FactoryInput)
-        .insert(WorldEntity);
+        .insert(WorldEntity)
+        .with_children(|children| {
+            children
+                .spawn_bundle(SpriteSheetBundle {
+                    texture_atlas: textures.factory.clone().into(),
+                    transform: Transform::from_xyz(3.0, -10.25, 0.01),
+                    ..default()
+                })
+                .insert(animations.factory_off.clone())
+                .insert(AnimationState::default())
+                .insert(FactoryGraphic);
+        });
 
     /* FACTORY OUTPUT */
     commands
         .spawn_bundle((
             RigidBody::Static,
             CollisionShape::Cuboid {
-                half_extends: Vec3::new(60.0, 10.0, GRID_SIZE / 2.0),
+                half_extends: Vec3::new(100.0, 10.0, GRID_SIZE / 2.0),
                 border_radius: None,
             },
             CollisionLayers::none()
@@ -160,7 +171,7 @@ fn setup_world(
         ))
         .insert_bundle(SpriteBundle::default())
         .insert_bundle(TransformBundle {
-            local: Transform::from_xyz(5.0 * GRID_SIZE, 0.0, 0.0),
+            local: Transform::from_xyz(5.9 * GRID_SIZE, -0.8 * GRID_SIZE, 0.0),
             ..default()
         })
         .insert(WorldEntity);

@@ -67,7 +67,10 @@ pub struct TextureAssets {
     #[asset(path = "textures/horse_and_cart.png")]
     pub horse_and_cart: Handle<TextureAtlas>,
 
-    #[asset(texture_atlas(tile_size_x = 64., tile_size_y = 64., columns = 2, rows = 1))]
+    #[asset(path = "textures/cart_shadow.png")]
+    pub cart_shadow: Handle<Image>,
+
+    #[asset(texture_atlas(tile_size_x = 64., tile_size_y = 64., columns = 1, rows = 1))]
     #[asset(path = "textures/sun.png")]
     pub sun: Handle<TextureAtlas>,
 
@@ -186,6 +189,10 @@ pub struct TextureAssets {
     #[asset(texture_atlas(tile_size_x = 32., tile_size_y = 32., columns = 6, rows = 1))]
     #[asset(path = "textures/splashes.png")]
     pub splashes: Handle<TextureAtlas>,
+
+    #[asset(texture_atlas(tile_size_x = 160., tile_size_y = 192., columns = 7, rows = 1))]
+    #[asset(path = "textures/factory.png")]
+    pub factory: Handle<TextureAtlas>,
 }
 
 /// Contains animation assets loaded from file using a custom animation loader
@@ -200,15 +207,15 @@ pub struct AnimationAssets {
     #[asset(path = "animations/cart.animation.yml")]
     pub cart: Handle<Animation>,
 
-    #[asset(path = "animations/ship_unfurl.animation.yml")]
-    pub ship_unfurl: Handle<Animation>,
-
-    #[asset(path = "animations/ship_furl.animation.yml")]
-    pub ship_furl: Handle<Animation>,
-
     #[asset(path = "animations/ship_idle.animation.yml")]
     pub ship_idle: Handle<Animation>,
 
     #[asset(path = "animations/splashes.animation.yml")]
     pub splashes: Handle<Animation>,
+
+    #[asset(path = "animations/factory_on.animation.yml")]
+    pub factory_on: Handle<Animation>,
+
+    #[asset(path = "animations/factory_off.animation.yml")]
+    pub factory_off: Handle<Animation>,
 }

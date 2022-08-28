@@ -19,7 +19,7 @@ pub fn spawn_physics_crate(
         .insert(PhysicsCrate { box_type })
         .insert(RigidBody::Dynamic)
         .insert(CollisionShape::Cuboid {
-            half_extends: Vec3::new(GRID_SIZE / 2.5, GRID_SIZE / 2.5, GRID_SIZE / 2.5),
+            half_extends: Vec3::new(GRID_SIZE / 2.75, GRID_SIZE / 2.75, GRID_SIZE / 2.75),
             border_radius: Some(2.0),
         })
         .insert(

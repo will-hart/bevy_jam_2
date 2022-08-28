@@ -24,6 +24,13 @@ impl Plugin for FactoryPlugin {
             .add_event::<events::OnFactoryStartProducing>()
             .add_event::<events::OnFactoryFinishProducing>()
             .add_event::<events::OnFactoryQueueItem>()
+            .add_system(
+                events::show_factory_on_animation.run_on_event::<events::OnFactoryStartProducing>(),
+            )
+            .add_system(
+                events::show_factory_off_animation
+                    .run_on_event::<events::OnFactoryFinishProducing>(),
+            )
             .add_system(events::handle_drop_factory_input.run_in_state(GameState::Playing))
             .add_system(
                 production::add_item_to_factory
