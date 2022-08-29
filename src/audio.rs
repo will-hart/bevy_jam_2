@@ -8,6 +8,7 @@ use iyes_loopless::{
 use crate::{
     game::{
         actions::{OnCrateSplashedInWater, OnDropCrateOnShip},
+        factory::events::OnIncorrectFactoryRecipeEffects,
         OnCoinsReceived, OnRainEnd, OnRainStart, OnShipSpawned,
     },
     loader::AudioAssets,
@@ -44,6 +45,11 @@ impl Plugin for InternalAudioPlugin {
                 on_splash
                     .run_in_state(GameState::Playing)
                     .run_on_event::<OnCrateSplashedInWater>(),
+            )
+            .add_system(
+                on_incorrect_production
+                    .run_in_state(GameState::Playing)
+                    .run_on_event::<OnIncorrectFactoryRecipeEffects>(),
             )
             .add_system(
                 on_ship_spawn
@@ -86,6 +92,14 @@ fn stop_all_music(
 ) {
     music_channel.stop();
     rain_channel.stop();
+}
+
+fn on_incorrect_production(
+    effects_channel: Res<AudioChannel<EffectsChannel>>,
+    audio_assets: Res<AudioAssets>,
+) {
+    info!("Playing incorrect production sound");
+    effects_channel.play(audio_assets.i_cant_make_that.clone());
 }
 
 fn on_coin_drop(
