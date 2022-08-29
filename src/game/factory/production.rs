@@ -19,7 +19,7 @@ use super::{
     OnDropInFactoryInput,
 };
 
-pub const FACTORY_OUTPUT_LOCATION: Vec3 = Vec3::new(0.0, 3.5 * GRID_SIZE, 0.0);
+pub const FACTORY_OUTPUT_LOCATION: Vec3 = Vec3::new(0.0, 3.5 * GRID_SIZE, 5.0);
 pub const FACTORY_OUTPUT_INITIAL_VELOCITY: Vec2 = Vec2::new(200.0, 10.0);
 pub const FACTORY_OUTPUT_INDICATOR_LOCATION: Vec3 =
     Vec3::new(-0.5 * GRID_SIZE, 3.0 * GRID_SIZE, 6.0);
