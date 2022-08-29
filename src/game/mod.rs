@@ -23,7 +23,7 @@ use iyes_loopless::prelude::AppLooplessStateExt;
 use crate::{
     game::{
         actions::ActionPlugin,
-        components::{FactoryGraphic, FactoryInput, SplashCatcher, WorldEntity},
+        components::{FactoryGraphic, FactoryInput, HardSurface, SplashCatcher, WorldEntity},
         day_night_cycle::DayNightCyclePlugin,
         factory::FactoryPlugin,
         spawners::{spawn_torch, GamePhysicsLayer, SpawningPlugin},
@@ -118,7 +118,8 @@ fn setup_world(
             local: Transform::from_xyz(-0.193 * WIDTH, -1.75 * GRID_SIZE, 0.0),
             ..default()
         })
-        .insert(WorldEntity);
+        .insert(WorldEntity)
+        .insert(HardSurface);
 
     /* FACTORY */
     commands
@@ -168,7 +169,8 @@ fn setup_world(
             local: Transform::from_xyz(5.9 * GRID_SIZE, -0.8 * GRID_SIZE, 0.0),
             ..default()
         })
-        .insert(WorldEntity);
+        .insert(WorldEntity)
+        .insert(HardSurface);
 
     /* SPLASH SECTION */
     commands

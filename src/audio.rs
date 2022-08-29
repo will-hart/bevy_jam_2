@@ -1,5 +1,6 @@
 use bevy::prelude::*;
 use bevy_kira_audio::prelude::*;
+use heron::Collisions;
 use iyes_loopless::{
     condition::IntoConditionalSystem,
     prelude::{AppLooplessStateExt, ConditionHelpers},
@@ -8,6 +9,7 @@ use iyes_loopless::{
 use crate::{
     game::{
         actions::{OnCrateSplashedInWater, OnDropCrateOnShip},
+        components::{HardSurface, HardSurfaceHandled, PhysicsCrate},
         factory::events::OnIncorrectFactoryRecipeEffects,
         OnCoinsReceived, OnRainEnd, OnRainStart, OnShipSpawned,
     },
@@ -66,6 +68,7 @@ impl Plugin for InternalAudioPlugin {
                     .run_in_state(GameState::Playing)
                     .run_on_event::<OnRainEnd>(),
             )
+            .add_system(on_box_contact.run_in_state(GameState::Playing))
             .add_enter_system(GameState::Menu, play_wind)
             .add_enter_system(GameState::Playing, play_music)
             .add_exit_system(GameState::Playing, stop_all_music);
@@ -136,4 +139,22 @@ fn on_rain_start(rain_channel: Res<AudioChannel<RainChannel>>, audio_assets: Res
 fn on_rain_stop(rain_channel: Res<AudioChannel<RainChannel>>) {
     info!("Stopping rain sound");
     rain_channel.stop();
+}
+
+fn on_box_contact(
+    mut commands: Commands,
+    effects_channel: Res<AudioChannel<EffectsChannel>>,
+    audio_assets: Res<AudioAssets>,
+    box_collisions: Query<(Entity, &Collisions), (With<PhysicsCrate>, Without<HardSurfaceHandled>)>,
+    hard_surfaces: Query<&HardSurface>,
+) {
+    for (entity, collisions) in box_collisions.iter() {
+        for collision in collisions.entities() {
+            if let Ok(_) = hard_surfaces.get(collision) {
+                commands.entity(entity).insert(HardSurfaceHandled);
+                effects_channel.play(audio_assets.box_drop.clone());
+                break;
+            }
+        }
+    }
 }
