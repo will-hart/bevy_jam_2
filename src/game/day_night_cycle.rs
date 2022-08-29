@@ -1,6 +1,7 @@
 use bevy::prelude::*;
+use chrono::{Duration, NaiveDate};
 use iyes_loopless::prelude::{AppLooplessStateExt, IntoConditionalSystem};
-use rand::{Rng, SeedableRng};
+use rand::{thread_rng, Rng, SeedableRng};
 use rand_chacha::ChaCha8Rng;
 
 use crate::{
@@ -13,12 +14,16 @@ use super::{
     Animation,
 };
 
+pub struct OnRainStart;
+
+pub struct OnRainEnd;
+
 const RANDOM_SEED: u64 = 349678046248609346;
 
 const TORCH_THRESHOLD: f32 = 1.0;
 
 // The amount of world time that elapses per game second
-const TIME_OF_DAY_HOURS_PER_GAME_SECONDS: f32 = 0.35;
+const TIME_OF_DAY_HOURS_PER_GAME_SECONDS: f32 = 0.5;
 
 const NUM_COLOURS: usize = 8;
 const HOURS_PER_COLOUR: f32 = 24.0 / (NUM_COLOURS as f32);
@@ -28,11 +33,13 @@ const SUN_DOWN: f32 = 19.0;
 
 const STAR_SPEED: f32 = -2.3;
 
+const CHANCE_OF_SUN: f64 = 0.8;
+
 // Note for smooth lerping, these palettes should start and end on the same colour as each other
 const SUNNY_COLOR_CYCLE: [Vec3; NUM_COLOURS] = [
     /*  0am */ Vec3::new(0.1, 0.1, 0.2),
     /*  3am */ Vec3::new(0.15, 0.15, 0.25),
-    /*  6am */ Vec3::new(0.3, 0.2, 0.4),
+    /*  6am */ Vec3::new(0.35, 0.3, 0.55),
     /*  9am */ Vec3::new(0.4, 0.5, 0.7),
     /* 12pm */ Vec3::new(0.4, 0.8, 0.9),
     /*  3pm */ Vec3::new(0.3, 0.7, 0.8),
@@ -51,12 +58,25 @@ const STORMY_COLOR_CYCLE: [Vec3; NUM_COLOURS] = [
     /*  9pm */ Vec3::new(0.18, 0.18, 0.25),
 ];
 
+pub const START_DATE_YMD: [u32; 3] = [1883, 6, 11];
+
+pub fn get_start_date() -> NaiveDate {
+    NaiveDate::from_ymd(
+        START_DATE_YMD[0] as i32,
+        START_DATE_YMD[1],
+        START_DATE_YMD[2],
+    )
+}
+
 pub struct DayNightCyclePlugin;
 
 impl Plugin for DayNightCyclePlugin {
     fn build(&self, app: &mut App) {
         app.insert_resource(SkyColourCycles::default())
-            .insert_resource(TimeOfDay { time_of_day: 5.8 })
+            .insert_resource(TimeOfDay {
+                time_of_day: 5.8,
+                today: get_start_date(),
+            })
             .add_event::<OnSunEvent>()
             .add_system(day_night_cycle.run_in_state(GameState::Playing))
             .add_system(torch_visibility.run_in_state(GameState::Playing))
@@ -85,8 +105,9 @@ impl Default for SkyColourCycles {
     }
 }
 
-struct TimeOfDay {
+pub struct TimeOfDay {
     pub time_of_day: f32,
+    pub today: NaiveDate,
 }
 
 fn reset_day_night_cycle(mut cycle: ResMut<TimeOfDay>) {
@@ -99,9 +120,12 @@ fn day_night_cycle(
     mut clear_colour: ResMut<ClearColor>,
     mut time_of_day: ResMut<TimeOfDay>,
     mut sun_events: EventWriter<OnSunEvent>,
+    mut rain_start_events: EventWriter<OnRainStart>,
+    mut rain_stop_events: EventWriter<OnRainEnd>,
 ) {
     let dt = time.delta_seconds();
     let elapsed = dt * TIME_OF_DAY_HOURS_PER_GAME_SECONDS;
+    let mut rng = thread_rng();
 
     let prev_time_of_day = time_of_day.time_of_day;
     time_of_day.time_of_day = (time_of_day.time_of_day + elapsed) % 24.0;
@@ -109,15 +133,22 @@ fn day_night_cycle(
     // check if we've wrapped over midnight
     if prev_time_of_day > 23.0 && time_of_day.time_of_day < 1.0 {
         // true if we've just wrapped day, we need to toggle the colour pattern
-        cycle.is_sunny = !cycle.is_sunny;
+        cycle.is_sunny = rng.gen_bool(CHANCE_OF_SUN);
+
+        // increment the date
+        time_of_day.today += Duration::days(1);
     }
 
     if prev_time_of_day < 18.0 && time_of_day.time_of_day >= 18.0 {
         sun_events.send(OnSunEvent(false));
+        rain_stop_events.send(OnRainEnd);
     }
 
     if prev_time_of_day < 6.0 && time_of_day.time_of_day >= 6.0 {
         sun_events.send(OnSunEvent(true));
+        if !cycle.is_sunny {
+            rain_start_events.send(OnRainStart);
+        }
     }
 
     let from_idx = (time_of_day.time_of_day / HOURS_PER_COLOUR).floor() as usize;

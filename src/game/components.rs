@@ -194,3 +194,12 @@ pub struct WorldEntity;
 
 #[derive(Component)]
 pub struct MenuItem;
+
+#[derive(Component)]
+pub struct CurrentDateMarker;
+
+#[derive(Component)]
+pub struct HardSurface;
+
+#[derive(Component)]
+pub struct HardSurfaceHandled;

@@ -24,14 +24,19 @@ impl Plugin for FactoryPlugin {
             .add_event::<events::OnFactoryStartProducing>()
             .add_event::<events::OnFactoryFinishProducing>()
             .add_event::<events::OnFactoryQueueItem>()
+            .add_event::<events::OnIncorrectFactoryRecipe>()
+            .add_event::<events::OnIncorrectFactoryRecipeEffects>()
             .add_system(
-                events::show_factory_on_animation.run_on_event::<events::OnFactoryStartProducing>(),
+                events::show_factory_on_animation
+                    .run_on_event::<events::OnFactoryStartProducing>()
+                    .after("factory_off_animation"),
             )
             .add_system(
                 events::show_factory_off_animation
-                    .run_on_event::<events::OnFactoryFinishProducing>(),
+                    .run_on_event::<events::OnFactoryFinishProducing>()
+                    .label("factory_off_animation"),
             )
-            .add_system(events::handle_drop_factory_input.run_in_state(GameState::Playing))
+            .add_system(events::reject_crates_on_incorrect_input.run_in_state(GameState::Playing))
             .add_system(
                 production::add_item_to_factory
                     .run_in_state(GameState::Playing)

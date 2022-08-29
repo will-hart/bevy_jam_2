@@ -6,10 +6,13 @@ use crate::{
     game::{
         actions::OnDropCrateOnShip,
         animation::OnShipArrivedAtDestination,
-        components::{ScoreUi, ShipHold, Wave},
+        components::{CurrentDateMarker, ScoreUi, ShipHold, Wave},
+        day_night_cycle::TimeOfDay,
     },
     GameState,
 };
+
+pub const UNMET_DEMAND_PENALTY: f32 = 40.0;
 
 /// Event triggered when a player receives coins, allowing effects to be played
 pub struct OnCoinsReceived;
@@ -62,11 +65,19 @@ pub fn despawn_ships_and_penalise(
         for child in wave_children.iter() {
             if let Ok(hold) = holds.get(*child) {
                 let unmet_demands = hold.get_unmet_demands().len() as f32;
-                score.0 -= unmet_demands * 10.0;
+                score.0 -= unmet_demands * UNMET_DEMAND_PENALTY;
                 break;
             }
         }
 
         commands.entity(event.0).despawn_recursive();
     }
+}
+
+pub fn update_current_date(
+    time_of_day: Res<TimeOfDay>,
+    mut date_text: Query<&mut Text, With<CurrentDateMarker>>,
+) {
+    date_text.single_mut().sections[0].value =
+        format!("{}", time_of_day.today.format("%-d %B, %C%y"));
 }

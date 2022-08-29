@@ -1,19 +1,20 @@
 [package]
 name = "the_company"
-version = "0.4.1"
+version = "1.0.0"
 edition = "2021"
 license = "MIT OR Apache-2.0"
 authors = ["William Hart <hart.wl@gmail.com>"]
-exclude = ["dist", "build", "assets", "credits"]
+exclude = ["assets", "raw_data"]
 
 
 [dependencies]
 anyhow = "1"
 benimator = {version = "4.0.0-rc.1", features = ["serde"] }
-bevy = "0.8"
+bevy = { version = "0.8", default-features = false, features = ["bevy_asset", "bevy_winit", "render", "png", "x11"] }
 bevy_asset_loader = { version = "0.12", features = ["stageless", "2d"] }
 bevy_prototype_debug_lines = { version = "0.8", optional = true }
 bevy_kira_audio = { version = "0.12", features = ["ogg"] }
+chrono = "0.4.22"
 heron = { version = "4.0.0", features = ["2d"] }
 iyes_loopless = "0.7.1"
 leafwing-input-manager = "0.5.2"

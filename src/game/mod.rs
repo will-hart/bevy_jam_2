@@ -12,6 +12,7 @@ pub mod rng;
 mod ui;
 
 pub use animation::{Animation, AnimationState};
+pub use day_night_cycle::{OnRainEnd, OnRainStart};
 pub use spawners::OnShipSpawned;
 pub use ui::OnCoinsReceived;
 
@@ -22,7 +23,7 @@ use iyes_loopless::prelude::AppLooplessStateExt;
 use crate::{
     game::{
         actions::ActionPlugin,
-        components::{FactoryGraphic, FactoryInput, SplashCatcher, WorldEntity},
+        components::{FactoryGraphic, FactoryInput, HardSurface, SplashCatcher, WorldEntity},
         day_night_cycle::DayNightCyclePlugin,
         factory::FactoryPlugin,
         spawners::{spawn_torch, GamePhysicsLayer, SpawningPlugin},
@@ -51,7 +52,9 @@ pub struct GamePlugin;
 impl Plugin for GamePlugin {
     fn build(&self, app: &mut App) {
         info!("Mounting GamePlugin");
-        app.add_plugin(PhysicsPlugin::default()) // Add the plugin
+        app.add_event::<OnRainStart>()
+            .add_event::<OnRainEnd>()
+            .add_plugin(PhysicsPlugin::default()) // Add the plugin
             .insert_resource(Gravity::from(Vec3::new(0.0, -500.0, 0.0)))
             .add_plugin(AnimationPlugin)
             .add_plugin(ActionPlugin)
@@ -115,7 +118,8 @@ fn setup_world(
             local: Transform::from_xyz(-0.193 * WIDTH, -1.75 * GRID_SIZE, 0.0),
             ..default()
         })
-        .insert(WorldEntity);
+        .insert(WorldEntity)
+        .insert(HardSurface);
 
     /* FACTORY */
     commands
@@ -165,7 +169,8 @@ fn setup_world(
             local: Transform::from_xyz(5.9 * GRID_SIZE, -0.8 * GRID_SIZE, 0.0),
             ..default()
         })
-        .insert(WorldEntity);
+        .insert(WorldEntity)
+        .insert(HardSurface);
 
     /* SPLASH SECTION */
     commands

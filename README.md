@@ -56,3 +56,12 @@ A new release will be available in GitHub, with the archives per platform availb
 
 The `git` commands above produced this release: [my-game-1.0](
 https://github.com/bevyengine/bevy_github_ci_template/releases/tag/my-game-1.0).
+
+## Credits and License
+
+All artwork and audio with the exception of the rain noise was made by me for the jam.
+
+* All artwork is CC0 <https://creativecommons.org/publicdomain/zero/1.0/>,
+* All code is MIT/Apache dual license.
+* The rain sound is from here <https://freesound.org/people/idomusics/sounds/518863/> (CC0)
+* The font Josefin Sans is available under the Open Font License.

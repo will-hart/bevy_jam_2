@@ -4,7 +4,14 @@ use iyes_loopless::{
     state::NextState,
 };
 
-use crate::{game::components::MenuItem, loader::TextureAssets, GameState};
+use crate::{
+    game::{
+        components::MenuItem,
+        day_night_cycle::{get_start_date, TimeOfDay},
+    },
+    loader::{FontAssets, TextureAssets},
+    GameState,
+};
 
 use super::tutorial::was_action_pressed;
 
@@ -44,13 +51,35 @@ fn start_playing(mut commands: Commands) {
     commands.insert_resource(NextState(GameState::Playing));
 }
 
-fn spawn_game_over(mut commands: Commands, textures: Res<TextureAssets>) {
+fn spawn_game_over(
+    mut commands: Commands,
+    time_of_day: Res<TimeOfDay>,
+    fonts: Res<FontAssets>,
+    textures: Res<TextureAssets>,
+) {
+    let elapsed_days = time_of_day.today - get_start_date();
+
     commands
         .spawn_bundle(SpriteBundle {
             texture: textures.game_over.clone(),
             ..default()
         })
-        .insert(MenuItem);
+        .insert(MenuItem)
+        .with_children(|parent| {
+            parent.spawn_bundle(Text2dBundle {
+                text: Text::from_section(
+                    format!("Your company survived {} days", elapsed_days.num_days()),
+                    TextStyle {
+                        color: Color::ANTIQUE_WHITE,
+                        font: fonts.default_font.clone(),
+                        font_size: 24.0,
+                    },
+                )
+                .with_alignment(TextAlignment::CENTER),
+                transform: Transform::from_xyz(0.0, -32.0, 1.0),
+                ..default()
+            });
+        });
 }
 
 fn despawn_game_over(mut commands: Commands, menu_items: Query<Entity, With<MenuItem>>) {

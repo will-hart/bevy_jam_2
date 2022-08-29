@@ -1,5 +1,6 @@
 use bevy::prelude::*;
 use bevy_kira_audio::prelude::*;
+use heron::Collisions;
 use iyes_loopless::{
     condition::IntoConditionalSystem,
     prelude::{AppLooplessStateExt, ConditionHelpers},
@@ -8,7 +9,9 @@ use iyes_loopless::{
 use crate::{
     game::{
         actions::{OnCrateSplashedInWater, OnDropCrateOnShip},
-        OnCoinsReceived, OnShipSpawned,
+        components::{HardSurface, HardSurfaceHandled, PhysicsCrate},
+        factory::events::OnIncorrectFactoryRecipeEffects,
+        OnCoinsReceived, OnRainEnd, OnRainStart, OnShipSpawned,
     },
     loader::AudioAssets,
     GameState,
@@ -18,6 +21,8 @@ use crate::{
 struct MusicChannel;
 #[derive(Component, Default, Clone)]
 struct EffectsChannel;
+#[derive(Component, Default, Clone)]
+struct RainChannel;
 
 pub struct InternalAudioPlugin;
 
@@ -26,6 +31,7 @@ impl Plugin for InternalAudioPlugin {
     fn build(&self, app: &mut App) {
         app.add_plugin(AudioPlugin)
             .add_audio_channel::<MusicChannel>()
+            .add_audio_channel::<RainChannel>()
             .add_audio_channel::<EffectsChannel>()
             .add_system(
                 on_coin_drop
@@ -43,11 +49,29 @@ impl Plugin for InternalAudioPlugin {
                     .run_on_event::<OnCrateSplashedInWater>(),
             )
             .add_system(
+                on_incorrect_production
+                    .run_in_state(GameState::Playing)
+                    .run_on_event::<OnIncorrectFactoryRecipeEffects>(),
+            )
+            .add_system(
                 on_ship_spawn
                     .run_in_state(GameState::Playing)
                     .run_on_event::<OnShipSpawned>(),
             )
-            .add_exit_system(GameState::Loading, play_music);
+            .add_system(
+                on_rain_start
+                    .run_in_state(GameState::Playing)
+                    .run_on_event::<OnRainStart>(),
+            )
+            .add_system(
+                on_rain_stop
+                    .run_in_state(GameState::Playing)
+                    .run_on_event::<OnRainEnd>(),
+            )
+            .add_system(on_box_contact.run_in_state(GameState::Playing))
+            .add_enter_system(GameState::Menu, play_wind)
+            .add_enter_system(GameState::Playing, play_music)
+            .add_exit_system(GameState::Playing, stop_all_music);
     }
 }
 
@@ -56,8 +80,29 @@ fn play_music(music_channel: Res<AudioChannel<MusicChannel>>, audio_assets: Res<
         .play(audio_assets.music.clone())
         .with_volume(0.15)
         .looped();
+}
 
-    // music_channel.pause();
+fn play_wind(music_channel: Res<AudioChannel<MusicChannel>>, audio_assets: Res<AudioAssets>) {
+    music_channel
+        .play(audio_assets.wind.clone())
+        .with_volume(0.15)
+        .looped();
+}
+
+fn stop_all_music(
+    music_channel: Res<AudioChannel<MusicChannel>>,
+    rain_channel: Res<AudioChannel<RainChannel>>,
+) {
+    music_channel.stop();
+    rain_channel.stop();
+}
+
+fn on_incorrect_production(
+    effects_channel: Res<AudioChannel<EffectsChannel>>,
+    audio_assets: Res<AudioAssets>,
+) {
+    info!("Playing incorrect production sound");
+    effects_channel.play(audio_assets.i_cant_make_that.clone());
 }
 
 fn on_coin_drop(
@@ -84,4 +129,33 @@ fn on_ship_spawn(
 ) {
     info!("Playing ship spawn sound");
     effects_channel.play(audio_assets.ships_bell.clone());
+}
+
+fn on_rain_start(rain_channel: Res<AudioChannel<RainChannel>>, audio_assets: Res<AudioAssets>) {
+    info!("Playing rain sound");
+    rain_channel.play(audio_assets.rain.clone());
+}
+
+fn on_rain_stop(rain_channel: Res<AudioChannel<RainChannel>>) {
+    info!("Stopping rain sound");
+    rain_channel.stop();
+}
+
+#[allow(clippy::type_complexity)]
+fn on_box_contact(
+    mut commands: Commands,
+    effects_channel: Res<AudioChannel<EffectsChannel>>,
+    audio_assets: Res<AudioAssets>,
+    box_collisions: Query<(Entity, &Collisions), (With<PhysicsCrate>, Without<HardSurfaceHandled>)>,
+    hard_surfaces: Query<&HardSurface>,
+) {
+    for (entity, collisions) in box_collisions.iter() {
+        for collision in collisions.entities() {
+            if hard_surfaces.get(collision).is_ok() {
+                commands.entity(entity).insert(HardSurfaceHandled);
+                effects_channel.play(audio_assets.box_drop.clone());
+                break;
+            }
+        }
+    }
 }
