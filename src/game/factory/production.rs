@@ -83,7 +83,7 @@ pub fn add_item_to_factory(
             incorrect_recipe_events.send(OnIncorrectFactoryRecipe(
                 factory.inputs[0].unwrap(),
                 factory.inputs[1].unwrap(),
-                FACTORY_OUTPUT_LOCATION.clone(),
+                FACTORY_OUTPUT_LOCATION,
             ));
         };
 

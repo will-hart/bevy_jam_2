@@ -141,6 +141,7 @@ fn on_rain_stop(rain_channel: Res<AudioChannel<RainChannel>>) {
     rain_channel.stop();
 }
 
+#[allow(clippy::type_complexity)]
 fn on_box_contact(
     mut commands: Commands,
     effects_channel: Res<AudioChannel<EffectsChannel>>,
@@ -150,7 +151,7 @@ fn on_box_contact(
 ) {
     for (entity, collisions) in box_collisions.iter() {
         for collision in collisions.entities() {
-            if let Ok(_) = hard_surfaces.get(collision) {
+            if hard_surfaces.get(collision).is_ok() {
                 commands.entity(entity).insert(HardSurfaceHandled);
                 effects_channel.play(audio_assets.box_drop.clone());
                 break;

@@ -53,7 +53,7 @@ pub fn reject_crates_on_incorrect_input(
     mut incorrect_recipe_events: EventReader<OnIncorrectFactoryRecipe>,
     mut play_incorrect_recipe_effects: EventWriter<OnIncorrectFactoryRecipeEffects>,
 ) {
-    for evt in incorrect_recipe_events.iter() {
+    if let Some(evt) = incorrect_recipe_events.iter().next() {
         let e1 = commands
             .spawn_bundle(SpriteBundle {
                 texture: evt.0.get_image(&textures),
@@ -73,6 +73,5 @@ pub fn reject_crates_on_incorrect_input(
         spawn_physics_crate(&mut commands, e1, evt.0, Vec2::new(-200.0, 50.0));
         spawn_physics_crate(&mut commands, e2, evt.1, Vec2::new(200.0, 50.0));
         play_incorrect_recipe_effects.send(OnIncorrectFactoryRecipeEffects);
-        return;
     }
 }
