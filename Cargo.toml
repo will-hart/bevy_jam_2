@@ -1,10 +1,10 @@
 [package]
 name = "the_company"
-version = "0.4.1"
+version = "1.0.0"
 edition = "2021"
 license = "MIT OR Apache-2.0"
 authors = ["William Hart <hart.wl@gmail.com>"]
-exclude = ["dist", "build", "assets", "credits"]
+exclude = ["assets", "raw_data"]
 
 
 [dependencies]
